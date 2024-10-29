@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import "../globals.css";
 import Container from "../components/Container";
 import StyledComponentsRegistry from "@/lib/registry";
+import ThemeProviderWrapper from "./ThemeProviderWrapper";
 
 export const metadata: Metadata = {
   title: "MoZip",
@@ -22,7 +23,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <StyledComponentsRegistry>
-          <Container>{children}</Container>
+          <ThemeProviderWrapper>
+            <Container>{children}</Container>
+          </ThemeProviderWrapper>
         </StyledComponentsRegistry>
       </body>
     </html>
