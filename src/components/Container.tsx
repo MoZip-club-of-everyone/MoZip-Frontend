@@ -1,5 +1,8 @@
 "use client";
 
+// 수정금지
+// layout.tsx 파일에서 모든 children을 중앙으로 배치하기 위함
+
 import styled from "styled-components";
 
 const StyledContainer = styled.div`
