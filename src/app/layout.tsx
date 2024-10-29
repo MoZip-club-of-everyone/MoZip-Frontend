@@ -3,6 +3,7 @@
 import type { Metadata } from "next";
 import "../globals.css";
 import Container from "../components/Container";
+import StyledComponentsRegistry from "@/lib/registry";
 
 export const metadata: Metadata = {
   title: "MoZip",
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Container>{children}</Container>
+        <StyledComponentsRegistry>
+          <Container>{children}</Container>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
