@@ -2,6 +2,7 @@
 
 import type { Metadata } from "next";
 import "../globals.css";
+import Container from "../components/Container";
 
 export const metadata: Metadata = {
   title: "MoZip",
@@ -19,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
+        <Container>{children}</Container>
       </body>
     </html>
   );
