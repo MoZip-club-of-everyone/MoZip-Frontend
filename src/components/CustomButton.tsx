@@ -1,6 +1,6 @@
 "use client";
 
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 
 // 수정 금지
 // 버튼 제작 시 해당 컴포넌트 활용
