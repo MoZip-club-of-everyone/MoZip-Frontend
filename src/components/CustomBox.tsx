@@ -6,24 +6,24 @@ import styled from "styled-components";
 // 박스(일반 div) 필요 시 해당 컴포넌트 사용
 
 interface CustomBoxProps {
-	$width?: string;
-	$height?: string;
-	$gap?: string;
-	$display?: string;
-	$flexdirection?: string;
-	$alignitems?: string;
-	$justifycontent?: string;
-	$margin?: string;
-	$margintop?: string;
-	$padding?: string;
-	$paddingbottom?: string;
-	$backgroundcolor?: string;
-	$color?: string;
-	$border?: string;
-	$borderradius?: string;
-	$overflowy?: string;
-	$overflowx?: string;
-	$zindex?: string;
+  $width?: string;
+  $height?: string;
+  $gap?: string;
+  $display?: string;
+  $flexdirection?: string;
+  $alignitems?: string;
+  $justifycontent?: string;
+  $margin?: string;
+  $margintop?: string;
+  $padding?: string;
+  $paddingbottom?: string;
+  $backgroundcolor?: string;
+  $color?: string;
+  $border?: string;
+  $borderradius?: string;
+  $overflowy?: string;
+  $overflowx?: string;
+  $zindex?: string;
 }
 
 const CustomBox = styled.div<CustomBoxProps>`
@@ -54,11 +54,11 @@ const CustomBox = styled.div<CustomBoxProps>`
   }
 
   &::-webkit-scrollbar-track {
-    background: black;
+    background: transparent;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #1E1E1E;
+    background-color: #D9D9D9;
     border-radius: 5px;
     border: none;
   }
