@@ -3,17 +3,17 @@
 import styled from "styled-components";
 
 // 담당자: 나영
-// MozipBlock 내부의 Text Field 컴포넌트입니다.
+// Text Field 컴포넌트입니다. 완성된 상태입니다.
 
 interface MozipBlockInputProps {
-	$width?: string;
-	$height?: string;
-	$padding?: string;
-	$margin?: string;
-	$bordercolor?: string;
-	$borderradius?: string;
-	$highlightcolor?: string;
-	$placeholder?: string;
+  $width?: string;
+  $height?: string;
+  $padding?: string;
+  $margin?: string;
+  $bordercolor?: string;
+  $borderradius?: string;
+  $highlightcolor?: string;
+  $placeholder?: string;
 }
 
 const StyledMozipBlockInput = styled.input<MozipBlockInputProps>`
@@ -35,10 +35,10 @@ const StyledMozipBlockInput = styled.input<MozipBlockInputProps>`
 `;
 
 const MozipBlockInput: React.FC<MozipBlockInputProps> = ({
-	$placeholder = "여기에 입력...",
-	...props
+  $placeholder = "여기에 입력...",
+  ...props
 }) => {
-	return <StyledMozipBlockInput placeholder={$placeholder} {...props} />;
+  return <StyledMozipBlockInput placeholder={$placeholder} {...props} />;
 };
 
 export default MozipBlockInput;
