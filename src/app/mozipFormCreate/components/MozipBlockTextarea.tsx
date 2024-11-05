@@ -4,20 +4,20 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 // 담당자: 나영
-// MozipBlock 내부의 Textarea 컴포넌트입니다.
+// Textarea 컴포넌트입니다. 완성된 상태입니다.
 
 interface MozipBlockTextareaProps {
-	$width?: string;
-	$height?: string;
-	$padding?: string;
-	$margin?: string;
-	$bordercolor?: string;
-	$borderradius?: string;
-	$highlightcolor?: string;
-	$placeholder?: string;
-	$overflowx?: string;
-	$overflowy?: string;
-	maxLength?: number;
+  $width?: string;
+  $height?: string;
+  $padding?: string;
+  $margin?: string;
+  $bordercolor?: string;
+  $borderradius?: string;
+  $highlightcolor?: string;
+  $placeholder?: string;
+  $overflowx?: string;
+  $overflowy?: string;
+  maxLength?: number;
 }
 
 const TextareaWrapper = styled.div<MozipBlockTextareaProps>`
@@ -69,29 +69,29 @@ const CharacterCount = styled.div`
 `;
 
 const MozipBlockTextarea: React.FC<MozipBlockTextareaProps> = ({
-	$placeholder = "여기에 입력...",
-	maxLength = 1000, // 1000자를 최대로 기본 설정했음
-	...props
+  $placeholder = "여기에 입력...",
+  maxLength = 1000, // 1000자를 최대로 기본 설정했음
+  ...props
 }) => {
-	const [charCount, setCharCount] = useState(0);
+  const [charCount, setCharCount] = useState(0);
 
-	const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-		setCharCount(event.target.value.length);
-	};
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCharCount(event.target.value.length);
+  };
 
-	return (
-		<TextareaWrapper $width={props.$width}>
-			<StyledMozipBlockTextarea
-				placeholder={$placeholder}
-				maxLength={maxLength}
-				onChange={handleChange}
-				{...props}
-			/>
-			<CharacterCount>
-				{charCount}/{maxLength.toLocaleString()}
-			</CharacterCount>
-		</TextareaWrapper>
-	);
+  return (
+    <TextareaWrapper $width={props.$width}>
+      <StyledMozipBlockTextarea
+        placeholder={$placeholder}
+        maxLength={maxLength}
+        onChange={handleChange}
+        {...props}
+      />
+      <CharacterCount>
+        {charCount}/{maxLength.toLocaleString()}
+      </CharacterCount>
+    </TextareaWrapper>
+  );
 };
 
 export default MozipBlockTextarea;
