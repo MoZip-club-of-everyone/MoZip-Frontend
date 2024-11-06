@@ -1,3 +1,6 @@
+"use client";
+
+import styled from "styled-components";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
 import StyledImg from "@/components/StyledImg";
@@ -7,11 +10,15 @@ import { IoIosArrowForward } from "react-icons/io";
 // Figma : 모집폼 관리 > 상단 세개의 탭을 관리하는 파일입니다.
 // /mozipFormCreate의 page.tsx에서 현재 표시하고 있는 컴포넌트의 옆에 파란별을 띄워 표시합니다.
 
+const CustomTabs = styled(CustomRow)`
+  padding-top: 3rem;
+`;
+
 export default function MozipTabs() {
 
 	return (
 
-		<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start" $gap="1rem">
+		<CustomTabs $width="100%" $alignitems="center" $justifycontent="flex-start" $gap="1rem">
 
 			<CustomRow $width="auto" $alignitems="center" $justifycontent="center" $gap="0.5rem">
 				<CustomFont $color='black' $font="1.2rem" $fontweight="bold">설명 작성</CustomFont>
@@ -30,6 +37,6 @@ export default function MozipTabs() {
 				<CustomFont $color='black' $font="1.2rem" $fontweight="bold">설정</CustomFont>
 			</CustomRow>
 
-		</CustomRow>
+		</CustomTabs>
 	);
 }
