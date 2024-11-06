@@ -40,12 +40,13 @@ export default function MozipDescription() {
 					$placeholder="내용을 입력해 주세요."
 					$highlightcolor="#8BB9FF"
 					$width="100%"
+					$height="20rem"
 					maxLength={1000}
 				/>
 			</CustomColumn>
 
 			<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-end">
-				<CustomButton $width="5rem" $backgroundColor="#5296FF">
+				<CustomButton $width="5rem" $backgroundColor="#5296FF" $padding="1rem">
 					<CustomFont $color="white" $font="1rem">
 						다음
 					</CustomFont>
