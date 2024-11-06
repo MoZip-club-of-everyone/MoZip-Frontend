@@ -3,11 +3,13 @@
 
 import CustomColumn from "@/components/CustomColumn";
 import MozipDescription from "./MozipBlocks/MozipDescription";
+import MozipTabs from "./MozipTabs/MozipTabs";
 
 export default function Home() {
 
 	return (
 		<CustomColumn $width="90%" $gap="2rem" $justifycontent="center" $alignitems="flex-start">
+			<MozipTabs />
 			<MozipDescription />
 		</CustomColumn>
 	);
