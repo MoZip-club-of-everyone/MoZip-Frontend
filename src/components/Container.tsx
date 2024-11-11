@@ -12,13 +12,12 @@ const StyledContainer = styled.div`
   justify-content: center;
   gap: 5rem;
   min-height: 100vh;
-  padding: 1rem 10vh 10rem;
 `;
 
 export default function Container({
-	children,
+  children,
 }: {
-	children: React.ReactNode;
+  children: React.ReactNode;
 }) {
-	return <StyledContainer>{children}</StyledContainer>;
+  return <StyledContainer>{children}</StyledContainer>;
 }
