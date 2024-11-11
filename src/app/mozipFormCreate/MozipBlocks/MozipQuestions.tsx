@@ -49,7 +49,7 @@ export default function MozipQuestions() {
 
 			<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start">
 				<CustomRow $width="90%" $alignitems="center" $justifycontent="flex-end">
-					<CustomButton $width="5rem" $backgroundColor="white" $padding="1rem">
+					<CustomButton $width="5rem" $backgroundColor="white" $padding="1rem" $border="1px solid black">
 						<CustomFont $color="black" $font="1rem">
 							이전
 						</CustomFont>
