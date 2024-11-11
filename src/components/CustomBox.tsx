@@ -40,7 +40,6 @@ const CustomBox = styled.div<CustomBoxProps>`
   padding-bottom: ${(props) => props.$paddingbottom || "0"};
   background: ${(props) => props.$backgroundcolor || "#1E1E1E"};
   color: ${(props) => props.color || "black"};
-  padding: 0.75rem 1.5rem;
   border: ${(props) => props.$border || "none"};
   border-radius: ${(props) => props.$borderradius || "0.5rem"};
   overflow-x: ${(props) => props.$overflowx || "auto"};
