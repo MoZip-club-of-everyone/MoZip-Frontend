@@ -14,6 +14,8 @@ interface MozipBlockInputProps {
   $borderradius?: string;
   $highlightcolor?: string;
   $placeholder?: string;
+  value?: string; // 추가
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void; // 추가
 }
 
 const StyledMozipBlockInput = styled.input<MozipBlockInputProps>`
@@ -36,9 +38,11 @@ const StyledMozipBlockInput = styled.input<MozipBlockInputProps>`
 
 const MozipBlockInput: React.FC<MozipBlockInputProps> = ({
   $placeholder = "여기에 입력...",
+  value,
+  onChange,
   ...props
 }) => {
-  return <StyledMozipBlockInput placeholder={$placeholder} {...props} />;
+  return <StyledMozipBlockInput placeholder={$placeholder} value={value} onChange={onChange} {...props} />;
 };
 
 export default MozipBlockInput;
