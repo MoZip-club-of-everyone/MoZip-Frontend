@@ -14,7 +14,7 @@ interface MozipBlockDropdownProps {
 	$bordercolor?: string;
 	$borderradius?: string;
 	$highlightcolor?: string;
-	buttonText: React.ReactNode; // string 대신 React.ReactNode로 변경
+	buttonText: React.ReactNode;
 	menuItems: string[];
 }
 
