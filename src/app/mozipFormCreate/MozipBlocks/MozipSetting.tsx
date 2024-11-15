@@ -1,3 +1,6 @@
+// 담당자: 나영
+// Figma : 모집폼 관리 > [ 설정 ] 탭 클릭 시 나타나는 컴포넌트입니다.
+
 import React, { useState } from "react";
 import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
@@ -7,10 +10,12 @@ import MozipBlockInput from "../components/MozipBlockInput";
 import MozipDatePicker from "../components/MozipDatePicker";
 import "../components/SwitchButton.css";
 
-// 담당자: 나영
-// Figma : 모집폼 관리 > [ 설정 ] 탭 클릭 시 나타나는 컴포넌트입니다.
+interface MozipSettingProps {
+	onPublish: () => void;
+	onPrev: () => void;
+}
 
-export default function MozipSetting() {
+export default function MozipSetting({ onPublish, onPrev }: MozipSettingProps) {
 	const [preRecruitText, setPreRecruitText] = useState("");
 	const [postRecruitText, setPostRecruitText] = useState("");
 	const [isLoginRequired, setIsLoginRequired] = useState(false);
@@ -109,12 +114,12 @@ export default function MozipSetting() {
 			</CustomColumn>
 
 			<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-end">
-				<CustomButton $width="5rem" $backgroundColor="white" $padding="1rem" $border="1px solid black">
+				<CustomButton $width="5rem" $backgroundColor="white" $padding="1rem" $border="1px solid black" onClick={onPrev}>
 					<CustomFont $color="black" $font="1rem">
 						이전
 					</CustomFont>
 				</CustomButton>
-				<CustomButton $width="7rem" $backgroundColor="#5296FF" $padding="1rem">
+				<CustomButton $width="7rem" $backgroundColor="#5296FF" $padding="1rem" onClick={onPublish}>
 					<CustomFont $color="white" $font="1rem">
 						모집 게시
 					</CustomFont>
