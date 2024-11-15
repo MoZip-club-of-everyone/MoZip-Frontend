@@ -4,8 +4,8 @@ import CustomRow from "@/components/CustomRow";
 import CustomButton from "@/components/CustomButton";
 import CustomDivider from "@/components/CustomDivider";
 
-import MozipBlockInput from "../components/MozipBlockInput";
-import MozipBlockTextarea from "../components/MozipBlockTextarea";
+import MozipBlockInput from "../../components/MozipBlockInput";
+import MozipBlockTextarea from "../../components/MozipBlockTextarea";
 
 // 담당자: 나영
 // Figma : 모집폼 관리 > [ 설명 작성 ] 탭 클릭 시 나타나는 컴포넌트입니다.
