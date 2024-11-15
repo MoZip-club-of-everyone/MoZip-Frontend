@@ -8,12 +8,12 @@
 // MozipLayout 폴더에서 SideBar와 Header를 정의하고, 레이아웃 컴포넌트를 정의했습니다.
 
 import { useState } from "react";
-import MozipDescription from "./MozipBlocks/MozipDescription";
-import MozipQuestions from "./MozipBlocks/MozipQuestions";
-import MozipSetting from "./MozipBlocks/MozipSetting";
+import MozipDescription from "./MozipBlocks/MozipDescription/MozipDescription";
+import MozipQuestions from "./MozipBlocks/MozipQuestion/MozipQuestions";
+import MozipSetting from "./MozipBlocks/MozipSetting/MozipSetting";
 import MozipTabs from "./MozipTabs/MozipTabs";
 import MozipLayout from "./MozipLayout/MozipLayout";
-import MozipCreateDone from "./MozipBlocks/MozipCreateDone";
+import MozipCreateDone from "./MozipBlocks/MozipCreateDone/MozipCreateDone";
 
 export default function Home() {
 	const [activeTab, setActiveTab] = useState("설명 작성");

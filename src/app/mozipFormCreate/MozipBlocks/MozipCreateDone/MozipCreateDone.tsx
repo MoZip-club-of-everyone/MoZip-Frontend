@@ -1,10 +1,10 @@
-import React, { useState } from "react";
 import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
 import CustomButton from "@/components/CustomButton";
 import CustomBox from "@/components/CustomBox";
-import { TbArrowBigDownLinesFilled } from "react-icons/tb";
+import MozipCreateDoneMessage from "./MozipCreateDoneMessage";
+
 import { RiShareBoxLine } from "react-icons/ri";
 import { MdOutlineContentCopy } from "react-icons/md";
 
@@ -20,16 +20,7 @@ export default function MozipCreateDone({ onManage }: MozipCreateDoneProps) {
 	return (
 		<CustomColumn $width="90%" $alignitems="center" $justifycontent="center" $gap='2rem'>
 
-			<CustomFont $color='black' $font="1.5rem" $fontweight="bold">
-				모집이 게시되었습니다!
-			</CustomFont>
-			<CustomFont $color='black' $font="1.5rem" $fontweight="bold">
-				아래 링크를 공유해 모집을 시작해보세요!
-			</CustomFont>
-			<CustomRow $gap='1rem'>
-				<TbArrowBigDownLinesFilled style={{ fontSize: '2rem' }} />
-				<TbArrowBigDownLinesFilled style={{ fontSize: '2rem' }} />
-			</CustomRow>
+			<MozipCreateDoneMessage />
 
 			<CustomBox $width='100%' $height="auto" $border="1px solid #D8D8D8" $backgroundcolor="white"
 				$padding='0.5rem' $alignitems="center" $justifycontent="center">
