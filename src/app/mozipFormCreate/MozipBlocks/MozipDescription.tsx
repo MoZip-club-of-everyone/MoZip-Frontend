@@ -11,7 +11,11 @@ import MozipBlockTextarea from "../components/MozipBlockTextarea";
 // Figma : 모집폼 관리 > [ 설명 작성 ] 탭 클릭 시 나타나는 컴포넌트입니다.
 // 모집에 대한 설명을 작성하는 컴포넌트 파일입니다.
 
-export default function MozipDescription() {
+interface MozipDescriptionProps {
+	onNext: () => void;
+}
+
+export default function MozipDescription({ onNext }: MozipDescriptionProps) {
 
 	return (
 
@@ -46,7 +50,7 @@ export default function MozipDescription() {
 			</CustomColumn>
 
 			<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-end">
-				<CustomButton $width="5rem" $backgroundColor="#5296FF" $padding="1rem">
+				<CustomButton $width="5rem" $backgroundColor="#5296FF" $padding="1rem" onClick={onNext}>
 					<CustomFont $color="white" $font="1rem">
 						다음
 					</CustomFont>

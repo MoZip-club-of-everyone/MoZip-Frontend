@@ -1,19 +1,23 @@
+// 담당자: 나영
+// Figma : 모집폼 관리 > [ 질문 작성 ] 탭 클릭 시 나타나는 컴포넌트입니다.
+// 모집의 모든 문항을 작성하는 컴포넌트 파일입니다.
+
 import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
 import CustomButton from "@/components/CustomButton";
 import CustomDivider from "@/components/CustomDivider";
 
-
 import MozipBlock from "../components/MozipBlock";
 import MozipBlockDropdown from "../components/MozipDropdown";
 import { IoIosArrowDown } from "react-icons/io";
 
-// 담당자: 나영
-// Figma : 모집폼 관리 > [ 질문 작성 ] 탭 클릭 시 나타나는 컴포넌트입니다.
-// 모집의 모든 문항을 작성하는 컴포넌트 파일입니다.
+interface MozipQuestionProps {
+	onNext: () => void;
+	onPrev: () => void;
+}
 
-export default function MozipQuestions() {
+export default function MozipQuestions({ onNext, onPrev }: MozipQuestionProps) {
 
 	return (
 
@@ -49,13 +53,13 @@ export default function MozipQuestions() {
 
 			<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start">
 				<CustomRow $width="90%" $alignitems="center" $justifycontent="flex-end">
-					<CustomButton $width="5rem" $backgroundColor="white" $padding="1rem" $border="1px solid black">
+					<CustomButton $width="5rem" $backgroundColor="white" $padding="1rem" $border="1px solid black" onClick={onPrev}>
 						<CustomFont $color="black" $font="1rem">
 							이전
 						</CustomFont>
 					</CustomButton>
 
-					<CustomButton $width="5rem" $backgroundColor="#5296FF" $padding="1rem">
+					<CustomButton $width="5rem" $backgroundColor="#5296FF" $padding="1rem" onClick={onNext}>
 						<CustomFont $color="white" $font="1rem">
 							다음
 						</CustomFont>

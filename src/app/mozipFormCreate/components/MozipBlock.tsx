@@ -21,7 +21,7 @@ import { FaArrowsUpDown } from "react-icons/fa6";
 // 담당자: 나영
 // Figma 디자인에서, 모집 생성 시 모든 문항이 들어갈 블록 컴포넌트입니다.
 
-const StyledIconContainer = styled.div`
+const StyledIconContainer = styled.button`
   width: 2rem;
   height: 100%;
   background-color: #5296FF;
@@ -32,6 +32,12 @@ const StyledIconContainer = styled.div`
   border-bottom-left-radius: 1rem;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.1s ease-in-out;
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 export default function MozipBlock() {
