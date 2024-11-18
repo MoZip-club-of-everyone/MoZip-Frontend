@@ -5,9 +5,8 @@ import CustomRow from "@/components/CustomRow";
 import CustomButton from "@/components/CustomButton";
 import { FaPlus } from "react-icons/fa";
 
-// 담당자: 현아
-// Figma : 홈 > [ 모집 ] 탭 클릭 시 나타나는 컴포넌트입니다.
-// 모집에 대한 설명을 작성하는 컴포넌트 파일입니다.
+// 담당자: 현아 -> 나영
+// 홈화면 > 각 동아리별 Mozip 홈화면 컴포넌트의 버튼입니다.
 
 export default function AddNewMozip() {
 

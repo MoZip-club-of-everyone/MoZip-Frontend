@@ -1,8 +1,6 @@
 "use client";
 
-// Figma 좌측 네비게이션 바에서 [ 모집폼 관리] 클릭하여 나타나는 화면입니다.
 // 담당자(담당 브랜치): hyuna
-
 // 홈 -> 동아리 페이지의 동아리 사진 컴포넌트
 
 import styled from "styled-components";

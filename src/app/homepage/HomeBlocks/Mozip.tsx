@@ -8,9 +8,9 @@ import AddNewMozip from "../components/AddNewMozip";
 import MozipProgressButton from "../components/MozipProgressButton";
 import MozipDivider from "../components/MozipDivider";
 
-// 담당자: 현아
-// Figma : 홈 > [ 모집 ] 탭 클릭 시 나타나는 컴포넌트입니다.
-// 모집에 대한 설명을 작성하는 컴포넌트 파일입니다.
+// 담당자: 현아 -> 나영
+// 홈화면에서 특정 동아리 클릭 시, 각 모집의 진행 상황이 보이는 컴포넌트입니다.
+// 'Mozip 홈화면' 이라고 부릅니다.
 
 const CustomColumnMargin = styled(CustomColumn)`
 	margin-top: 1rem;

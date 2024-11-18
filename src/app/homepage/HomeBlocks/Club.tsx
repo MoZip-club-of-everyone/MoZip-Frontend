@@ -1,8 +1,7 @@
 "use client";
 
-// 담당자: 현아
-// Figma : 홈 > [ 동아리 ] 탭 클릭 시 나타나는 컴포넌트입니다.
-// 동아리에 대한 설명을 작성하는 컴포넌트 파일입니다.
+// 담당자: 현아 -> 나영
+// 홈화면에 기본으로 렌더링되는 홈 컴포넌트입니다.
 
 import CustomColumn from "@/components/CustomColumn";
 import CustomCard from "../components/CustomCard";
