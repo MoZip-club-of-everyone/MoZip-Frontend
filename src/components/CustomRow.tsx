@@ -20,7 +20,7 @@ const CustomRow = styled.div<CustomRowProps>`
   display: flex;
   flex-direction: row;
   width: ${(props) => props.$width || "auto"};
-  max-width: ${(props) => props.$maxwidth || "none"}
+  max-width: ${(props) => props.$maxwidth || "none"};
   height: ${(props) => props.$height || "auto"};
   gap: ${(props) => props.$gap || "10px"};
   align-items: ${(props) => props.$alignitems || "center"};
