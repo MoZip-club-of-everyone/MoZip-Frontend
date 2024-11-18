@@ -10,7 +10,11 @@ import MozipBlockInput from "@/app/mozipFormCreate/components/MozipBlockInput";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
 
-export default function Certificate() {
+interface CertificateProps {
+	onComplete: () => void;
+}
+
+export default function Certificate({ onComplete }: CertificateProps) {
 	return (
 		<>
 			<CustomButton $width='auto' $backgroundColor="white" $border="1px solid black">
@@ -82,7 +86,11 @@ export default function Certificate() {
 				<CustomButton $width='100%' $alignItems="center" $justifyContent="center" $backgroundColor="#5296FF">
 					<CustomFont $color='white' $font='1.3em' $fontweight="bold">인증번호 발송</CustomFont>
 				</CustomButton>
-				<CustomButton $width='100%' $alignItems="center" $justifyContent="center" $backgroundColor="#5296FF">
+				<CustomButton $width='100%' $alignItems="center" $justifyContent="center" $backgroundColor="#5296FF"
+					onClick={() => {
+						alert("인증이 완료되었습니다.");
+						onComplete();
+					}}>
 					<CustomFont $color='white' $font='1.3em' $fontweight="bold">인증 완료</CustomFont>
 				</CustomButton>
 			</CustomColumn>
