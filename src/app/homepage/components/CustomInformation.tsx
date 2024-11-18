@@ -4,6 +4,7 @@
 // 동아리 정보 컴포넌트
 
 import styled from "styled-components";
+import CustomBox from "@/components/CustomBox";
 import { BsDot } from "react-icons/bs";
 
 interface CustomInformationProps {
@@ -11,14 +12,18 @@ interface CustomInformationProps {
   details?: string[]; //details를 배열로 받음
 }
 
-const InformationContainer = styled.div`
+const CustomBoxWithShadow = styled(CustomBox)`
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
+	border-radius: 1rem;
+	padding: 1rem;
+
+  width: 25rem;
+  height: auto;
+  border-radius: 20px;
+  overflow: hidden;
   padding: 24px;
   margin-top: 22px;
-  width: 260px;
-  height: 96px;
-  border-radius: 20px;
-  box-shadow: 0 0px 16px #DDDDDD;
-  overflow: hidden;
+  background-color: white;
 `;
 
 const ClubName = styled.div`
@@ -29,12 +34,12 @@ const ClubName = styled.div`
   text-overflow: ellipsis;
   color: #5B5B5B;
   text-align: left;
-  /* max-width: 15ch; */
 `;
 
 const DetailsContainer = styled.div`
   margin-top: 8px;
-  text-align: left; /* 왼쪽 정렬 */
+  text-align: left;
+  width: 100%;
 `;
 
 const DetailItem = styled.div`
@@ -46,17 +51,17 @@ const DetailItem = styled.div`
 
 export default function CustomInformation({ name, details }: CustomInformationProps) {
   return (
-    <InformationContainer>
+    <CustomBoxWithShadow>
       <ClubName>{name}</ClubName>
       <DetailsContainer>
         {details?.map((detail, index) => (
           <DetailItem key={index}>
-            <BsDot style={{ fontSize: "11px", color: "#5B5B5B" }} /> {/* 아이콘 추가 */}
+            <BsDot style={{ fontSize: "11px", color: "#5B5B5B" }} />
             {detail}
           </DetailItem>
         ))}
       </DetailsContainer>
-    </InformationContainer>
+    </CustomBoxWithShadow>
   );
 };
 

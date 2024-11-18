@@ -12,11 +12,10 @@ interface CustomImageProps {
   alt?: string;
 }
 const ImageWrapper = styled.div`
-  width: 100%;
-  height: 260px;
-  border: 1px solid black; /* 테두리 */
-  border-radius: 20px; /* 모서리를 이미지와 일치 */
-  overflow: hidden; /* 테두리를 넘는 이미지를 숨김 */
+  width: 25rem;
+  height: 25rem;
+  border-radius: 20px;
+  overflow: hidden;
   background-color: #f0f0f0;
 `;
 
@@ -25,15 +24,6 @@ const Image = styled.img`
   height: 100%;
   object-fit: cover;
 `;
-
-// const Image = styled.img`
-//   width: 100%;
-//   height: 260px;
-//   object-fit: cover;
-//   border-radius: 20px;
-//   border: 1px solid black;
-//   background-color: #f0f0f0;
-// `;
 
 const Placeholder = styled.div`
   width: 100%;
@@ -49,15 +39,15 @@ const Placeholder = styled.div`
 `;
 
 const CustomImage = ({ src, alt = "동아리이미지" }: CustomImageProps) => {
-    return (
-      src ? (
-        <ImageWrapper>
-          <Image src={src} alt={alt} />
-        </ImageWrapper>
-      ) : (
-        <Placeholder>{alt}</Placeholder>
-      )
-    );
-  };
+  return (
+    src ? (
+      <ImageWrapper>
+        <Image src={src} alt={alt} />
+      </ImageWrapper>
+    ) : (
+      <Placeholder>{alt}</Placeholder>
+    )
+  );
+};
 
 export default CustomImage;

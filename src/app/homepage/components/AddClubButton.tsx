@@ -2,12 +2,12 @@
 import styled from 'styled-components';
 
 const AddButtonContainer = styled.div`
-  width: 260px;
-  height: 260px;
+  width: 25rem;
+  height: 25rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #000;
+  border: 1px solid #D8D8D8;
   border-radius: 20px;
   cursor: pointer;
   background-color: #fff;
