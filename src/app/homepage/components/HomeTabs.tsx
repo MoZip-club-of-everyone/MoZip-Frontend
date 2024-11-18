@@ -10,6 +10,8 @@ import CustomRow from "@/components/CustomRow";
 import StyledImg from "@/components/StyledImg";
 import CustomButton from "@/components/CustomButton";
 import { IoIosArrowForward } from "react-icons/io";
+import CustomColumn from "@/components/CustomColumn";
+import CustomDivider from "@/components/CustomDivider";
 
 const CustomTabs = styled(CustomRow)`
   padding-top: 3rem;
@@ -24,22 +26,24 @@ interface MozipTabsProps {
 export default function HomeTabs({ activeTab, setActiveTab }: MozipTabsProps) {
 
 	return (
-		<CustomTabs $width="100%" $alignitems="center" $justifycontent="flex-start" $gap="1rem">
-			<CustomButton $width='auto' $backgroundColor="transparent" $padding='0' onClick={() => setActiveTab("동아리")}>
+		<CustomColumn $width='80%' $gap='1rem' $alignitems="center" $justifycontent="center">
+			<CustomTabs $width="100%" $alignitems="center" $justifycontent="flex-start" $gap="1rem">
+
 				<CustomRow $width="auto" $alignitems="center" $justifycontent="center" $gap="0.5rem">
 					<CustomFont $color='black' $font="1.2rem" $fontweight="bold">동아리</CustomFont>
 					{activeTab === "동아리" && <StyledImg src={'/icon_TabStar.png'} $width='1rem' $height="1rem" />}
 				</CustomRow>
-			</CustomButton>
 
-			<IoIosArrowForward />
+				<IoIosArrowForward />
 
-			<CustomButton $width='auto' $backgroundColor="transparent" $padding='0' onClick={() => setActiveTab("모집")}>
 				<CustomRow $width="auto" $alignitems="center" $justifycontent="center" $gap="0.5rem">
 					<CustomFont $color='black' $font="1.2rem" $fontweight="bold">모집</CustomFont>
 					{activeTab === "모집" && <StyledImg src={'/icon_TabStar.png'} $width='1rem' $height="1rem" />}
 				</CustomRow>
-			</CustomButton>
-		</CustomTabs>
+
+			</CustomTabs>
+
+			<CustomDivider $width='100%' $height='1px' $backgroundcolor="#D8D8D8" />
+		</CustomColumn>
 	);
 }

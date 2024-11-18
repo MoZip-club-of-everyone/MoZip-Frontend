@@ -14,7 +14,7 @@ export default function Home() {
 	const renderContent = () => {
 		switch (activeTab) {
 			case "동아리":
-				return <Club />;
+				return <Club setActiveTab={setActiveTab} />;
 			case "모집":
 				return <Mozip />;
 			default:
@@ -23,7 +23,7 @@ export default function Home() {
 	};
 
 	return (
-		<HomeLayout>
+		<HomeLayout setActiveTab={setActiveTab}>
 			<HomeTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 			{renderContent()}
 		</HomeLayout>
