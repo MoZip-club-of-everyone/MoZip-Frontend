@@ -19,7 +19,7 @@ const DividerContainer = styled.div<{ color: string }>`
 	&::after {
 		content: "";
 		flex: 1;
-		border-top: 1px solid ${(props) => props.color};
+		border-top: 1px dashed ${(props) => props.color};
 		margin: 0 1rem;
 	}
 `;
