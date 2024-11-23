@@ -56,7 +56,7 @@ export default function MozipManageDocumentList(): any {
           $width="100%"
           $alignitems="flex-end"
           $justifycontent="flex-start"
-          $padding="1rem"
+          // $padding="1rem"
         >
           <CustomFont $font="24px" $color="#363636" $fontweight="bold">
             서류 지원자 목록
