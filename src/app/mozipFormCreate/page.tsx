@@ -8,11 +8,12 @@
 // MozipLayout 폴더에서 SideBar와 Header를 정의하고, 레이아웃 컴포넌트를 정의했습니다.
 
 import { useState } from "react";
-import MozipDescription from "./MozipBlocks/MozipDescription";
-import MozipQuestions from "./MozipBlocks/MozipQuestions";
-import MozipSetting from "./MozipBlocks/MozipSetting";
+import MozipDescription from "./MozipBlocks/MozipDescription/MozipDescription";
+import MozipQuestions from "./MozipBlocks/MozipQuestion/MozipQuestions";
+import MozipSetting from "./MozipBlocks/MozipSetting/MozipSetting";
 import MozipTabs from "./MozipTabs/MozipTabs";
 import MozipLayout from "./MozipLayout/MozipLayout";
+import MozipCreateDone from "./MozipBlocks/MozipCreateDone/MozipCreateDone";
 
 export default function Home() {
 	const [activeTab, setActiveTab] = useState("설명 작성");
@@ -20,11 +21,23 @@ export default function Home() {
 	const renderContent = () => {
 		switch (activeTab) {
 			case "설명 작성":
-				return <MozipDescription />;
+				return <MozipDescription onNext={() => setActiveTab("질문 작성")} />;
 			case "질문 작성":
-				return <MozipQuestions />;
+				return (
+					<MozipQuestions
+						onPrev={() => setActiveTab("설명 작성")}
+						onNext={() => setActiveTab("설정")}
+					/>
+				);
 			case "설정":
-				return <MozipSetting />;
+				return (
+					<MozipSetting
+						onPrev={() => setActiveTab("질문 작성")}
+						onPublish={() => setActiveTab("모집 완료")}
+					/>
+				);
+			case "모집 완료":
+				return <MozipCreateDone onManage={() => setActiveTab("설명 작성")} />;
 			default:
 				return null;
 		}
@@ -32,9 +45,8 @@ export default function Home() {
 
 	return (
 		<MozipLayout>
-			<MozipTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+			<MozipTabs activeTab={activeTab} setActiveTab={() => { }} />
 			{renderContent()}
 		</MozipLayout>
 	);
 }
-

@@ -25,30 +25,25 @@ export default function MozipTabs({ activeTab, setActiveTab }: MozipTabsProps) {
 
 	return (
 		<CustomTabs $width="100%" $alignitems="center" $justifycontent="flex-start" $gap="1rem">
-			<CustomButton $width='auto' $backgroundColor="transparent" $padding='0' onClick={() => setActiveTab("설명 작성")}>
-				<CustomRow $width="auto" $alignitems="center" $justifycontent="center" $gap="0.5rem">
-					<CustomFont $color='black' $font="1.2rem" $fontweight="bold">설명 작성</CustomFont>
-					{activeTab === "설명 작성" && <StyledImg src={'/icon_TabStar.png'} $width='1rem' $height="1rem" />}
-				</CustomRow>
-			</CustomButton>
+			<CustomRow $width="auto" $alignitems="center" $justifycontent="center" $gap="0.5rem" onClick={() => setActiveTab("설명 작성")}>
+				<CustomFont $color='black' $font="1.2rem" $fontweight="bold">설명 작성</CustomFont>
+				{activeTab === "설명 작성" && <StyledImg src={'/icon_TabStar.png'} $width='1rem' $height="1rem" />}
+			</CustomRow>
 
 			<IoIosArrowForward />
 
-			<CustomButton $width='auto' $backgroundColor="transparent" $padding='0' onClick={() => setActiveTab("질문 작성")}>
-				<CustomRow $width="auto" $alignitems="center" $justifycontent="center" $gap="0.5rem">
-					<CustomFont $color='black' $font="1.2rem" $fontweight="bold">질문 작성</CustomFont>
-					{activeTab === "질문 작성" && <StyledImg src={'/icon_TabStar.png'} $width='1rem' $height="1rem" />}
-				</CustomRow>
-			</CustomButton>
+			<CustomRow $width="auto" $alignitems="center" $justifycontent="center" $gap="0.5rem" onClick={() => setActiveTab("질문 작성")}>
+				<CustomFont $color='black' $font="1.2rem" $fontweight="bold">질문 작성</CustomFont>
+				{activeTab === "질문 작성" && <StyledImg src={'/icon_TabStar.png'} $width='1rem' $height="1rem" />}
+			</CustomRow>
 
 			<IoIosArrowForward />
 
-			<CustomButton $width='auto' $backgroundColor="transparent" $padding='0' onClick={() => setActiveTab("설정")}>
-				<CustomRow $width="auto" $alignitems="center" $justifycontent="center" $gap="0.5rem">
-					<CustomFont $color='black' $font="1.2rem" $fontweight="bold">설정</CustomFont>
-					{activeTab === "설정" && <StyledImg src={'/icon_TabStar.png'} $width='1rem' $height="1rem" />}
-				</CustomRow>
-			</CustomButton>
+
+			<CustomRow $width="auto" $alignitems="center" $justifycontent="center" $gap="0.5rem" onClick={() => setActiveTab("설정")}>
+				<CustomFont $color='black' $font="1.2rem" $fontweight="bold">설정</CustomFont>
+				{activeTab === "설정" && <StyledImg src={'/icon_TabStar.png'} $width='1rem' $height="1rem" />}
+			</CustomRow>
 		</CustomTabs>
 	);
 }
