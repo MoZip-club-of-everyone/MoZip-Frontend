@@ -7,6 +7,8 @@ import CustomDivider from "@/components/CustomDivider";
 import CustomRow from "@/components/CustomRow";
 import CustomColumn from "@/components/CustomColumn";
 import CustomButton from "@/components/CustomButton";
+import Image from 'next/image';
+import headerLogo from '@/assets/logo/headerLogo.svg';
 
 const CustomHeader = styled(CustomColumn)`
 	padding-top: 3vh;
@@ -26,11 +28,12 @@ export default function HomeHeader({ setActiveTab }: HomeHeaderProps) {
 				<CustomButton
 					$width="auto"
 					$backgroundColor="white"
-					$border="1px solid black"
-					$padding="1rem"
+					// $border="1px solid black"
+					$padding="0"
 					onClick={() => setActiveTab("동아리")} // '동아리'로 설정
 				>
-					<CustomFont $color="black" $font="1rem">LOGO</CustomFont>
+					<Image src={headerLogo} alt="Logo"/>
+
 				</CustomButton>
 
 				<CustomButton
