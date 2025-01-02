@@ -2,8 +2,8 @@
 import styled from 'styled-components';
 
 const AddButtonContainer = styled.div`
-  width: 25rem;
-  height: 25rem;
+  width: 20rem;
+  height: 20rem;
   display: flex;
   align-items: center;
   justify-content: center;

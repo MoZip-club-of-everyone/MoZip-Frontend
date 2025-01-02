@@ -10,8 +10,8 @@ interface CustomImageProps {
   alt?: string;
 }
 const ImageWrapper = styled.div`
-  width: 25rem;
-  height: 25rem;
+  width: 20rem;
+  height: 20rem;
   border-radius: 20px;
   overflow: hidden;
   background-color: #f0f0f0;

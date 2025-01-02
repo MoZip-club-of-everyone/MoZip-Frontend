@@ -17,7 +17,6 @@ interface CustomCardProps {
 
 const CardContainer = styled.div`
   width: auto;
-  overflow: hidden;
   padding: 1rem;
   cursor: pointer;
 `;

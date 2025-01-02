@@ -16,8 +16,7 @@ const CustomBoxWithShadow = styled(CustomBox)`
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
 	border-radius: 1rem;
 	padding: 1rem;
-
-  width: 25rem;
+  width: 20rem;
   height: auto;
   border-radius: 20px;
   overflow: hidden;
