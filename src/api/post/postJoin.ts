@@ -1,7 +1,6 @@
 import axiosInstance from "../axiosInstance";
 
 interface JoinData {
-    username: string;
     password: string;
     realname: string;
     email: string;

@@ -28,7 +28,6 @@ const CustomFontWithLine = styled(CustomFont)`
 export default function Signup() {
 	const router = useRouter();
 
-	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [realname, setRealname] = useState('');
 	const [email, setEmail] = useState('');
@@ -48,7 +47,6 @@ export default function Signup() {
 		const formattedPhone = `${phone1}-${phone2}-${phone3}`;
 
 		const userData = {
-			username: username,
 			password: password,
 			realname: realname,
 			email: email,
@@ -105,22 +103,6 @@ export default function Signup() {
 								$height="3rem"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
-							/>
-						</CustomColumn>
-
-						{/* 아이디 추가 */}
-						<CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center" $gap='0.5rem'>
-							<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start" $gap='0.5rem'>
-								<CustomFont $color='#363636' $font='1rem'>아이디</CustomFont>
-								<CustomFont $color='red' $font='1rem'>*</CustomFont>
-							</CustomRow>
-							<MozipBlockInput
-								$placeholder="아이디"
-								$highlightcolor="#8BB9FF"
-								$width="100%"
-								$height="3rem"
-								value={username}
-								onChange={(e) => setUsername(e.target.value)}
 							/>
 						</CustomColumn>
 
