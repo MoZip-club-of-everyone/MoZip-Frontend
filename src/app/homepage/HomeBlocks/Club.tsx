@@ -37,10 +37,14 @@ const clubs = [
 ];
 
 const Layout = styled.div`
+  max-width: 80%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 3rem;
 `;
+const AddContainer = styled.div`
+  padding: 1rem;
+`
 
 interface ClubProps {
   setActiveTab: (tab: string) => void;
@@ -63,8 +67,9 @@ export default function Club({ setActiveTab }: ClubProps) {
             onClick={() => setActiveTab("모집")}
           />
         ))}
-
-        {shouldShowAddButton && <AddClubButton key="add-club" />}
+        <AddContainer>
+          {shouldShowAddButton && <AddClubButton key="add-club" />}
+        </AddContainer>
       </Layout>
     </CustomColumn>
   );

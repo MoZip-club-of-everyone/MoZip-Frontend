@@ -27,12 +27,12 @@ interface DefaultLoginProps {
 export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLoginProps) {
 	const router = useRouter();
 
-	const [username, setUsername] = useState('');
+	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [errormessage, setErrormessage] = useState('');
 
 	const handleLogin = async () => {
-		if (username === '') {
+		if (email === '') {
             alert('아이디를 입력하세요.');
             return;
         }
@@ -43,7 +43,7 @@ export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLog
         }
 
 		const userData = {
-			username: username,
+			email: email,
 			password: password,
 		};
 		console.log('로그인 데이터: ', userData); // 리퀘스트 데이터
@@ -101,15 +101,15 @@ export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLog
 
 					<CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
 						<CustomFont $color="#363636" $font="1rem">
-							아이디
+							이메일
 						</CustomFont>
 						<MozipBlockInput
-							$placeholder="아이디"
+							$placeholder="이메일"
 							$highlightcolor="#8BB9FF"
 							$width="100%"
 							$height="3rem"
-							value={username}
-							onChange={(e) => setUsername(e.target.value)}
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</CustomColumn>
 
