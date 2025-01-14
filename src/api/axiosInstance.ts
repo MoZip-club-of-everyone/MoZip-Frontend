@@ -12,13 +12,13 @@ import axios, { AxiosRequestConfig, AxiosError } from "axios";
 import { useRouter } from "next/router";
 
 // 토큰 관련 함수
-// const getAccessToken = (): string | null => sessionStorage.getItem("accessToken");
-// const getRefreshToken = (): string | null => sessionStorage.getItem("refreshToken");
-// const setAccessToken = (token: string): void => sessionStorage.setItem("accessToken", token);
-// const clearTokens = (): void => {
-//   sessionStorage.removeItem("accessToken");
-//   sessionStorage.removeItem("refreshToken");
-// };
+const getAccessToken = (): string | null => localStorage.getItem("accessToken");
+const getRefreshToken = (): string | null => localStorage.getItem("refreshToken");
+const setAccessToken = (token: string): void => localStorage.setItem("accessToken", token);
+const clearTokens = (): void => {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
+};
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
@@ -26,16 +26,20 @@ const axiosInstance = axios.create({
 });
 
 // 요청 인터셉터
-// axiosInstance.interceptors.request.use(
-//   (config) => {
-//     const accessToken = getAccessToken();
-//     if (accessToken && config.headers) {
-//       config.headers.Authorization = `Bearer ${accessToken}`;
-//     }
-//     return config;
-//   },
-//   (error: AxiosError) => Promise.reject(error)
-// );
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const accessToken = getAccessToken();
+    console.log("Access Token:", accessToken); // 토큰 값 확인(변수명accessToken을 저장 시(postLogin.ts참고)의 변수명과 동일하게 맞춰야함.)
+
+    if (accessToken && config.headers) {
+      config.headers.Authorization = `${accessToken}`; //`Bearer ${accessToken}` 원래는 이건데 이번에는 백에서 Bearer를 붙여서 줘서 뺌
+      console.log("Authorization 헤더:", config.headers.Authorization);
+    }
+    console.log("config 확인:", config);
+    return config;
+  },
+  (error: AxiosError) => Promise.reject(error)
+);
 
 // 응답 인터셉터
 // axiosInstance.interceptors.response.use(
