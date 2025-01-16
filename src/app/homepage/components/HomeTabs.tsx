@@ -8,7 +8,6 @@ import styled from "styled-components";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
 import StyledImg from "@/components/StyledImg";
-import CustomButton from "@/components/CustomButton";
 import { IoIosArrowForward } from "react-icons/io";
 import CustomColumn from "@/components/CustomColumn";
 import CustomDivider from "@/components/CustomDivider";
