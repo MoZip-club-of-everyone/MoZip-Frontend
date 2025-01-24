@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { fetchDocumentScore, ApiResponse } from "@/api/post/fetchDocumentScore";
 import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
@@ -42,86 +44,78 @@ const StyledTable = styled.table`
   }
 `;
 
-export default function MozipManageDocumentsScore(): any {
-  const CoreList = [
-    { name: "김현아", score: 96 },
-    { name: "이나영", score: 96 },
-    { name: "이수혁", score: 96 },
-    { name: "임승민", score: 96 },
-    { name: "이예림", score: 96 },
-    { name: "정재웅", score: 96 },
-  ];
+export default function MozipManageDocumentsScore(): JSX.Element {
+  const [data, setData] = useState<ApiResponse | null>(null);
+
+  useEffect(() => {
+    async function fetchScore() {
+      try {
+        const mozipId = "01F8MECHZX3TBDSZ7W3D5B9FQ9";
+        const fetchedData = await fetchDocumentScore(mozipId);
+        setData(fetchedData);
+      } catch (error) {
+        console.error("데이터 로드 실패:", error);
+      }
+    }
+
+    fetchScore();
+  }, []);
+
+  if (!data) {
+    return <p>로딩 중...</p>;
+  }
+
   return (
-    <>
-      <CustomColumn
-        $width="100%"
-        $alignitems="flex-start"
-        $justifycontent="flex-start"
-        $gap="0px"
-      >
-        {/* Header Section */}
-        <CustomRow
-          $width="100%"
-          $alignitems="flex-end"
-          $justifycontent="flex-start"
-          // $padding="1rem"
-        >
-          <CustomFont $font="24px" $color="#363636" $fontweight="bold">
-            서류 평가 점수
-          </CustomFont>
-          <Applicant blue>전체 146명</Applicant> |{" "}
-          <Applicant>합격자 20명</Applicant> |{" "}
-          <Applicant>불합격자 126명</Applicant>
-        </CustomRow>
-        <TableWrapper>
-          <StyledTable>
-            <thead>
-              <tr>
-                <th></th>
-                <th>지원번호</th>
-                <th>성명</th>
-                <th>지원서</th>
-                {CoreList.map((Core) => (
-                  <th key={Core.name}>{Core.name}</th>
-                ))}
-                <th>평균점수</th>
-                <th>합격여부</th>
-                <th>이메일</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[...Array(20)].map((_, index) => (
-                <tr key={index}>
-                  <td>
-                    <input type="checkbox" />
-                  </td>
-                  <td>{index + 1}</td>
-                  <td>김하린</td>
-                  <td>
-                    <a
-                      href="#"
-                      style={{ color: "#5296FF", textDecoration: "none" }}
-                    >
-                      지원서
-                    </a>
-                  </td>
-                  {CoreList.map((Core) => (
-                    <td key={Core.name}>{Core.score}</td>
-                  ))}
-                  <td>
-                    {(
-                      CoreList.reduce((sum, { score }) => sum + score, 0) /
-                      CoreList.length
-                    ).toFixed(2)}
-                  </td>
-                  <td>서류합격</td>
-                  <td>cu4149@gmail.com</td>
-                </tr>
+    <CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="flex-start" $gap="0px">
+      {/* Header Section */}
+      <CustomRow $width="100%" $alignitems="flex-end" $justifycontent="flex-start">
+        <CustomFont $font="24px" $color="#363636" $fontweight="bold">
+          서류 평가 점수
+        </CustomFont>
+        <Applicant blue>전체 {data.total_cnt}명</Applicant> |{" "}
+        <Applicant>합격자 {data.passed_cnt}명</Applicant> |{" "}
+        <Applicant>불합격자 {data.failed_cnt}명</Applicant>
+      </CustomRow>
+
+      {/* Table Section */}
+      <TableWrapper>
+        <StyledTable>
+          <thead>
+            <tr>
+              <th></th>
+              <th>지원번호</th>
+              <th>성명</th>
+              <th>지원서</th>
+              {data.applicants[0]?.evaluations.map((evaluation) => (
+                <th key={evaluation.realname}>{evaluation.realname}</th>
               ))}
-            </tbody>
-          </StyledTable>
-        </TableWrapper>
-      </CustomColumn>
-    </>
+              <th>평균점수</th>
+              <th>합격여부</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.applicants.map((applicant) => (
+              <tr key={applicant.applicant_id}>
+                <td>
+                  <input type="checkbox" />
+                </td>
+                <td>{applicant.application_number}</td>
+                <td>{applicant.realname}</td>
+                <td>
+                  <a href="#" style={{ color: "#5296FF", textDecoration: "none" }}>
+                    지원서
+                  </a>
+                </td>
+                {applicant.evaluations.map((evaluation) => (
+                  <td key={evaluation.realname}>{evaluation.score}</td>
+                ))}
+                <td>{applicant.everage.toFixed(2)}</td>
+                <td>{applicant.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </StyledTable>
+      </TableWrapper>
+    </CustomColumn>
   );
 }

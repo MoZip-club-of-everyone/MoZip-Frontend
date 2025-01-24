@@ -1,48 +1,12 @@
 import { useEffect, useState } from "react";
-import axiosInstance from "@/api/axiosInstance";
+import { manageDocumentGET } from "@/api/post/manageDocumentGET";
+
 import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
 import styled from "styled-components";
 
-const Applicant = styled.p<{ blue?: boolean }>`
-  font-size: 16px;
-  color: ${({ blue }) => (blue ? "#5296FF" : "inherit")};
-`;
-
-const TableWrapper = styled.div`
-  width: 100%;
-  overflow-x: auto;
-`;
-
-const StyledTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-
-  thead th {
-    border-top: 2px solid #ddd;
-    border-bottom: 2px solid #ddd;
-    background-color: white;
-    font-weight: bold;
-    padding: 8px;
-    text-align: center;
-  }
-
-  tbody td {
-    padding: 8px;
-    text-align: center;
-    background-color: white;
-  }
-
-  tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-
-  tbody tr:hover {
-    background-color: #f1f1f1;
-  }
-`;
+// 스타일링 코드 하단으로 이동!
 
 interface ApplicantData {
   applicant_id: string;
@@ -62,25 +26,19 @@ export default function MozipManageDocumentList(): any {
   const [failedCnt, setFailedCnt] = useState(0);
 
   useEffect(() => {
-    async function fetchApplicants() {
+    async function loadApplicants() {
       try {
-        const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
-        const response = await axiosInstance.get(`/mozip/{mozip_id}/applicants`, {
-          headers: {
-            Authorization: `Bearer ${userInfo.token}`,
-          },
-        });
-
-        setApplicants(response.data.applicants);
-        setTotalCnt(response.data.total_cnt);
-        setPassedCnt(response.data.passed_cnt);
-        setFailedCnt(response.data.failed_cnt);
+        const data = await manageDocumentGET();
+        setApplicants(data.applicants);
+        setTotalCnt(data.total_cnt);
+        setPassedCnt(data.passed_cnt);
+        setFailedCnt(data.failed_cnt);
       } catch (error) {
-        console.error("지원자 목록 불러오기 실패: ", error);
+        console.error("지원자 목록 로드 실패: ", error);
       }
     }
 
-    fetchApplicants();
+    loadApplicants();
   }, []);
 
   return (
@@ -91,7 +49,6 @@ export default function MozipManageDocumentList(): any {
         $justifycontent="flex-start"
         $gap="0px"
       >
-        {/* Header Section */}
         <CustomRow
           $width="100%"
           $alignitems="flex-end"
@@ -105,7 +62,6 @@ export default function MozipManageDocumentList(): any {
           <Applicant>불합격자 {failedCnt}명</Applicant>
         </CustomRow>
 
-        {/* Table Section */}
         <TableWrapper>
           <StyledTable>
             <thead>
@@ -151,3 +107,42 @@ export default function MozipManageDocumentList(): any {
     </>
   );
 }
+
+const Applicant = styled.p<{ blue?: boolean }>`
+  font-size: 16px;
+  color: ${({ blue }) => (blue ? "#5296FF" : "inherit")};
+`;
+
+const TableWrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+`;
+
+const StyledTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+
+  thead th {
+    border-top: 2px solid #ddd;
+    border-bottom: 2px solid #ddd;
+    background-color: white;
+    font-weight: bold;
+    padding: 8px;
+    text-align: center;
+  }
+
+  tbody td {
+    padding: 8px;
+    text-align: center;
+    background-color: white;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+`;
