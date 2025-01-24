@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import axiosInstance from "@/api/axiosInstance";
 import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
@@ -42,7 +44,45 @@ const StyledTable = styled.table`
   }
 `;
 
+interface ApplicantData {
+  applicant_id: string;
+  application_number: number;
+  realname: string;
+  applied_at: string;
+  paper_score: number;
+  email: string;
+  phone: string;
+  status: string;
+}
+
 export default function MozipManageDocumentList(): any {
+  const [applicants, setApplicants] = useState<ApplicantData[]>([]);
+  const [totalCnt, setTotalCnt] = useState(0);
+  const [passedCnt, setPassedCnt] = useState(0);
+  const [failedCnt, setFailedCnt] = useState(0);
+
+  useEffect(() => {
+    async function fetchApplicants() {
+      try {
+        const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+        const response = await axiosInstance.get(`/mozip/{mozip_id}/applicants`, {
+          headers: {
+            Authorization: `Bearer ${userInfo.token}`,
+          },
+        });
+
+        setApplicants(response.data.applicants);
+        setTotalCnt(response.data.total_cnt);
+        setPassedCnt(response.data.passed_cnt);
+        setFailedCnt(response.data.failed_cnt);
+      } catch (error) {
+        console.error("지원자 목록 불러오기 실패: ", error);
+      }
+    }
+
+    fetchApplicants();
+  }, []);
+
   return (
     <>
       <CustomColumn
@@ -56,14 +96,13 @@ export default function MozipManageDocumentList(): any {
           $width="100%"
           $alignitems="flex-end"
           $justifycontent="flex-start"
-          // $padding="1rem"
         >
           <CustomFont $font="24px" $color="#363636" $fontweight="bold">
             서류 지원자 목록
           </CustomFont>
-          <Applicant blue>전체 146명</Applicant> |{" "}
-          <Applicant>합격자 20명</Applicant> |{" "}
-          <Applicant>불합격자 126명</Applicant>
+          <Applicant blue>전체 {totalCnt}명</Applicant> |{" "}
+          <Applicant>합격자 {passedCnt}명</Applicant> |{" "}
+          <Applicant>불합격자 {failedCnt}명</Applicant>
         </CustomRow>
 
         {/* Table Section */}
@@ -83,14 +122,14 @@ export default function MozipManageDocumentList(): any {
               </tr>
             </thead>
             <tbody>
-              {[...Array(20)].map((_, index) => (
-                <tr key={index}>
+              {applicants.map((applicant) => (
+                <tr key={applicant.applicant_id}>
                   <td>
                     <input type="checkbox" />
                   </td>
-                  <td>{index + 1}</td>
-                  <td>김하린</td>
-                  <td>2024-10-20 22:46:50</td>
+                  <td>{applicant.application_number}</td>
+                  <td>{applicant.realname}</td>
+                  <td>{new Date(applicant.applied_at).toLocaleString()}</td>
                   <td>
                     <a
                       href="#"
@@ -99,10 +138,10 @@ export default function MozipManageDocumentList(): any {
                       지원서
                     </a>
                   </td>
-                  <td>96</td>
-                  <td>cu4149@gmail.com</td>
-                  <td>010-5063-8442</td>
-                  <td>합격</td>
+                  <td>{applicant.paper_score}</td>
+                  <td>{applicant.email}</td>
+                  <td>{applicant.phone}</td>
+                  <td>{applicant.status}</td>
                 </tr>
               ))}
             </tbody>
