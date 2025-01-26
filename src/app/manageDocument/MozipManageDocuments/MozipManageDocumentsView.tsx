@@ -2,6 +2,7 @@ import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
 import styled from "styled-components";
 import { SetStateAction, useState } from "react";
+import CommentModal from "./modalComponent/CommentModal";
 
 const QuestionWrapper = styled.div`
   width: 100%;
@@ -37,7 +38,6 @@ const AnswerDiv = styled.div`
   width: 100%;
   padding: 16px;
   border-left: 7px solid #5296ff;
-  // margin-bottom: 16px;
 `;
 
 const ScoreInput = styled.input`
@@ -62,7 +62,6 @@ const ScoreButton = styled.button`
   width: 59px;
   height: 24px;
   font-size: 12px;
-  // cursor: pointer;
   position: absolute;
   bottom: 20px;
   right: 22.5px;
@@ -83,6 +82,7 @@ const CommentButton = styled.button`
 
 export default function MozipManageDocumentsView(): JSX.Element {
   const [score, setScore] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
 
   const handleScoreChange = (e: {
     target: { value: SetStateAction<string> };
@@ -91,13 +91,15 @@ export default function MozipManageDocumentsView(): JSX.Element {
   };
 
   const handleScoreSubmit = () => {
-    // 점수 입력 로직 추가 가능
     alert(`점수 입력: ${score}`);
   };
 
   const handleCommentClick = () => {
-    // 평가 코멘트 로직 추가 가능
-    alert("평가 코멘트를 입력하세요.");
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -139,6 +141,10 @@ export default function MozipManageDocumentsView(): JSX.Element {
         <ScoreButton onClick={handleScoreSubmit}>점수 입력</ScoreButton>
         <CommentButton onClick={handleCommentClick}>평가 코멘트</CommentButton>
       </AnswerWapper>
+
+      {isModalOpen && (
+        <CommentModal isOpen={isModalOpen} onClose={closeModal} />
+      )}
     </CustomColumn>
   );
 }
