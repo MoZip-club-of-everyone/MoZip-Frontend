@@ -2,7 +2,7 @@ import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
 import styled from "styled-components";
 import { SetStateAction, useState } from "react";
-import CommentModal from "./modalComponent/CommentModal";
+import CommentModal from "../CommentModal";
 
 const QuestionWrapper = styled.div`
   width: 100%;
@@ -80,7 +80,7 @@ const CommentButton = styled.button`
   cursor: pointer;
 `;
 
-export default function MozipManageDocumentsView(): JSX.Element {
+export default function View(): JSX.Element {
   const [score, setScore] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
 

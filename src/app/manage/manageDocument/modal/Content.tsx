@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import CommentBox from "./components/CommentBox";
+import CommentBox from "./components/modal/CommentBox";
 
 interface Memo {
   title: string;

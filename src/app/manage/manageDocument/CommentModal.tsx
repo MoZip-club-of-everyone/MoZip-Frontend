@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Header from "./Header";
-import Content from "./Content";
-import Footer from "./Footer";
+import Header from "./modal/Header";
+import Content from "./modal/Content";
+import Footer from "./modal/Footer";
 
 interface CommentModalProps {
   isOpen: boolean;
