@@ -1,8 +1,10 @@
 import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
 import styled from "styled-components";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 import CommentModal from "../CommentModal";
+import CustomRow from "@/components/CustomRow";
+import Dropdown from "./Dropdown";
 
 const QuestionWrapper = styled.div`
   width: 100%;
@@ -20,11 +22,8 @@ const Question = styled.p`
 const AnswerWapper = styled.div`
   width: 100%;
   height: 300px;
-  position: relative;
   display: flex;
-  justify-content: center;
   align-items: center;
-  flex-direction: row;
 `;
 
 const AnswerName = styled.div`
@@ -44,18 +43,14 @@ const ScoreInput = styled.input`
   width: 59px;
   height: 24px;
   padding: 4px;
-  margin-right: 16px;
   font-size: 12px;
   position: absolute;
   bottom: 20px;
   right: 80px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   text-align: center;
-  color: #999999;
+  color: #999;
   border-radius: 4px;
-  border: 1px solid #999999;
+  border: 1px solid #999;
 `;
 
 const ScoreButton = styled.button`
@@ -82,11 +77,9 @@ const CommentButton = styled.button`
 
 export default function View(): JSX.Element {
   const [score, setScore] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleScoreChange = (e: {
-    target: { value: SetStateAction<string> };
-  }) => {
+  const handleScoreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setScore(e.target.value);
   };
 
@@ -94,44 +87,42 @@ export default function View(): JSX.Element {
     alert(`점수 입력: ${score}`);
   };
 
-  const handleCommentClick = () => {
-    setIsModalOpen(true);
-  };
+  const handleCommentClick = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
+  const applicants = [
+    { id: "김강민", label: "김강민", checked: true },
+    { id: "임승민", label: "임승민", checked: true },
+    { id: "이나영", label: "이나영", checked: false },
+    { id: "이예림", label: "이예림", checked: true },
+  ];
+
+  const questions = [
+    { id: "전체", label: "전체", checked: true },
+    { id: "1번 문항", label: "1번 문항", checked: true },
+    { id: "2번 문항", label: "2번 문항", checked: true },
+    { id: "3번 문항", label: "3번 문항", checked: false },
+  ];
 
   return (
-    <CustomColumn
-      $width="100%"
-      $alignitems="flex-start"
-      $justifycontent="flex-start"
-      $gap="16px"
-    >
+    <CustomColumn $width="100%" $alignitems="flex-start" $gap="16px">
       <CustomFont $font="24px" $color="#363636" $fontweight="bold">
         서류 지원서 보기
       </CustomFont>
-
+      <CustomRow>
+        <Dropdown title="조회할 지원자" options={applicants} searchable />
+        <Dropdown
+          title="문항별 응답조회"
+          options={questions}
+          searchable={false}
+        />
+      </CustomRow>
       <QuestionWrapper>
-        <Question>
-          다양한 IT동아리 중에서 멋쟁이사자처럼 대학 11기 활동에 지원하게 된
-          이유를 작성해주세요. (500자 이내)
-        </Question>
+        <Question>IT동아리 지원 이유를 작성해주세요.</Question>
       </QuestionWrapper>
-
       <AnswerWapper>
         <AnswerName>김강민</AnswerName>
-        <AnswerDiv>
-          저는 이 동아리에서 최대한 프로젝트 경험을 쌓고 싶습니다. 제가 개발
-          동아리를 찾게 된 이유이기도 한데, 개발자로서의 기본은 프로젝트를 통한
-          협업의 경험과 이에 대한 능력이라고 생각하기 때문입니다. 저는 최대한
-          다양한 프로젝트를 수행하며, 유의미한 결과를 도출해내고 싶습니다. 개발
-          지식을 갖추는 것은 책이나 유튜브를 보며 실습하는 것으로도 가능하지만,
-          제가 원하는 지식은 팀 프로젝트 내에서 제가 어떤 역할을 수행해야 하고,
-          어떻게 프로젝트를 진행해야 하는 지에 대한, 쉽게 얻지 못할 경험입니다.
-          부디 제가 이러한 질적 경험을 얻을 수 있도록 해주시면 감사하겠습니다.
-        </AnswerDiv>
+        <AnswerDiv>프로젝트 경험을 쌓고 싶습니다.</AnswerDiv>
         <ScoreInput
           type="text"
           value={score}
@@ -141,7 +132,6 @@ export default function View(): JSX.Element {
         <ScoreButton onClick={handleScoreSubmit}>점수 입력</ScoreButton>
         <CommentButton onClick={handleCommentClick}>평가 코멘트</CommentButton>
       </AnswerWapper>
-
       {isModalOpen && (
         <CommentModal isOpen={isModalOpen} onClose={closeModal} />
       )}

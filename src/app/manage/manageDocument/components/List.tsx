@@ -4,6 +4,9 @@ import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
 import styled from "styled-components";
+import CustomButton from "@/components/CustomButton";
+import { MdOutlineContentCopy } from "react-icons/md";
+import { BsDownload } from "react-icons/bs";
 
 const Applicant = styled.p<{ blue?: boolean }>`
   font-size: 16px;
@@ -42,6 +45,25 @@ const StyledTable = styled.table`
   tbody tr:hover {
     background-color: #f1f1f1;
   }
+`;
+
+const BtnsLeft = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+const BtnsRight = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const CheckButton = styled.div`
+  display: flex;
+  border: 1px solid #464646;
+  padding: 3px 5px;
+  border-radius: 4px;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 12px;
 `;
 
 interface ApplicantData {
@@ -106,6 +128,28 @@ export default function List(): any {
           <Applicant blue>전체 {totalCnt}명</Applicant> |{" "}
           <Applicant>합격자 {passedCnt}명</Applicant> |{" "}
           <Applicant>불합격자 {failedCnt}명</Applicant>
+        </CustomRow>
+        <CustomRow
+          $width="100%"
+          $justifycontent="space-between"
+          $margin="0.5rem"
+        >
+          <BtnsLeft>
+            <CheckButton>서류합격</CheckButton>
+            <CheckButton>서류불합격</CheckButton>
+            <CheckButton>보류</CheckButton>
+            <CheckButton>예비</CheckButton>
+          </BtnsLeft>
+          <BtnsRight>
+            <CheckButton>
+              <MdOutlineContentCopy />
+              이메일 주소 복사
+            </CheckButton>
+            <CheckButton>
+              <BsDownload />
+              PDF 다운로드
+            </CheckButton>
+          </BtnsRight>
         </CustomRow>
 
         {/* Table Section */}
