@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import CustomColumn from "@/components/CustomColumn";
 import CustomRow from "@/components/CustomRow";
