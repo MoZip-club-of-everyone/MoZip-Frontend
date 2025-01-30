@@ -8,8 +8,12 @@ import CustomBox from "@/components/CustomBox";
 import CustomColumn from "@/components/CustomColumn";
 import { BsDot } from "react-icons/bs";
 
-// 담당자: 현아 -> 나영
-// 홈화면에서 특정 동아리 클릭 시 진입하는 동아리의 Mozip 홈화면 컴포넌트입니다.
+// Props 타입 정의
+interface MozipProgressButtonProps {
+	title: string;
+	startDate: string;
+	endDate: string;
+}
 
 const CustomBoxWithShadow = styled(CustomBox)`
 	width: 20rem;
@@ -20,29 +24,25 @@ const CustomBoxWithShadow = styled(CustomBox)`
 	background-color: white;
 `;
 
-export default function MozipProgressButton() {
-
+export default function MozipProgressButton({ title, startDate, endDate }: MozipProgressButtonProps) {
 	return (
-
-		<CustomButton $width='auto' $height='auto' $padding='0' $backgroundColor="transparent">
+		<CustomButton $width="auto" $height="auto" $padding="0" $backgroundColor="transparent">
 			<CustomBoxWithShadow>
 				<CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center">
-					<CustomFont $color='#5B5B5B' $font='1rem' $fontweight="bold">모집제목최대15자</CustomFont>
+					<CustomFont $color="#5B5B5B" $font="1rem" $fontweight="bold">
+						{title}
+					</CustomFont>
 				</CustomColumn>
 				<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start">
-					<BsDot style={{ color: '#5B5B5B' }} />
-					<CustomFont $color='#5B5B5B'>한줄최대30글자</CustomFont>
+					<BsDot style={{ color: "#5B5B5B" }} />
+					<CustomFont $color="#5B5B5B">{startDate}</CustomFont>
 				</CustomRow>
-				<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start" $gap='0.5rem'>
-					<BsDot style={{ color: '#5B5B5B' }} />
-					<CustomFont $color='#5B5B5B'>157</CustomFont>
-					<CustomFont $color='#5B5B5B'>(지원자)</CustomFont>
-					<CustomFont $color='#5B5B5B'>/</CustomFont>
-					<CustomFont $color='#5B5B5B'>17</CustomFont>
-					<CustomFont $color='#5B5B5B'>(합격자)</CustomFont>
+				<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start" $gap="0.5rem">
+					<BsDot style={{ color: "#5B5B5B" }} />
+					<CustomFont $color="#5B5B5B">{endDate}</CustomFont>
 				</CustomRow>
 				<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-end">
-					<CustomFont $color='#AAAAAA'>1일 전 최종수정</CustomFont>
+					<CustomFont $color="#AAAAAA">1일 전 최종수정</CustomFont>
 				</CustomRow>
 			</CustomBoxWithShadow>
 		</CustomButton>

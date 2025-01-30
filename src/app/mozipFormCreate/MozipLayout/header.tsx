@@ -7,6 +7,9 @@ import CustomRow from "@/components/CustomRow";
 import CustomColumn from "@/components/CustomColumn";
 import CustomButton from "@/components/CustomButton";
 
+import headerLogo from '@/assets/logo/headerLogo.svg';
+import StyledImg from "@/components/StyledImg";
+
 // 담당자: 나영
 // Figma : 모집폼 관리 > 상단 header 파일입니다.
 
@@ -19,8 +22,8 @@ export default function Header() {
 	return (
 		<CustomHeader $width="100%" $gap="0" $alignitems="flex-end">
 			<CustomRow $width="90%" $padding="0.5rem" $justifycontent="space-between" $alignitems="center">
-				<CustomButton $width='auto' $backgroundColor="white" $border="1px solid black" $padding="1rem">
-					<CustomFont $color="black" $font="1rem">LOGO</CustomFont>
+				<CustomButton $width='auto' $backgroundColor="transparent" $padding="1rem">
+					<StyledImg src={headerLogo} width='4rem' />
 				</CustomButton>
 
 				<CustomButton $width='auto' $backgroundColor="transparent">

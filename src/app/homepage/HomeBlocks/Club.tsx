@@ -7,6 +7,7 @@ import CustomColumn from "@/components/CustomColumn";
 import CustomCard from "../components/CustomCard";
 import AddClubButton from "../components/AddClubButton";
 import styled from "styled-components";
+import { useRouter } from "next/navigation";
 
 const clubs = [
   {
@@ -54,6 +55,7 @@ export default function Club({ setActiveTab }: ClubProps) {
   // 최대 6개까지만 표시 (임시로)
   const displayedClubs = clubs.slice(0, 6);
   const shouldShowAddButton = displayedClubs.length < 6;
+  const router = useRouter();
 
   return (
     <CustomColumn $width="100%" $alignitems="center" $justifycontent="center">

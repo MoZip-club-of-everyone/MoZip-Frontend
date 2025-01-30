@@ -8,6 +8,7 @@ import CustomRow from "@/components/CustomRow";
 import CustomColumn from "@/components/CustomColumn";
 import SideBar from "./sidebar";
 import Header from "./header";
+// import HomeHeader from "@/app/homepage/HomeLayout/HomeHeader";
 
 export default function MozipLayout({ children }: { children: React.ReactNode }) {
 	return (

@@ -13,8 +13,10 @@ import { useRouter } from "next/router";
 
 // 토큰 관련 함수
 const getAccessToken = (): string | null => localStorage.getItem("accessToken");
-const getRefreshToken = (): string | null => localStorage.getItem("refreshToken");
-const setAccessToken = (token: string): void => localStorage.setItem("accessToken", token);
+const getRefreshToken = (): string | null =>
+  localStorage.getItem("refreshToken");
+const setAccessToken = (token: string): void =>
+  localStorage.setItem("accessToken", token);
 const clearTokens = (): void => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("refreshToken");
@@ -80,4 +82,3 @@ axiosInstance.interceptors.request.use(
 // );
 
 export default axiosInstance;
-
