@@ -39,12 +39,22 @@ const StyledIconContainer = styled.button`
 `;
 
 interface MozipBlockProps {
+	id: number;
+	type: string;
+	question: string;
 	onAdd: () => void;
-	onAddDivider: () => void;
 	onRemove: () => void;
+	onUpdate: (id: number, key: "type" | "question", value: string) => void;
 }
 
-export default function MozipBlock({ onAdd, onAddDivider, onRemove }: MozipBlockProps) {
+export default function MozipBlock({
+	id,
+	type,
+	question,
+	onAdd,
+	onRemove,
+	onUpdate,
+}: MozipBlockProps) {
 	return (
 		<CustomRow $width="100%" $alignitems="center" $justifycontent="center">
 			<CustomBox $flexdirection="row" $backgroundcolor="white" $width="90%" $height="10rem" $alignitems="center" $justifycontent="flex-start" $border="1px solid #D9D9D9" $borderradius="1rem">
@@ -61,7 +71,7 @@ export default function MozipBlock({ onAdd, onAddDivider, onRemove }: MozipBlock
 										질문 유형 선택:
 									</CustomFont>
 									<CustomFont $color="black" $font="0.8rem">
-										단답형
+										{type}
 									</CustomFont>
 									<IoIosArrowDown />
 								</CustomRow>
@@ -72,19 +82,23 @@ export default function MozipBlock({ onAdd, onAddDivider, onRemove }: MozipBlock
 							$bordercolor="1px solid #D9D9D9"
 							$borderradius="0.5rem"
 							$highlightcolor="#8BB9FF"
+							onSelect={(value) => onUpdate(id, "type", value)}
 						/>
 					</CustomRow>
-					<MozipBlockInput $placeholder="질문을 입력하세요." $highlightcolor="#8BB9FF" $width="100%" $height="3rem" />
+					<MozipBlockInput
+						$placeholder="질문을 입력하세요."
+						$highlightcolor="#8BB9FF"
+						$width="100%"
+						$height="3rem"
+						value={question}
+						onChange={(e) => onUpdate(id, "question", e.target.value)}
+					/>
 				</CustomColumn>
 			</CustomBox>
 
 			<CustomColumn $width="10%" $alignitems="center" $justifycontent="center" $gap="1rem">
 				<CustomButton $width="auto" $height="auto" $backgroundColor="black" $alignItems="center" $justifyContent="center" $borderRadius="1rem" $padding="1rem" onClick={onAdd}>
 					<GoPlus style={{ color: "white" }} />
-				</CustomButton>
-
-				<CustomButton $width="auto" $height="auto" $backgroundColor="black" $alignItems="center" $justifyContent="center" $borderRadius="1rem" $padding="1rem" onClick={onAddDivider}>
-					<TbListNumbers style={{ color: "white" }} />
 				</CustomButton>
 
 				<CustomButton $width="auto" $height="auto" $backgroundColor="#FF7272" $alignItems="center" $justifyContent="center" $borderRadius="1rem" $padding="1rem" onClick={onRemove}>

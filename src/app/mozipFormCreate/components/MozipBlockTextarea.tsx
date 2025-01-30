@@ -18,6 +18,8 @@ interface MozipBlockTextareaProps {
   $overflowx?: string;
   $overflowy?: string;
   maxLength?: number;
+  value?: string; // value 속성 추가
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; // onChange 핸들러 추가
 }
 
 const TextareaWrapper = styled.div<MozipBlockTextareaProps>`
@@ -71,12 +73,17 @@ const CharacterCount = styled.div`
 const MozipBlockTextarea: React.FC<MozipBlockTextareaProps> = ({
   $placeholder = "여기에 입력...",
   maxLength = 1000, // 1000자를 최대로 기본 설정했음
+  value = "", // 기본값 추가
+  onChange, // onChange 핸들러 추가
   ...props
 }) => {
-  const [charCount, setCharCount] = useState(0);
+  const [charCount, setCharCount] = useState(value.length);
 
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCharCount(event.target.value.length);
+    if (onChange) {
+      onChange(event); // 외부 onChange 핸들러 호출
+    }
   };
 
   return (
@@ -84,7 +91,8 @@ const MozipBlockTextarea: React.FC<MozipBlockTextareaProps> = ({
       <StyledMozipBlockTextarea
         placeholder={$placeholder}
         maxLength={maxLength}
-        onChange={handleChange}
+        value={value} // value 속성 추가
+        onChange={handleChange} // onChange 핸들러 연결
         {...props}
       />
       <CharacterCount>

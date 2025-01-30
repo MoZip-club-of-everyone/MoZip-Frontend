@@ -1,7 +1,3 @@
-// 담당자: 나영
-// Figma : 모집폼 관리 > [ 질문 작성 ] 탭 클릭 시 나타나는 컴포넌트입니다.
-// 모집의 모든 문항을 작성하는 컴포넌트 파일입니다.
-
 import React, { useState } from "react";
 import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
@@ -17,38 +13,59 @@ interface MozipQuestionProps {
 
 export default function MozipQuestions({ onNext, onPrev }: MozipQuestionProps) {
 	// 초기 로딩 시 기본 MozipBlock 한 개 포함
-	const [blocks, setBlocks] = useState<Array<{ id: number; isDivider: boolean }>>([
-		{ id: Date.now(), isDivider: false }
+	const [blocks, setBlocks] = useState<Array<{ id: number; type: string; question: string }>>([
+		{ id: Date.now(), type: "단답형", question: "" },
 	]);
 
 	// GoPlus 버튼 클릭 시 MozipBlock 추가
 	const handleAddBlock = () => {
-		setBlocks([...blocks, { id: Date.now(), isDivider: false }]);
+		setBlocks([...blocks, { id: Date.now(), type: "단답형", question: "" }]);
 	};
 
-	// TbListNumbers 버튼 클릭 시 섹션 구분선 추가
-	const handleAddDivider = () => {
-		setBlocks([...blocks, { id: Date.now(), isDivider: true }]);
-	};
-
-	// MozipBlock 삭제 시 구분선이 함께 사라지지 않도록 수정함 : 2024.11.18
+	// MozipBlock 삭제
 	const handleRemoveBlock = (id: number) => {
-		const blockIndex = blocks.findIndex((block) => block.id === id);
-
-		if (blockIndex === -1) return; // 블록이 존재하지 않으면 아무 작업도 하지 않음
-
-		const newBlocks = [...blocks];
-
-		// 삭제하려는 블록이 일반 블록이고 다음 블록이 구분선일 경우 구분선도 함께 삭제
-		if (!newBlocks[blockIndex].isDivider && newBlocks[blockIndex + 1]?.isDivider) {
-			newBlocks.splice(blockIndex, 2); // 현재 블록과 다음 구분선 제거
-		} else {
-			newBlocks.splice(blockIndex, 1); // 일반 삭제
-		}
-
-		setBlocks(newBlocks);
+		setBlocks(blocks.filter((block) => block.id !== id));
 	};
 
+	// 질문 데이터 업데이트
+	const handleUpdateBlock = (id: number, key: "type" | "question", value: string) => {
+		setBlocks((prevBlocks) =>
+			prevBlocks.map((block) =>
+				block.id === id ? { ...block, [key]: value } : block
+			)
+		);
+	};
+
+	// 질문 유형 매핑
+	const mapQuestionType = (type: string) => {
+		switch (type) {
+			case "단답형":
+				return "SHORT_ANSWER";
+			case "장문형":
+				return "LONG_ANSWER";
+			case "객관식":
+				return "ONE_CHOICE";
+			case "체크박스":
+				return "MULTIPLE_CHOICE";
+			default:
+				return "UNKNOWN";
+		}
+	};
+
+	// localStorage에 데이터 저장
+	const saveToLocalStorage = () => {
+		const transformedBlocks = blocks.map((block) => ({
+			...block,
+			type: mapQuestionType(block.type),
+		}));
+		localStorage.setItem("mozipQuestions", JSON.stringify(transformedBlocks));
+	};
+
+	// 다음 단계로 이동
+	const handleNext = () => {
+		saveToLocalStorage();
+		onNext();
+	};
 
 	return (
 		<CustomColumn $width="100%" $alignitems="center" $justifycontent="center">
@@ -64,15 +81,17 @@ export default function MozipQuestions({ onNext, onPrev }: MozipQuestionProps) {
 			</CustomColumn>
 
 			{/* MozipBlock 목록 */}
-			{blocks.map((block) =>
-				block.isDivider ? (
-					<CustomFont key={block.id} $color="gray" $font="1rem">
-						----섹션 구분선----
-					</CustomFont>
-				) : (
-					<MozipBlock key={block.id} onAdd={handleAddBlock} onAddDivider={handleAddDivider} onRemove={() => handleRemoveBlock(block.id)} />
-				)
-			)}
+			{blocks.map((block) => (
+				<MozipBlock
+					key={block.id}
+					id={block.id}
+					type={block.type}
+					question={block.question}
+					onAdd={handleAddBlock}
+					onRemove={() => handleRemoveBlock(block.id)}
+					onUpdate={handleUpdateBlock}
+				/>
+			))}
 
 			<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start">
 				<CustomRow $width="90%" $alignitems="center" $justifycontent="flex-end">
@@ -82,7 +101,7 @@ export default function MozipQuestions({ onNext, onPrev }: MozipQuestionProps) {
 						</CustomFont>
 					</CustomButton>
 
-					<CustomButton $width="5rem" $backgroundColor="#5296FF" $padding="1rem" onClick={onNext}>
+					<CustomButton $width="5rem" $backgroundColor="#5296FF" $padding="1rem" onClick={handleNext}>
 						<CustomFont $color="white" $font="1rem">
 							다음
 						</CustomFont>

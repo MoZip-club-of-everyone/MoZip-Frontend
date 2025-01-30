@@ -7,28 +7,23 @@ import "react-datepicker/dist/react-datepicker.css";
 import { CiCalendar } from "react-icons/ci";
 
 interface MozipDatePickerProps {
-	$width?: string;
-	$height?: string;
-	$padding?: string;
-	$margin?: string;
-	$bordercolor?: string;
-	$borderradius?: string;
-	$highlightcolor?: string;
+	onChangeStartDate: (date: string | null) => void;
+	onChangeEndDate: (date: string | null) => void;
 }
 
-const DatePickerContainer = styled.div<MozipDatePickerProps>`
+const DatePickerContainer = styled.div`
   display: flex;
   align-items: center;
-  width: ${(props) => props.$width || "100%"};
-  height: ${(props) => props.$height || "auto"};
-  padding: ${(props) => props.$padding || "0.5rem 1rem"};
-  margin: ${(props) => props.$margin || "0"};
-  border: ${(props) => props.$bordercolor || "1px solid #D9D9D9"};
-  border-radius: ${(props) => props.$borderradius || "0.5rem"};
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  border: 1px solid #d9d9d9;
+  border-radius: 0.5rem;
   outline: none;
 
   &:focus-within {
-    border-color: ${(props) => props.$highlightcolor || "#8BB9FF"};
+    border-color: #8bb9ff;
   }
 `;
 
@@ -39,19 +34,44 @@ const IconContainer = styled.div`
   color: #b0b0b0;
 `;
 
-const MozipDatePicker = () => {
+const MozipDatePicker: React.FC<MozipDatePickerProps> = ({
+	onChangeStartDate,
+	onChangeEndDate,
+}) => {
 	const [startDate, setStartDate] = useState<Date | null>(null);
 	const [endDate, setEndDate] = useState<Date | null>(null);
 
+	const handleStartDateChange = (date: Date | null) => {
+		setStartDate(date);
+		onChangeStartDate(
+			date
+				? `${date.toISOString().split("T")[0]}T${new Date().toLocaleTimeString("en-US", {
+					hour12: false,
+				})}`
+				: null
+		);
+	};
+
+	const handleEndDateChange = (date: Date | null) => {
+		setEndDate(date);
+		onChangeEndDate(
+			date
+				? `${date.toISOString().split("T")[0]}T${new Date().toLocaleTimeString("en-US", {
+					hour12: false,
+				})}`
+				: null
+		);
+	};
+
 	return (
 		<div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-			<DatePickerContainer $width="auto" $padding="0.5rem" $borderradius="0.5rem">
+			<DatePickerContainer>
 				<IconContainer>
 					<CiCalendar />
 				</IconContainer>
 				<DatePicker
 					selected={startDate}
-					onChange={(date: Date | null) => setStartDate(date)}
+					onChange={handleStartDateChange}
 					dateFormat="yyyy-MM-dd"
 					placeholderText="YYYY-MM-DD"
 					className="custom-date-picker"
@@ -61,13 +81,13 @@ const MozipDatePicker = () => {
 
 			<span>~</span>
 
-			<DatePickerContainer $width="auto" $padding="0.5rem" $borderradius="0.5rem">
+			<DatePickerContainer>
 				<IconContainer>
 					<CiCalendar />
 				</IconContainer>
 				<DatePicker
 					selected={endDate}
-					onChange={(date: Date | null) => setEndDate(date)}
+					onChange={handleEndDateChange}
 					dateFormat="yyyy-MM-dd"
 					placeholderText="YYYY-MM-DD"
 					className="custom-date-picker"
