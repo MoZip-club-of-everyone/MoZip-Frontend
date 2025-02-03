@@ -8,7 +8,6 @@ import MozipDivider from "../components/MozipDivider";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-// 타입 정의
 interface MozipItem {
 	id: string;
 	title: string;
@@ -16,32 +15,36 @@ interface MozipItem {
 	endDate: string;
 }
 
-// 버튼들을 감싸는 래퍼 스타일
 const ButtonWrapper = styled.div`
-	display: flex;
-	flex-wrap: wrap; /* 너비 초과 시 행 바꿈 */
-	gap: 1rem; /* 버튼 간 간격 */
-	justify-content: center; /* 중앙 정렬 */
-	width: 100%; /* 부모 컨테이너 너비 채움 */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  width: 100%;
 `;
 
 const CustomColumnMargin = styled(CustomColumn)`
-	margin-top: 1rem;
-	min-height: 100vh;
+  margin-top: 1rem;
+  min-height: 100vh;
 `;
 
 export default function Mozip() {
 	const [mozipData, setMozipData] = useState<MozipItem[]>([]);
-	const [currentTime, setCurrentTime] = useState<Date>(new Date());
+	const [loading, setLoading] = useState(true); // 로딩 상태 관리
 	const token = localStorage.getItem("accessToken");
 
-	// mockData를 위한 clubId
-	const clubId = "01JJVD9F4RMC9XQX7BWWXSKECA";
-
 	useEffect(() => {
+		const clubId = localStorage.getItem("selectedClubId");
+
+		if (!clubId) {
+			console.error("club_id가 localStorage에 없습니다.");
+			setLoading(false);
+			return;
+		}
+
 		const fetchMozipData = async () => {
 			try {
-				console.log(token);
+				console.log("localStorage에서 가져온 club_id:", clubId);
 				const response = await axios.get<MozipItem[]>(
 					`${process.env.NEXT_PUBLIC_SERVER_URL}/api/mozip?club_id=${clubId}`,
 					{
@@ -52,7 +55,9 @@ export default function Mozip() {
 				);
 				setMozipData(response.data);
 			} catch (error) {
-				console.error("특정 동아리의 모집 목록 조회 실패:", error);
+				console.error("모집 데이터를 가져오는 중 오류 발생:", error);
+			} finally {
+				setLoading(false);
 			}
 		};
 
@@ -78,26 +83,35 @@ export default function Mozip() {
 					title={item.title}
 					startDate={formatDate(item.startDate)}
 					endDate={formatDate(item.endDate)}
+				// 클릭 시 배포된 모집 링크가 보이게 나중에 추가하기 !!
 				/>
 			));
+
+	if (loading) {
+		return <div>Loading...</div>;
+	}
+
+	if (!mozipData.length) {
+		return <div>아직 생성한 모집이 없어요 !</div>;
+	}
 
 	return (
 		<CustomColumnMargin $width="80%" $alignitems="center" $justifycontent="flex-start" $gap="2rem">
 			<AddNewMozip />
 			<MozipDivider text="모집 전" hasAddNewMozip={true} />
 			<ButtonWrapper>
-				{renderProgressButtons(mozipData, (item) => new Date(item.startDate) > currentTime)}
+				{renderProgressButtons(mozipData, (item) => new Date(item.startDate) > new Date())}
 			</ButtonWrapper>
 			<MozipDivider text="모집 중" hasAddNewMozip={true} />
 			<ButtonWrapper>
 				{renderProgressButtons(
 					mozipData,
-					(item) => new Date(item.startDate) <= currentTime && currentTime <= new Date(item.endDate)
+					(item) => new Date(item.startDate) <= new Date() && new Date() <= new Date(item.endDate)
 				)}
 			</ButtonWrapper>
 			<MozipDivider text="서류 평가 중" hasAddNewMozip={true} />
 			<ButtonWrapper>
-				{renderProgressButtons(mozipData, (item) => new Date(item.endDate) < currentTime)}
+				{renderProgressButtons(mozipData, (item) => new Date(item.endDate) < new Date())}
 			</ButtonWrapper>
 		</CustomColumnMargin>
 	);

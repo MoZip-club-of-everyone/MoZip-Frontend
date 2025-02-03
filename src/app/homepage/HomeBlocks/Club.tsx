@@ -18,13 +18,13 @@ const AddContainer = styled.div`
 `;
 
 interface ClubProps {
-  setActiveTab: (tab: string) => void;
+  setActiveTab: (tab: string) => void; // 탭 변경 함수
 }
 
 interface ClubData {
   club_id: string;
   name: string;
-  image: Blob | string | null; // string을 허용하여 이미지 경로 지원
+  image: Blob | string | null;
   master_name: string;
   mozip_count: number;
 }
@@ -40,25 +40,33 @@ export default function Club({ setActiveTab }: ClubProps) {
         const accessToken = localStorage.getItem("accessToken");
 
         if (!userId) {
-          console.error("userId가 없습니다. 로그인 여부를 확인하세요.");
+          console.error("userId가 없습니다.");
           return;
         }
 
         if (!accessToken) {
-          console.error("accessToken이 없습니다. 인증 상태를 확인하세요.");
+          console.error("accessToken이 없습니다.");
           return;
         }
 
+        // API 요청 및 응답 데이터 확인
         const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/clubs/user/${userId}`, {
           headers: {
             Authorization: `${accessToken}`,
           },
         });
 
-        const baseUrl = 'https://mozip-bucket.s3.amazonaws.com';
+        const baseUrl = "https://mozip-bucket.s3.amazonaws.com";
 
         const clubData = await Promise.all(
           response.data.map(async (club: any) => {
+            console.log("클럽 데이터:", club);
+
+            if (!club.club_id) {
+              console.warn("club_id가 없습니다. 데이터 구조를 확인하세요.", club);
+              return null;
+            }
+
             const imageUrl = `${baseUrl}/${club.image}`;
             try {
               const imageResponse = await fetch(imageUrl);
@@ -66,19 +74,19 @@ export default function Club({ setActiveTab }: ClubProps) {
               const imageBlob = await imageResponse.blob();
               return {
                 ...club,
-                image: imageBlob, // Blob 데이터 저장
+                image: imageBlob,
               };
             } catch (error) {
-              console.warn(`이미지 요청 실패. 기본 URL 사용: ${imageUrl}`, error);
+              console.warn(`이미지 요청 실패: ${imageUrl}`, error);
               return {
                 ...club,
-                image: imageUrl, // 요청 실패 시 URL 그대로 저장
+                image: imageUrl,
               };
             }
           })
         );
 
-        setClubs(clubData);
+        setClubs(clubData.filter((club) => club !== null)); // null 데이터 필터링
       } catch (error) {
         console.error("클럽 데이터를 가져오는 중 오류 발생:", error);
       }
@@ -86,6 +94,12 @@ export default function Club({ setActiveTab }: ClubProps) {
 
     fetchClubs();
   }, []);
+
+  // 클릭 시 localStorage에 club_id 저장
+  const handleClubClick = (clubId: string) => {
+    localStorage.setItem("selectedClubId", clubId);
+    setActiveTab("모집");
+  };
 
   return (
     <CustomColumn $width="100%" $alignitems="center" $justifycontent="center">
@@ -95,14 +109,14 @@ export default function Club({ setActiveTab }: ClubProps) {
             key={club.club_id}
             imageSrc={
               club.image instanceof Blob
-                ? URL.createObjectURL(club.image) // Blob 객체를 URL로 변환
+                ? URL.createObjectURL(club.image)
                 : typeof club.image === "string"
-                  ? club.image // 이미지 경로로 렌더링
-                  : "" // 이미지가 없을 경우 빈 값
+                  ? club.image
+                  : ""
             }
             clubName={club.name}
             clubDetails={[`관리자: ${club.master_name}`, `${club.mozip_count}개의 모집폼`]}
-            onClick={() => setActiveTab("모집")}
+            onClick={() => handleClubClick(club.club_id)}
           />
         ))}
         <AddContainer>

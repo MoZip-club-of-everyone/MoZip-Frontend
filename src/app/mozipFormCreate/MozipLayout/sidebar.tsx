@@ -1,6 +1,8 @@
 "use client";
 
 import styled from "styled-components";
+import { useRouter } from "next/navigation";
+
 import CustomFont from "@/components/CustomFont";
 import CustomDivider from "@/components/CustomDivider";
 import CustomRow from "@/components/CustomRow";
@@ -21,13 +23,14 @@ const CustomSideBarMenu = styled(CustomColumn)`
 `;
 
 export default function SideBar() {
+	const router = useRouter();
 
 	return (
 		<CustomRow $height="100vh" $gap="0" $alignitems="flex-start">
 			<CustomSideBarMenu $height="80vh" $justifycontent="space-between">
 
 				<CustomColumn $width="auto" $gap="1rem">
-					<CustomButton $backgroundColor="transparent">
+					<CustomButton $backgroundColor="transparent" onClick={() => router.push("/")}>
 						<CustomColumn $width='auto' $gap="0.5rem">
 							<HiOutlineHome style={{ fontSize: '1.5rem' }} />
 							<CustomFont $color="black" $font="0.6rem">
@@ -36,7 +39,7 @@ export default function SideBar() {
 						</CustomColumn>
 					</CustomButton>
 
-					<CustomButton $backgroundColor="transparent">
+					<CustomButton $backgroundColor="transparent" onClick={() => router.push("/mozipFormCreate")}>
 						<CustomColumn $width='auto' $gap="0.5rem">
 							<BsEnvelope style={{ fontSize: '1.5rem' }} />
 							<CustomFont $color="black" $font="0.6rem">
@@ -45,7 +48,7 @@ export default function SideBar() {
 						</CustomColumn>
 					</CustomButton>
 
-					<CustomButton $backgroundColor="transparent">
+					<CustomButton $backgroundColor="transparent" onClick={() => router.push("/manage")}>
 						<CustomColumn $width='auto' $gap="0.5rem">
 							<IoNewspaperOutline style={{ fontSize: '1.5rem' }} />
 							<CustomFont $color="black" $font="0.6rem">
@@ -54,7 +57,7 @@ export default function SideBar() {
 						</CustomColumn>
 					</CustomButton>
 
-					<CustomButton $backgroundColor="transparent">
+					<CustomButton $backgroundColor="transparent" onClick={() => router.push("/manage")}>
 						<CustomColumn $width='auto' $gap="0.5rem">
 							<FaRegAddressCard style={{ fontSize: '1.5rem' }} />
 							<CustomFont $color="black" $font="0.6rem">

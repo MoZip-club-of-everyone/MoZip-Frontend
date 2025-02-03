@@ -24,8 +24,7 @@ export default function MozipSetting({ onPublish, onPrev }: MozipSettingProps) {
 
 	const token = localStorage.getItem("accessToken");
 
-	// mockData를 위한 clubId
-	const clubId = "01JJVD9F4RMC9XQX7BWWXSKECA";
+	const clubId = localStorage.getItem('club_id_for_mozip'); // 홈화면 > 동아리 진입 시 얻은 clubId
 
 	// 모집 게시 처리
 	const handlePublish = async () => {
