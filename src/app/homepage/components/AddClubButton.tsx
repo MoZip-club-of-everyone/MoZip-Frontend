@@ -150,30 +150,28 @@ export default function AddClubButton() {
     setFileError("");
   };
 
-  //api연동
   const handleClubCreate = async () => {
     if (!clubName.trim()) {
       alert("동아리명을 입력해주세요.");
       return;
     }
-  
-    const formData = new FormData();
-    formData.append("name", clubName);
-    formData.append("image", file || headerLogo);
-    // if (file) {
-    //   formData.append("image", file);
-    // } else {
-    //   formData.append("image", headerLogo); // 기본 이미지
-    // }
+
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+
+    const image = file || headerLogo;
 
     try {
-      const response = await postClubCreate(formData);
+      const response = await postClubCreate(image, clubName);
       console.log("동아리 생성 성공:", response);
       alert("동아리가 성공적으로 생성되었습니다!");
       closeModal();
       removeFile();
     } catch (error: any) {
-      console.error("동아리 생성 실패:", error);
+      console.error("동아리 생성 실패:", error.message || error);
       alert("동아리 생성에 실패했습니다.");
     }
   };
@@ -186,8 +184,8 @@ export default function AddClubButton() {
 
       {/* <AddModal /> */}
 
-      <CustomModal 
-        isOpen={isModalOpen} 
+      <CustomModal
+        isOpen={isModalOpen}
         onClose={closeModal}
         $padding='3rem'
       >
@@ -203,14 +201,14 @@ export default function AddClubButton() {
             <ErrorMessage>1자 이상, 15자 이하로 입력해주세요.</ErrorMessage>
           )}
         </ClubNameLayout>
-        
+
         <Content>동아리 사진 첨부</Content>
         <FileButton htmlFor="fileInput">파일 첨부</FileButton>
-        <FileInput 
-          id="fileInput" 
-          type="file" 
-          accept="image/*" 
-          onChange={handleFileChange} 
+        <FileInput
+          id="fileInput"
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
         />
         {fileError && <ErrorMessage>{fileError}</ErrorMessage>}
         {/* {fileName && (
@@ -237,14 +235,14 @@ export default function AddClubButton() {
         >
           동아리 생성
         </ModalButton>
-        <ModalButton 
-          $width='100%' 
-          $height='56px' 
-          $backgroundColor='#fff' 
-          $borderRadius='12px' 
+        <ModalButton
+          $width='100%'
+          $height='56px'
+          $backgroundColor='#fff'
+          $borderRadius='12px'
           $border='1px solid #000'
           onClick={() => {
-            closeModal(); 
+            closeModal();
             removeFile();
           }}
         >

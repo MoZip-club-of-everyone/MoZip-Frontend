@@ -1,27 +1,41 @@
-import axiosInstance from "../axiosInstance";
+import axios from "axios";
 
-// interface ClubData {
-//   name: string;
-//   image: File;
-// }
-
-export default async function postClubCreate(data: FormData) {
+export default async function postClubCreate(image: File, name: string,) {
   try {
-    // const token = localStorage.getItem("token"); // 토큰 가져오기
-    // console.log("토큰 확인:", token); // 토큰 값 출력
-    // if (!token) throw new Error("토큰이 없습니다.");
+    const accessToken = typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+    const userId = localStorage.getItem("userId");
 
-    const response = await axiosInstance.post(`/api/clubs`, data, {
+    if (!userId) {
+      throw new Error("userId가 없습니다.");
+    }
+    if (!accessToken) {
+      throw new Error("accessToken이 없습니다.");
+    }
+
+    console.log("동아리 만드는 유저는:", userId);
+    console.log("동아리 만드는 유저 토큰은:", accessToken);
+
+    const formData = new FormData();
+    formData.append("userId", userId);
+    formData.append("image", image);
+    formData.append("name", name);
+
+    console.log("서버로 전송할 데이터:");
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+
+    const response = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/clubs`, formData, {
       headers: {
-        // Authorization: `${token}`, // Authorization 헤더 추가
-        "Content-Type": "multipart/form-data", // FormData 전송을 위한 Content-Type 지정
+        Authorization: `${accessToken}`,
+        "Content-Type": "multipart/form-data",
       },
     });
 
     console.log("Response:", response.data);
     return response.data;
-  } catch (error) {
-    console.error("클럽 생성 실패: ", error);
-    throw error; // 오류 처리를 호출자에게 전달하기 위해 throw 사용
-  } 
+  } catch (error: any) {
+    console.error("클럽 생성 실패:", error.message || error);
+    throw error;
+  }
 }
