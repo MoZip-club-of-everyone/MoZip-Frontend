@@ -13,8 +13,16 @@ const Layout = styled.div`
   grid-template-columns: repeat(3, 1fr);
   gap: 3rem;
 `;
+
 const AddContainer = styled.div`
   padding: 1rem;
+`;
+
+const MessageContainer = styled.div`
+  font-size: 1.5rem;
+  color: #555;
+  text-align: center;
+  margin-top: 2rem;
 `;
 
 interface ClubProps {
@@ -31,42 +39,36 @@ interface ClubData {
 
 export default function Club({ setActiveTab }: ClubProps) {
   const [clubs, setClubs] = useState<ClubData[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리!
   const shouldShowAddButton = clubs.length < 6;
 
   useEffect(() => {
+    const checkLoginStatus = () => {
+      const userId = localStorage.getItem("userId");
+      const accessToken = localStorage.getItem("accessToken");
+      setIsLoggedIn(!!userId && !!accessToken); // 로그인 상태 확인
+    };
+
     const fetchClubs = async () => {
       try {
         const userId = localStorage.getItem("userId");
         const accessToken = localStorage.getItem("accessToken");
 
-        if (!userId) {
-          console.error("userId가 없습니다.");
+        if (!userId || !accessToken) {
+          console.error("로그인되지 않았습니다.");
           return;
         }
 
-        if (!accessToken) {
-          console.error("accessToken이 없습니다.");
-          return;
-        }
-
-        // API 요청 및 응답 데이터 확인
         const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/clubs/user/${userId}`, {
           headers: {
             Authorization: `${accessToken}`,
           },
         });
 
-        const baseUrl = "https://mozip-bucket.s3.amazonaws.com";
+        const baseUrl = "https://mozip-bucket.s3.amazonaws.com"; //s3 서버 주소
 
         const clubData = await Promise.all(
           response.data.map(async (club: any) => {
-            console.log("클럽 데이터:", club);
-
-            if (!club.club_id) {
-              console.warn("club_id가 없습니다. 데이터 구조를 확인하세요.", club);
-              return null;
-            }
-
             const imageUrl = `${baseUrl}/${club.image}`;
             try {
               const imageResponse = await fetch(imageUrl);
@@ -92,14 +94,22 @@ export default function Club({ setActiveTab }: ClubProps) {
       }
     };
 
-    fetchClubs();
+    checkLoginStatus(); // 로그인 됐는가?
+    fetchClubs(); // 동아리 데이터 가져오기
   }, []);
 
-  // 클릭 시 localStorage에 club_id 저장
   const handleClubClick = (clubId: string) => {
-    localStorage.setItem("selectedClubId", clubId);
-    setActiveTab("모집");
+    localStorage.setItem("selectedClubId", clubId); // club_id 저장
+    setActiveTab("모집"); // 탭 변경
   };
+
+  if (!isLoggedIn) {
+    return (
+      <MessageContainer>
+        로그인 후 나의 모든 동아리를 확인하세요.
+      </MessageContainer>
+    );
+  }
 
   return (
     <CustomColumn $width="100%" $alignitems="center" $justifycontent="center">
