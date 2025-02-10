@@ -1,5 +1,7 @@
 "use client";
 
+import { useRecoilState } from "recoil";
+import { loginState } from "@/recoil/loginState";
 import styled from "styled-components";
 import { useRouter } from "next/navigation";
 import CustomFont from "@/components/CustomFont";
@@ -20,6 +22,21 @@ interface HomeHeaderProps {
 
 export default function HomeHeader({ setActiveTab }: HomeHeaderProps) {
 	const router = useRouter();
+	const [loginStateValue, setLoginState] = useRecoilState(loginState);
+
+	const handleAuthClick = () => {
+		if (loginStateValue.isLoggedIn) {
+		  // 로그아웃 처리
+		  setLoginState({
+			isLoggedIn: false,
+			userId: null
+		  });
+		  localStorage.removeItem('userId');
+		  localStorage.removeItem('accessToken');
+		} else {
+		  router.push("/memberlogin");
+		}
+	  };
 
 	return (
 		<CustomHeader $width="100%" $gap="0" $alignitems="flex-end">
@@ -33,15 +50,14 @@ export default function HomeHeader({ setActiveTab }: HomeHeaderProps) {
 					onClick={() => setActiveTab("동아리")} // '동아리'로 설정
 				>
 					<Image src={headerLogo} alt="Logo"/>
-
 				</CustomButton>
 
 				<CustomButton
 					$width="auto"
 					$backgroundColor="transparent"
-					onClick={() => router.push("/memberlogin")}
+					onClick={handleAuthClick}
 				>
-					<CustomFont $color="black" $font="0.8rem">로그인</CustomFont>
+					<CustomFont $color="black" $font="0.8rem">{loginStateValue.isLoggedIn ? '로그아웃' : '로그인'}</CustomFont>
 				</CustomButton>
 			</CustomRow>
 			<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D8D8D8" />

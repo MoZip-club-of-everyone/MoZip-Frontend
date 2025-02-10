@@ -1,5 +1,7 @@
 "use client";
 
+import { useRecoilValue } from "recoil";
+import { loginState } from "@/recoil/loginState";
 import CustomColumn from "@/components/CustomColumn";
 import CustomCard from "../components/CustomCard";
 import AddClubButton from "../components/AddClubButton";
@@ -39,19 +41,41 @@ interface ClubData {
 
 export default function Club({ setActiveTab }: ClubProps) {
   const [clubs, setClubs] = useState<ClubData[]>([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리!
+  // const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리!
+  //const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState); // Recoil 상태 사용
+  const loginStateValue = useRecoilValue(loginState);
   const shouldShowAddButton = clubs.length < 6;
 
-  useEffect(() => {
-    const checkLoginStatus = () => {
-      const userId = localStorage.getItem("userId");
-      const accessToken = localStorage.getItem("accessToken");
-      setIsLoggedIn(!!userId && !!accessToken); // 로그인 상태 확인
-    };
+  // useEffect(() => {
+  //   const checkLoginStatus = () => {
+  //     const userId = localStorage.getItem("userId");
+  //     const accessToken = localStorage.getItem("accessToken");
+  //     // setIsLoggedIn(!!userId && !!accessToken); // 로그인 상태 확인
+  //     setIsLoggedIn({
+  //       isLoggedIn: !!userId && !!accessToken,
+  //       userId: userId || null, // userId도 상태로 관리
+  //     });
+  //   };
 
+  //   const fetchClubs = async () => {
+  //     try {
+  //       const userId = localStorage.getItem("userId");
+  //       const accessToken = localStorage.getItem("accessToken");
+
+  //       if (!userId || !accessToken) {
+  //         console.error("로그인되지 않았습니다.");
+  //         return;
+  //       }
+
+  //       const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/clubs/user/${userId}`, {
+  //         headers: {
+  //           Authorization: `${accessToken}`,
+  //         },
+  //       });
+  useEffect(() => {
     const fetchClubs = async () => {
       try {
-        const userId = localStorage.getItem("userId");
+        const userId = loginStateValue.userId;
         const accessToken = localStorage.getItem("accessToken");
 
         if (!userId || !accessToken) {
@@ -59,11 +83,14 @@ export default function Club({ setActiveTab }: ClubProps) {
           return;
         }
 
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/clubs/user/${userId}`, {
-          headers: {
-            Authorization: `${accessToken}`,
-          },
-        });
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/api/clubs/user/${userId}`,
+          {
+            headers: {
+              Authorization: `${accessToken}`,
+            },
+          }
+        );
 
         const baseUrl = "https://mozip-bucket.s3.amazonaws.com"; //s3 서버 주소
 
@@ -93,17 +120,20 @@ export default function Club({ setActiveTab }: ClubProps) {
         console.error("클럽 데이터를 가져오는 중 오류 발생:", error);
       }
     };
-
-    checkLoginStatus(); // 로그인 됐는가?
-    fetchClubs(); // 동아리 데이터 가져오기
-  }, []);
+    if (loginStateValue.isLoggedIn) {
+      fetchClubs();
+    }
+  }, [loginStateValue.isLoggedIn, loginStateValue.userId]);
+  //   checkLoginStatus(); // 로그인 됐는가?
+  //   fetchClubs(); // 동아리 데이터 가져오기
+  // }, [setIsLoggedIn]); // setIsLoggedIn 변경 시 useEffect 다시 실행
 
   const handleClubClick = (clubId: string) => {
     localStorage.setItem("selectedClubId", clubId); // club_id 저장
     setActiveTab("모집"); // 탭 변경
   };
 
-  if (!isLoggedIn) {
+  if (!loginStateValue.isLoggedIn) {
     return (
       <MessageContainer>
         로그인 후 나의 모든 동아리를 확인하세요.

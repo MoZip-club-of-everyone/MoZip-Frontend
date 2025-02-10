@@ -33,6 +33,12 @@ axiosInstance.interceptors.request.use(
     const accessToken = getAccessToken();
     console.log("Access Token:", accessToken); // 토큰 값 확인(변수명accessToken을 저장 시(postLogin.ts참고)의 변수명과 동일하게 맞춰야함.)
 
+    //회원가입 요청은 accessToken을 추가하지 않음
+    if (config.url?.includes("/users/join")) {
+      console.log("회원가입 요청 - Authorization 헤더 제외");
+      return config;
+    }
+
     if (accessToken && config.headers) {
       config.headers.Authorization = `${accessToken}`; //`Bearer ${accessToken}` 원래는 이건데 이번에는 백에서 Bearer를 붙여서 줘서 뺌
       console.log("Authorization 헤더:", config.headers.Authorization);
