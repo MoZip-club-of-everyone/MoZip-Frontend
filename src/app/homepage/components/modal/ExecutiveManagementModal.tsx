@@ -34,20 +34,22 @@ export default function ExecutiveManagementModal({
   return (
     <ModalOverlay onClick={onClose}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
-        <ModalHeader>
-          <h2>운영진 관리</h2>
-          <CopyLink>
-            <IoLinkOutline />
-            링크 복사
-          </CopyLink>
-        </ModalHeader>
-        <Divider />
+        <Title>운영진 관리</Title>
+        <CopyLink>
+          <IoLinkOutline />
+          링크 복사
+        </CopyLink>
         <ModalContent>
-          <Input type="email" placeholder="이메일 입력" />
-          <InviteButton>초대</InviteButton>
+          <Content>이메일 초대</Content>
+          <InputWrapper>
+            <CreateClubInput type="email" placeholder="이메일 입력" />
+            <InviteButton>초대</InviteButton>
+          </InputWrapper>
         </ModalContent>
         <MemberList>
-          <h3>운영진 권한 관리 ({Object.keys(userRoles).length}명)</h3>
+          <Content>
+            운영진 권한 관리 ({Object.keys(userRoles).length}명)
+          </Content>
           <ul>
             {Object.entries(userRoles).map(([name, role]) => (
               <ListItem key={name}>
@@ -70,6 +72,7 @@ export default function ExecutiveManagementModal({
             ))}
           </ul>
         </MemberList>
+        <ModalButton onClick={onClose}>닫기</ModalButton>
       </ModalContainer>
     </ModalOverlay>
   );
@@ -91,15 +94,15 @@ const ModalOverlay = styled.div`
 const ModalContainer = styled.div`
   background: white;
   width: 450px;
-  padding: 20px;
+  padding: 3rem;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
-const ModalHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+const Title = styled.div`
+  font-weight: bold;
+  font-size: 28px;
+  margin-bottom: 1rem;
 `;
 
 const CopyLink = styled.div`
@@ -109,42 +112,53 @@ const CopyLink = styled.div`
   color: #5a5a5a;
   font-size: 14px;
   cursor: pointer;
-`;
-
-const Divider = styled.div`
-  width: 100%;
-  height: 1px;
-  background-color: #d8d8d8;
-  margin: 10px 0;
+  margin-bottom: 1rem;
 `;
 
 const ModalContent = styled.div`
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+  gap: 1vh;
   margin: 20px 0;
 `;
 
-const Input = styled.input`
+const Content = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+`;
+
+const InputWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const CreateClubInput = styled.input`
   flex: 1;
+  height: 40px;
   padding: 10px;
+  font-size: 14px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
+  outline: none;
+
+  &:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
 `;
 
 const InviteButton = styled.button`
-  background: #3b82f6;
+  background: #5296ff;
   color: white;
   border: none;
   padding: 10px 15px;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 14px;
 `;
 
 const MemberList = styled.div`
-  h3 {
-    margin-bottom: 10px;
-  }
+  margin-top: 20px;
 
   ul {
     list-style: none;
@@ -170,5 +184,17 @@ const Dropdown = styled.select`
   border: 1px solid #ccc;
   border-radius: 6px;
   background: white;
+  cursor: pointer;
+`;
+
+const ModalButton = styled.button`
+  width: 100%;
+  height: 56px;
+  background-color: #fff;
+  border-radius: 12px;
+  border: 1px solid #000;
+  font-weight: 600;
+  font-size: medium;
+  margin-top: 20px;
   cursor: pointer;
 `;

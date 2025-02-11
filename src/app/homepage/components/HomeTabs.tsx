@@ -14,7 +14,8 @@ import CustomDivider from "@/components/CustomDivider";
 import { IoSettingsOutline } from "react-icons/io5";
 import { HiOutlineUserPlus } from "react-icons/hi2";
 import { useState } from "react";
-import ExecutiveManagementModal from "./ExecutiveManagementModal";
+import ExecutiveManagementModal from "./modal/ExecutiveManagementModal";
+import ClubEditModal from "./modal/ClubEditModal";
 
 const CustomTabs = styled(CustomRow)`
   padding-top: 3rem;
@@ -28,6 +29,8 @@ interface MozipTabsProps {
 
 export default function HomeTabs({ activeTab, setActiveTab }: MozipTabsProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isClubModalOpen, setIsClubModalOpen] = useState(false);
+
   return (
     <CustomColumn
       $width="80%"
@@ -79,7 +82,7 @@ export default function HomeTabs({ activeTab, setActiveTab }: MozipTabsProps) {
           </CustomRow>
         </BtnsLeft>
         <BtnsRight>
-          <CheckButton>
+          <CheckButton onClick={() => setIsClubModalOpen(true)}>
             <IoSettingsOutline />
             동아리 관리
           </CheckButton>
@@ -94,6 +97,9 @@ export default function HomeTabs({ activeTab, setActiveTab }: MozipTabsProps) {
       {isModalOpen && (
         <ExecutiveManagementModal onClose={() => setIsModalOpen(false)} />
       )}
+      {isClubModalOpen && (
+        <ClubEditModal onClose={() => setIsClubModalOpen(false)} />
+      )}
     </CustomColumn>
   );
 }
@@ -105,13 +111,15 @@ const CheckButton = styled.div`
   align-items: center;
   gap: 0.5rem;
   font-size: 12px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const BtnsLeft = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  //   gap: 1rem;
 `;
 const BtnsRight = styled.div`
   display: flex;
