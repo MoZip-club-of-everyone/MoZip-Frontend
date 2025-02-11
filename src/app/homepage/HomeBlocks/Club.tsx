@@ -1,7 +1,8 @@
 "use client";
 
-import { useRecoilValue } from "recoil";
-import { loginState } from "@/recoil/loginState";
+// import { useRecoilValue } from "recoil";
+// import { loginState } from "@/recoil/loginState";
+import { useLoginStore } from "@/stores/useLoginStore";
 import CustomColumn from "@/components/CustomColumn";
 import CustomCard from "../components/CustomCard";
 import AddClubButton from "../components/AddClubButton";
@@ -43,7 +44,8 @@ export default function Club({ setActiveTab }: ClubProps) {
   const [clubs, setClubs] = useState<ClubData[]>([]);
   // const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리!
   //const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState); // Recoil 상태 사용
-  const loginStateValue = useRecoilValue(loginState);
+  // const loginStateValue = useRecoilValue(loginState);
+  const { isLoggedIn, userId } = useLoginStore();
   const shouldShowAddButton = clubs.length < 6;
 
   // useEffect(() => {
@@ -75,7 +77,6 @@ export default function Club({ setActiveTab }: ClubProps) {
   useEffect(() => {
     const fetchClubs = async () => {
       try {
-        const userId = loginStateValue.userId;
         const accessToken = localStorage.getItem("accessToken");
 
         if (!userId || !accessToken) {
@@ -120,10 +121,11 @@ export default function Club({ setActiveTab }: ClubProps) {
         console.error("클럽 데이터를 가져오는 중 오류 발생:", error);
       }
     };
-    if (loginStateValue.isLoggedIn) {
+    if (isLoggedIn) {
       fetchClubs();
     }
-  }, [loginStateValue.isLoggedIn, loginStateValue.userId]);
+  }, [isLoggedIn, userId]);
+
   //   checkLoginStatus(); // 로그인 됐는가?
   //   fetchClubs(); // 동아리 데이터 가져오기
   // }, [setIsLoggedIn]); // setIsLoggedIn 변경 시 useEffect 다시 실행
@@ -133,7 +135,7 @@ export default function Club({ setActiveTab }: ClubProps) {
     setActiveTab("모집"); // 탭 변경
   };
 
-  if (!loginStateValue.isLoggedIn) {
+  if (!isLoggedIn) {
     return (
       <MessageContainer>
         로그인 후 나의 모든 동아리를 확인하세요.

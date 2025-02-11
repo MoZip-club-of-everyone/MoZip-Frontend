@@ -1,7 +1,7 @@
 "use client";
 
-import { useRecoilState } from "recoil";
-import { loginState } from "@/recoil/loginState";
+// import { useRecoilState } from "recoil";
+// import { loginState } from "@/recoil/loginState";
 import styled from "styled-components";
 import { useRouter } from "next/navigation";
 import CustomFont from "@/components/CustomFont";
@@ -11,6 +11,7 @@ import CustomColumn from "@/components/CustomColumn";
 import CustomButton from "@/components/CustomButton";
 import Image from 'next/image';
 import headerLogo from '@/assets/logo/headerLogo.svg';
+import { useLoginStore } from "@/stores/useLoginStore";
 
 const CustomHeader = styled(CustomColumn)`
 	padding-top: 3vh;
@@ -22,21 +23,32 @@ interface HomeHeaderProps {
 
 export default function HomeHeader({ setActiveTab }: HomeHeaderProps) {
 	const router = useRouter();
-	const [loginStateValue, setLoginState] = useRecoilState(loginState);
+	// const [loginStateValue, setLoginState] = useRecoilState(loginState);
+
+	// const handleAuthClick = () => {
+	// 	if (loginStateValue.isLoggedIn) {
+	// 	  // 로그아웃 처리
+	// 	  setLoginState({
+	// 		isLoggedIn: false,
+	// 		userId: null
+	// 	  });
+	// 	  localStorage.removeItem('userId');
+	// 	  localStorage.removeItem('accessToken');
+	// 	} else {
+	// 	  router.push("/memberlogin");
+	// 	}
+	//   };
+	const { isLoggedIn, logout, setLogin } = useLoginStore();
 
 	const handleAuthClick = () => {
-		if (loginStateValue.isLoggedIn) {
-		  // 로그아웃 처리
-		  setLoginState({
-			isLoggedIn: false,
-			userId: null
-		  });
-		  localStorage.removeItem('userId');
-		  localStorage.removeItem('accessToken');
+		if (isLoggedIn) {
+		logout();
+		localStorage.removeItem('userId');
+		localStorage.removeItem('accessToken');
 		} else {
-		  router.push("/memberlogin");
+		router.push("/memberlogin");
 		}
-	  };
+	};
 
 	return (
 		<CustomHeader $width="100%" $gap="0" $alignitems="flex-end">
@@ -57,7 +69,10 @@ export default function HomeHeader({ setActiveTab }: HomeHeaderProps) {
 					$backgroundColor="transparent"
 					onClick={handleAuthClick}
 				>
-					<CustomFont $color="black" $font="0.8rem">{loginStateValue.isLoggedIn ? '로그아웃' : '로그인'}</CustomFont>
+					{/* <CustomFont $color="black" $font="0.8rem">{loginStateValue.isLoggedIn ? '로그아웃' : '로그인'}</CustomFont> */}
+					<CustomFont $color="black" $font="0.8rem">
+						{isLoggedIn ? '로그아웃' : '로그인'}
+					</CustomFont>
 				</CustomButton>
 			</CustomRow>
 			<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D8D8D8" />

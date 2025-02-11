@@ -2,6 +2,7 @@
 
 "use client";
 import { RecoilRoot } from "recoil";
+import { useState, useEffect } from "react";
 
 interface RecoilRootWrapperProps {
 	children: React.ReactNode;
@@ -10,5 +11,12 @@ interface RecoilRootWrapperProps {
 export default function RecoilRootWrapper({
 	children,
 }: RecoilRootWrapperProps) {
-	return <RecoilRoot>{children}</RecoilRoot>;
+	// return <RecoilRoot>{children}</RecoilRoot>;
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	return mounted ? <RecoilRoot>{children}</RecoilRoot> : null;
 }

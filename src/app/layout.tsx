@@ -5,7 +5,7 @@ import "../globals.css";
 import Container from "../components/Container";
 import StyledComponentsRegistry from "@/lib/registry";
 import ThemeProviderWrapper from "./ThemeProviderWrapper";
-import RecoilRootWrapper from "./RecoilWrapper";
+// import RecoilRootWrapper from "./RecoilWrapper";
 
 export const metadata: Metadata = {
   title: "MoZip",
@@ -23,13 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        {/* <RecoilRootWrapper> */}
           <StyledComponentsRegistry>
             <ThemeProviderWrapper>
-              <RecoilRootWrapper>
                 <Container>{children}</Container>
-              </RecoilRootWrapper>
             </ThemeProviderWrapper>
           </StyledComponentsRegistry>
+        {/* </RecoilRootWrapper> */}
       </body>
     </html>
   );
