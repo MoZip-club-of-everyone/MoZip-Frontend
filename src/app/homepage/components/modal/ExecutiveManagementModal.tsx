@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { IoLinkOutline } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
+import CustomRow from "@/components/CustomRow";
 
 interface ExecutiveManagementModalProps {
   onClose: () => void;
@@ -34,13 +36,23 @@ export default function ExecutiveManagementModal({
   return (
     <ModalOverlay onClick={onClose}>
       <ModalContainer onClick={(e) => e.stopPropagation()}>
-        <Title>운영진 관리</Title>
-        <CopyLink>
-          <IoLinkOutline />
-          링크 복사
-        </CopyLink>
+        <CloseButton onClick={onClose}>
+          <IoClose size={24} />
+        </CloseButton>
+        <CustomRow
+          $width="auto"
+          $alignitems="flex-end"
+          $justifycontent="space-between"
+          $gap="0.5rem"
+        >
+          <Title>운영진 관리</Title>
+          <CopyLink>
+            <IoLinkOutline /> 링크 복사
+          </CopyLink>
+        </CustomRow>
+
+        <hr />
         <ModalContent>
-          <Content>이메일 초대</Content>
           <InputWrapper>
             <CreateClubInput type="email" placeholder="이메일 입력" />
             <InviteButton>초대</InviteButton>
@@ -72,7 +84,6 @@ export default function ExecutiveManagementModal({
             ))}
           </ul>
         </MemberList>
-        <ModalButton onClick={onClose}>닫기</ModalButton>
       </ModalContainer>
     </ModalOverlay>
   );
@@ -92,11 +103,23 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContainer = styled.div`
+  position: relative;
   background: white;
   width: 450px;
   padding: 3rem;
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const CloseButton = styled.button`
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: #333;
 `;
 
 const Title = styled.div`
@@ -184,17 +207,5 @@ const Dropdown = styled.select`
   border: 1px solid #ccc;
   border-radius: 6px;
   background: white;
-  cursor: pointer;
-`;
-
-const ModalButton = styled.button`
-  width: 100%;
-  height: 56px;
-  background-color: #fff;
-  border-radius: 12px;
-  border: 1px solid #000;
-  font-weight: 600;
-  font-size: medium;
-  margin-top: 20px;
   cursor: pointer;
 `;
