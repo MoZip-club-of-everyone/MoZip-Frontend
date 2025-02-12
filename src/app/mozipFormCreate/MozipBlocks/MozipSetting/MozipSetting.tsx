@@ -74,6 +74,9 @@ export default function MozipSetting({ onPublish, onPrev }: MozipSettingProps) {
 		} catch (error) {
 			console.error("모집 생성 실패:", error);
 			alert("모집 생성에 실패했습니다.");
+			console.log('토큰은:', token);
+			console.log('클럽 ID는:', clubId);
+			console.log('내가 보낸 요청 값은:', requestData);
 		}
 	};
 
