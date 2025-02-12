@@ -1,7 +1,8 @@
 "use client"
 import { useState } from 'react';
 import styled from 'styled-components';
-import { useModals } from '@/hooks/useModals';
+import { useModalStore } from '@/stores/useModalStore';
+// import { useModals } from '@/hooks/useModals';
 import CustomModal from '@/components/CustomModal';
 import CustomButton from '@/components/CustomButton';
 import AddModal from './AddModal';
@@ -114,7 +115,8 @@ const ImagePreview = styled.img`
 `;
 
 export default function AddClubButton() {
-  const { isModalOpen, openModal, closeModal } = useModals();
+  // const { isModalOpen, openModal, closeModal } = useModals();
+  const { isModalOpen, openModal, closeModal } = useModalStore();
   const [clubName, setClubName] = useState("");
   const [isError, setIsError] = useState(false);
   // const [fileName, setFileName] = useState("");
@@ -149,6 +151,8 @@ export default function AddClubButton() {
     setFile(null);
     setFileError("");
   };
+
+  //useState로 상태변수 아무거나 하나 만들고 모달 닫힌걸 이 변수로 감지시켜서 fetch함수 실행
 
   const handleClubCreate = async () => {
     if (!clubName.trim()) {
