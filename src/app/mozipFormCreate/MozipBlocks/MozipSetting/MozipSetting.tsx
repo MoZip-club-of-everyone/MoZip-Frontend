@@ -68,9 +68,15 @@ export default function MozipSetting({ onPublish, onPrev }: MozipSettingProps) {
 			);
 
 			if (response.status == 200) {
+				// 모집 생성 후 모집 ID 저장해두어야 함 
 				alert("모집 생성 완료");
 				console.log('토큰은:', token);
 				console.log('클럽 ID는:', clubId);
+
+				const mozipId = response.data.id;
+				console.log('방금 생성한 모집의 mozipId는:', mozipId);
+
+				localStorage.setItem("mozipId", mozipId);
 				onPublish(); // 게시 후 이동
 			}
 		} catch (error) {

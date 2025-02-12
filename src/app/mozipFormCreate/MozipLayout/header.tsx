@@ -7,6 +7,7 @@ import CustomRow from "@/components/CustomRow";
 import CustomColumn from "@/components/CustomColumn";
 import CustomButton from "@/components/CustomButton";
 
+import Image from 'next/image';
 import headerLogo from '@/assets/logo/headerLogo.svg';
 import StyledImg from "@/components/StyledImg";
 
@@ -23,7 +24,8 @@ export default function Header() {
 		<CustomHeader $width="100%" $gap="0" $alignitems="flex-end">
 			<CustomRow $width="90%" $padding="0.5rem" $justifycontent="space-between" $alignitems="center">
 				<CustomButton $width='auto' $backgroundColor="transparent" $padding="1rem">
-					<StyledImg src={headerLogo} width='4rem' />
+					{/* <StyledImg src={headerLogo} width='4rem' /> */}
+					<Image src={headerLogo} alt='logo' />
 				</CustomButton>
 
 				<CustomButton $width='auto' $backgroundColor="transparent">
