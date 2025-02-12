@@ -24,7 +24,7 @@ export default function MozipSetting({ onPublish, onPrev }: MozipSettingProps) {
 
 	const token = localStorage.getItem("accessToken");
 
-	const clubId = localStorage.getItem('club_id_for_mozip'); // 홈화면 > 동아리 진입 시 얻은 clubId
+	const clubId = localStorage.getItem("selectedClubId"); // 홈화면 > 동아리 진입 시 얻은 clubId
 
 	// 모집 게시 처리
 	const handlePublish = async () => {
@@ -69,6 +69,8 @@ export default function MozipSetting({ onPublish, onPrev }: MozipSettingProps) {
 
 			if (response.status == 200) {
 				alert("모집 생성 완료");
+				console.log('토큰은:', token);
+				console.log('클럽 ID는:', clubId);
 				onPublish(); // 게시 후 이동
 			}
 		} catch (error) {
