@@ -9,6 +9,9 @@ import AddClubButton from "../components/AddClubButton";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
+// import { useModals } from "@/hooks/useModals";
+import { useModalStore } from '@/stores/useModalStore'
+
 
 const Layout = styled.div`
   max-width: 80%;
@@ -46,6 +49,8 @@ export default function Club({ setActiveTab }: ClubProps) {
   //const [isLoggedIn, setIsLoggedIn] = useRecoilState(loginState); // Recoil 상태 사용
   // const loginStateValue = useRecoilValue(loginState);
   const { isLoggedIn, userId } = useLoginStore();
+  // const { isModalOpen, openModal, closeModal } = useModals();
+  const isModalOpen = useModalStore((state) => state.isModalOpen)
   const shouldShowAddButton = clubs.length < 6;
 
   // useEffect(() => {
@@ -124,7 +129,7 @@ export default function Club({ setActiveTab }: ClubProps) {
     if (isLoggedIn) {
       fetchClubs();
     }
-  }, [isLoggedIn, userId]);
+  }, [isLoggedIn, userId, isModalOpen]);
 
   //   checkLoginStatus(); // 로그인 됐는가?
   //   fetchClubs(); // 동아리 데이터 가져오기

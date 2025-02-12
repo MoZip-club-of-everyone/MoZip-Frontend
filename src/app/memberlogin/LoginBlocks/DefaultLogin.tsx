@@ -59,7 +59,7 @@ export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLog
 			router.push('/'); // 홈 페이지로 이동
 		} catch (error: any) {
 			console.error('에러: ', error.response);
-			setErrormessage('아이디 또는 비밀번호가 일치하지 않습니다.');
+			setErrormessage('이메일 또는 비밀번호가 일치하지 않습니다.');
 			alert('로그인에 실패했습니다.');
 		}
 		
@@ -150,7 +150,7 @@ export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLog
 						}}
 					>
 						<CustomFontWithLine $color="#999999" $font="0.8rem">
-							아이디 찾기
+							이메일 찾기
 						</CustomFontWithLine>
 					</CustomButton>
 					<CustomButton
