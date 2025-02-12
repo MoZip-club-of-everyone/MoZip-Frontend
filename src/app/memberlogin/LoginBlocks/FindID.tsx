@@ -7,6 +7,8 @@ import CustomColumn from "@/components/CustomColumn";
 import CustomButton from "@/components/CustomButton";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
+import Image from 'next/image';
+import mainLogo from '@/assets/logo/mainLogo.svg';
 
 interface FindIDProps {
 	setCurrentView: (view: "login" | "findPW") => void;
@@ -15,13 +17,14 @@ interface FindIDProps {
 export default function FindID({ setCurrentView }: FindIDProps) {
 	return (
 		<>
-			<CustomButton $width="auto" $backgroundColor="white" $border="1px solid black">
+			{/* <CustomButton $width="auto" $backgroundColor="white" $border="1px solid black">
 				<CustomFont $color="black" $font="1rem">LOGO</CustomFont>
-			</CustomButton>
+			</CustomButton> */}
+			<Image src={mainLogo} alt="Logo" width={72} height={72} />
 
 			<CustomColumn $width="80%" $alignitems="center" $justifycontent="center">
 				<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start">
-					<CustomFont $color="black" $font="1.7rem" $fontweight="bold">아이디 찾기</CustomFont>
+					<CustomFont $color="black" $font="1.7rem" $fontweight="bold">이메일 찾기</CustomFont>
 				</CustomRow>
 
 				<CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="1rem">
