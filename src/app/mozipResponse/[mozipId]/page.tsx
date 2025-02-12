@@ -16,19 +16,7 @@ import CustomRow from "@/components/CustomRow";
 import CustomButton from "@/components/CustomButton";
 import StyledImg from "@/components/StyledImg";
 import CustomDivider from "@/components/CustomDivider";
-
-type MoxipDetail = {
-	id: string;
-	title: string;
-	description: string;
-	startDate: string;
-	endDate: string;
-	descriptionBeforeMozip: string;
-	descriptionAfterMozip: string;
-	loginRequired: boolean;
-	editAvailable: boolean;
-	images?: { id: string; url: string; description?: string }[];
-};
+import CustomColumn from "@/components/CustomColumn";
 
 export default function MozipResponsePage() {
 	const { mozipId } = useParams(); // URL에서 mozipId 가져오기
@@ -128,55 +116,110 @@ export default function MozipResponsePage() {
 			<CustomRow $width="100%" $alignitems="center" $justifycontent="space-between">
 				{/* <StyledImg src={logo} $width="4rem" /> */}
 				<Image src={headerLogo} alt='logo' />
-
 				<CustomButton $width='auto' $height='auto' $padding='0' $backgroundColor="transparent">
 					<CustomFont $color='black'>로그인</CustomFont>
 				</CustomButton>
 			</CustomRow>
+
 			<CustomDivider $width='100%' $height='1px' $backgroundcolor="#D9D9D9" />
-			<Title>{moxipDetail.title}</Title>
+			<CustomRow $width='100%' $justifycontent="flex-start" $alignitems="center">
+				<CustomFont $color='black' $font='1.5rem' $fontweight="bold">{moxipDetail.title}</CustomFont>
+			</CustomRow>
+
+			<CustomColumn $width='100%' $gap='0.5rem'>
+				<CustomDivider $width='100%' $height='1px' $backgroundcolor="#D9D9D9" />
+				<CustomRow $width='100%' $justifycontent="flex-end" $alignitems="center">
+					<CustomFont $color='black' $font="1rem">로그인 시 자동 저장됩니다.</CustomFont>
+				</CustomRow>
+				<CustomColumn $height="1rem" />
+			</CustomColumn>
+
+			<CustomBox $width="100%" $backgroundcolor="white" $padding="1rem" $overflowx="hidden" $overflowy="hidden"
+				$alignitems="flex-start" $justifycontent="center" $flexdirection="column" $gap="0.5rem" $boxshadow="7px 7px 10px rgba(0.1, 0.1, 0.1, 0.3)">
+				<CustomFont $color='#666666' $fontweight="bold" $font="1rem">{moxipDetail.description}</CustomFont>
+			</CustomBox>
+			<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
+
+			<CustomBox $width="100%" $height="auto" $backgroundcolor="white" $padding="1rem" $overflowx="hidden" $overflowy="hidden"
+				$alignitems="flex-start" $justifycontent="center" $flexdirection="column" $gap="0.5rem" $boxshadow="7px 7px 10px rgba(0.1, 0.1, 0.1, 0.3)">
+				<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-start">
+					<CustomFont $color='#666666' $fontweight="bold" $font="1rem">모집 응답 필수정보 수집</CustomFont>
+					<CustomFont $color='red' $fontweight="bold">필수</CustomFont>
+				</CustomRow>
+				<CustomFont $font="0.6rem" $color="#D9D9D9">필수 정보 입력 후 약관에 동의해야 응답이 가능합니다.</CustomFont>
+
+				<CustomFont $color="#666666">이름</CustomFont>
+				<Input />
+
+				{/* 나중에 제대로 수정하기 */}
+				<CustomFont $color="#666666">전화번호</CustomFont>
+				<Input />
+
+				{/* 나중에 제대로 수정하고, 형식검사 추가하기 */}
+				<CustomFont $color="#666666">이메일</CustomFont>
+				<Input />
+			</CustomBox>
+			<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
+
 			{questions.map((question, index) => {
 				switch (question.type) {
 					case "SHORT_ANSWER":
 						return (
-							<ShortAnswer
-								key={index}
-								question={question.question}
-								details={question.details}
-								isRequired={question.isRequired}
-							/>
+							<>
+								<ShortAnswer
+									key={index}
+									question={question.question}
+									details={question.details}
+									isRequired={question.isRequired}
+								/>
+								<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
+							</>
 						);
 					case "LONG_ANSWER":
 						return (
-							<LongAnswer
-								key={index}
-								question={question.question}
-								details={question.details}
-								isRequired={question.isRequired}
-							/>
+							<>
+								<LongAnswer
+									key={index}
+									question={question.question}
+									details={question.details}
+									isRequired={question.isRequired}
+								/>
+								<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
+							</>
 						);
 					case "ONE_CHOICE":
 						return (
-							<OneChoice
-								key={index}
-								question={question.question}
-								details={question.details}
-								isRequired={question.isRequired}
-							/>
+							<>
+								<OneChoice
+									key={index}
+									question={question.question}
+									details={question.details}
+									isRequired={question.isRequired}
+								/>
+								<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
+							</>
 						);
 					case "MULTIPLE_CHOICE":
 						return (
-							<MultipleChoice
-								key={index}
-								question={question.question}
-								details={question.details}
-								isRequired={question.isRequired}
-							/>
+							<>
+								<MultipleChoice
+									key={index}
+									question={question.question}
+									details={question.details}
+									isRequired={question.isRequired}
+								/>
+								<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
+							</>
 						);
 					default:
-						return <div key={index}>Unknown question type</div>;
+						return <div key={index}>질문의 종류를 알 수 없네요.</div>;
 				}
 			})}
+			<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-end">
+				<CustomButton $width='auto' $height='auto' $padding="1rem" $backgroundColor="#5296FF">
+					<CustomFont $color="white" $font="1rem">제출</CustomFont>
+				</CustomButton>
+			</CustomRow>
 		</Wrapper>
 	);
 }
@@ -192,10 +235,12 @@ const Wrapper = styled.div`
   justify-content: flex-start;
 `;
 
-const Title = styled.h1`
-  font-size: 1.5rem;
-  text-align: center;
-  margin-bottom: 1rem;
+const Input = styled.input`
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  max-width: 50%;
 `;
 
 type Question = {
@@ -203,4 +248,17 @@ type Question = {
 	question: string;
 	details: string;
 	isRequired: boolean;
+};
+
+type MoxipDetail = {
+	id: string;
+	title: string;
+	description: string;
+	startDate: string;
+	endDate: string;
+	descriptionBeforeMozip: string;
+	descriptionAfterMozip: string;
+	loginRequired: boolean;
+	editAvailable: boolean;
+	images?: { id: string; url: string; description?: string }[];
 };
