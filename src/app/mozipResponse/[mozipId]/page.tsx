@@ -134,7 +134,7 @@ export default function MozipResponsePage() {
 				<CustomColumn $height="1rem" />
 			</CustomColumn>
 
-			<CustomBox $width="100%" $backgroundcolor="white" $padding="1rem" $overflowx="hidden" $overflowy="hidden"
+			<CustomBox $width="100%" $backgroundcolor="white" $padding="1rem" $overflowx="hidden" $overflowy="hidden" $border="1px solid #D9D9D9"
 				$alignitems="flex-start" $justifycontent="center" $flexdirection="column" $gap="0.5rem" $boxshadow="7px 7px 10px rgba(0.1, 0.1, 0.1, 0.3)">
 				<CustomFont $color='#666666' $fontweight="bold" $font="1rem">{moxipDetail.description}</CustomFont>
 			</CustomBox>
@@ -165,51 +165,47 @@ export default function MozipResponsePage() {
 				switch (question.type) {
 					case "SHORT_ANSWER":
 						return (
-							<>
-								<ShortAnswer
-									key={index}
-									question={question.question}
-									details={question.details}
-									isRequired={question.isRequired}
-								/>
-								<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
-							</>
+
+							<ShortAnswer
+								key={index}
+								question={question.question}
+								details={question.details}
+								isRequired={question.isRequired}
+							/>
+
 						);
 					case "LONG_ANSWER":
 						return (
-							<>
-								<LongAnswer
-									key={index}
-									question={question.question}
-									details={question.details}
-									isRequired={question.isRequired}
-								/>
-								<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
-							</>
+
+							<LongAnswer
+								key={index}
+								question={question.question}
+								details={question.details}
+								isRequired={question.isRequired}
+							/>
+
 						);
 					case "ONE_CHOICE":
 						return (
-							<>
-								<OneChoice
-									key={index}
-									question={question.question}
-									details={question.details}
-									isRequired={question.isRequired}
-								/>
-								<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
-							</>
+
+							<OneChoice
+								key={index}
+								question={question.question}
+								details={question.details}
+								isRequired={question.isRequired}
+							/>
+
 						);
 					case "MULTIPLE_CHOICE":
 						return (
-							<>
-								<MultipleChoice
-									key={index}
-									question={question.question}
-									details={question.details}
-									isRequired={question.isRequired}
-								/>
-								<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
-							</>
+
+							<MultipleChoice
+								key={index}
+								question={question.question}
+								details={question.details}
+								isRequired={question.isRequired}
+							/>
+
 						);
 					default:
 						return <div key={index}>질문의 종류를 알 수 없네요.</div>;
