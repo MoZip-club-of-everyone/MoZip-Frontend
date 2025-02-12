@@ -9,6 +9,8 @@ import CustomButton from "@/components/CustomButton";
 import MozipBlockInput from "@/app/mozipFormCreate/components/MozipBlockInput";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
+import Image from 'next/image';
+import mainLogo from '@/assets/logo/mainLogo.svg';
 
 interface CertificateProps {
 	onComplete: () => void;
@@ -17,9 +19,10 @@ interface CertificateProps {
 export default function Certificate({ onComplete }: CertificateProps) {
 	return (
 		<>
-			<CustomButton $width='auto' $backgroundColor="white" $border="1px solid black">
+			{/* <CustomButton $width='auto' $backgroundColor="white" $border="1px solid black">
 				<CustomFont $color="black" $font="1rem">LOGO</CustomFont>
-			</CustomButton>
+			</CustomButton> */}
+			<Image src={mainLogo} alt="Logo" width={72} height={72} />
 
 			<CustomColumn $width="80%" $alignitems="center" $justifycontent="center">
 				<CustomRow $width='100%' $alignitems="center" $justifycontent="flex-start">

@@ -129,7 +129,7 @@ export default function Club({ setActiveTab }: ClubProps) {
     if (isLoggedIn) {
       fetchClubs();
     }
-  }, [isLoggedIn, userId, isModalOpen]);
+  }, [isLoggedIn, userId, isModalOpen]); // 모달 상태를 전역적으로 관리하여 모달 상태값 변경 시 리렌더링
 
   //   checkLoginStatus(); // 로그인 됐는가?
   //   fetchClubs(); // 동아리 데이터 가져오기
