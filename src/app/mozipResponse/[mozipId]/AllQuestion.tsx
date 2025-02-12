@@ -1,30 +1,30 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import styled from "styled-components";
 import ShortAnswer from "../components/ShortAnswer";
 import LongAnswer from "../components/LongAnswer";
 import OneChoice from "../components/OneChoice";
 import MultipleChoice from "../components/MultipleChoice";
-
-import CustomFont from "@/components/CustomFont";
+import CustomDivider from "@/components/CustomDivider";
 import CustomRow from "@/components/CustomRow";
 import CustomButton from "@/components/CustomButton";
+import CustomFont from "@/components/CustomFont";
 
-interface MozipIdProps {
+interface Question {
+	type: "SHORT_ANSWER" | "LONG_ANSWER" | "ONE_CHOICE" | "MULTIPLE_CHOICE";
+	question: string;
+	details: string;
+	isRequired: boolean;
+}
+
+interface AllQuestionsProps {
 	mozipId: string;
 }
 
-export default function AllQuestion({ mozipId }: MozipIdProps) {
-	// const { mozipId } = useParams(); // URL에서 mozipId 가져오기
+export default function AllQuestions({ mozipId }: AllQuestionsProps) {
 	const [questions, setQuestions] = useState<Question[]>([]);
 	const [error, setError] = useState<string | null>(null);
-	const [moxipDetail, setMoxipDetail] = useState<MoxipDetail | null>(null);
-	const [moxipError, setMoxipError] = useState<string | null>(null);
 
-
-	// 모든 서류 질문을 가져오기 위한 API 호출 
 	useEffect(() => {
 		if (!mozipId) {
 			setError("Mozip ID가 제공되지 않았습니다.");
@@ -66,99 +66,57 @@ export default function AllQuestion({ mozipId }: MozipIdProps) {
 		return <div>Error: {error}</div>;
 	}
 
-	if (!moxipDetail) {
-		return;
-	}
-
 	return (
-		<Wrapper>
-
+		<>
 			{questions.map((question, index) => {
 				switch (question.type) {
 					case "SHORT_ANSWER":
 						return (
-
 							<ShortAnswer
 								key={index}
 								question={question.question}
 								details={question.details}
 								isRequired={question.isRequired}
 							/>
-
 						);
 					case "LONG_ANSWER":
 						return (
-
 							<LongAnswer
 								key={index}
 								question={question.question}
 								details={question.details}
 								isRequired={question.isRequired}
 							/>
-
 						);
 					case "ONE_CHOICE":
 						return (
-
 							<OneChoice
 								key={index}
 								question={question.question}
 								details={question.details}
 								isRequired={question.isRequired}
 							/>
-
 						);
 					case "MULTIPLE_CHOICE":
 						return (
-
 							<MultipleChoice
 								key={index}
 								question={question.question}
 								details={question.details}
 								isRequired={question.isRequired}
 							/>
-
 						);
 					default:
-						return <div key={index}>질문의 종류를 알 수 없네요.</div>;
+						return <div key={index}>질문의 종류를 알 수 없습니다.</div>;
 				}
 			})}
+
+			<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
 			<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-end">
-				<CustomButton $width='auto' $height='auto' $padding="1rem" $backgroundColor="#5296FF">
+				<CustomButton $width="auto" $height="auto" $padding="1rem" $backgroundColor="#5296FF">
 					<CustomFont $color="white" $font="1rem">제출</CustomFont>
 				</CustomButton>
 			</CustomRow>
-		</Wrapper>
+		</>
 	);
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding: 2rem;
-  width: 80%;
-  min-height: 100vh;
-  margin: auto;
-  justify-content: flex-start;
-`;
-
-type Question = {
-	type: "SHORT_ANSWER" | "LONG_ANSWER" | "ONE_CHOICE" | "MULTIPLE_CHOICE";
-	question: string;
-	details: string;
-	isRequired: boolean;
-};
-
-type MoxipDetail = {
-	id: string;
-	title: string;
-	description: string;
-	startDate: string;
-	endDate: string;
-	descriptionBeforeMozip: string;
-	descriptionAfterMozip: string;
-	loginRequired: boolean;
-	editAvailable: boolean;
-	images?: { id: string; url: string; description?: string }[];
-};

@@ -9,12 +9,12 @@ import CustomRow from "@/components/CustomRow";
 import CustomColumn from "@/components/CustomColumn";
 import CustomButton from "@/components/CustomButton";
 
-interface MozipIdProps {
+interface DefaultInfoProps {
 	mozipId: string;
+	setSubmissionStatus: (status: "default" | "success" | "error") => void;
 }
 
-export default function DefaultInfo({ mozipId }: MozipIdProps) {
-
+export default function DefaultInfo({ mozipId, setSubmissionStatus }: DefaultInfoProps) {
 	if (!mozipId) {
 		return;
 	}
@@ -23,7 +23,7 @@ export default function DefaultInfo({ mozipId }: MozipIdProps) {
 	const [phone, setPhone] = useState({ first: "", second: "", third: "" });
 	const [email, setEmail] = useState("");
 
-	// 모든 필드가 입력되었는지 확인
+	// 모든 필드가 입력되었는지 확인하는 함수
 	const isFormComplete =
 		name.trim() !== "" &&
 		phone.first.length === 3 &&
@@ -33,7 +33,7 @@ export default function DefaultInfo({ mozipId }: MozipIdProps) {
 
 	// 전화번호 입력 핸들러 (숫자만 입력 가능)
 	const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>, part: "first" | "second" | "third") => {
-		const value = e.target.value.replace(/\D/g, "");
+		const value = e.target.value.replace(/\D/g, ""); // 숫자만 허용
 
 		// 각 필드별 길이 제한 적용
 		if ((part === "first" && value.length <= 3) || (part === "second" && value.length <= 4) || (part === "third" && value.length <= 4)) {
@@ -41,35 +41,42 @@ export default function DefaultInfo({ mozipId }: MozipIdProps) {
 		}
 	};
 
-	// API 요청 핸들러
 	const handleSubmit = async () => {
-		if (!isFormComplete) return;
 		const token = localStorage.getItem("accessToken");
 		if (!token) {
-			console.error("토큰이 없습니다.");
+			setSubmissionStatus("error");
 			return;
 		}
 
+		const requestBody = {
+			realname: name,
+			phone: `${phone.first}-${phone.second}-${phone.third}`,
+			email: email,
+		};
+
 		try {
 			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_SERVER_URL}/api/mozip/${mozipId}`, // ✅ mozipId를 올바르게 전달
+				`${process.env.NEXT_PUBLIC_SERVER_URL}/api/mozip/${mozipId}/applicants`,
 				{
+					method: "POST",
 					headers: {
 						Authorization: `${token}`,
+						"Content-Type": "application/json",
 					},
+					body: JSON.stringify(requestBody),
 				}
 			);
 
-			if (!response.ok) {
-				throw new Error(`모집 기본정보 요청 실패: ${response.status}`);
+			if (response.status === 200) {
+				const data = await response.json();
+				console.log("응답 데이터:", data);
+				setSubmissionStatus("success");
+			} else {
+				setSubmissionStatus("error");
 			}
-
-			const data = await response.json();
-			// console.log("모집 데이터:", data);
-			return data;
 		} catch (error) {
-			console.error("모집 데이터 가져오기 실패:", error);
-			return null;
+			console.error("API 요청 실패:", error);
+			setSubmissionStatus("error");
 		}
 	};
 
@@ -124,7 +131,6 @@ export default function DefaultInfo({ mozipId }: MozipIdProps) {
 	);
 }
 
-// 일반 입력 필드 스타일
 const Input = styled.input`
   padding: 0.5rem;
   font-size: 1rem;
@@ -133,12 +139,11 @@ const Input = styled.input`
   max-width: 50%;
 `;
 
-// 전화번호 입력 필드 스타일
 const PhoneInput = styled.input`
   padding: 0.5rem;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 4px;
-  width: 3rem;
+  width: 5rem;
   text-align: center;
 `;
