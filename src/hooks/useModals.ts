@@ -1,23 +1,33 @@
+// Zustand store
 "use client"
-
-import { useState, useCallback } from "react"
-
-// 담당자: 현아
-// 모달의 열림/닫힘 상태를 관리하는 훅입니다.
+import { useModalStore } from '@/stores/useModalStore'
 
 export const useModals = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false); //모달 상태 관리
+  const { isModalOpen, openModal, closeModal } = useModalStore()
+  return { isModalOpen, openModal, closeModal }
+}
+// 여기는 그냥 useModals
+// "use client"
 
-  const openModal = useCallback(()=> {
-    setIsModalOpen(true);
-  },[]); //모달 열기
+// import { useState, useCallback } from "react"
 
-  const closeModal = useCallback(()=>{
-    setIsModalOpen(false);
-  },[]); //모달 닫기
+// // 담당자: 현아
+// // 모달의 열림/닫힘 상태를 관리하는 훅입니다.
 
-  return { isModalOpen, openModal, closeModal};
-};
+// export const useModals = () => {
+//   const [isModalOpen, setIsModalOpen] = useState(false); //모달 상태 관리
+
+//   const openModal = useCallback(()=> {
+//     setIsModalOpen(true);
+//   },[]); //모달 열기
+
+//   const closeModal = useCallback(()=>{
+//     setIsModalOpen(false);
+//   },[]); //모달 닫기
+
+//   return { isModalOpen, openModal, closeModal};
+// };
+
 
 //여기는 컨텍스트 api사용시 코드
 // "use client";

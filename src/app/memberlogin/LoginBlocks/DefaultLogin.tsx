@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import postLogin from "@/api/post/postLogin";
 import Image from 'next/image';
 import mainLogo from '@/assets/logo/mainLogo.svg';
-
+import { useLoginStore } from "@/stores/useLoginStore";
 
 const CustomFontWithLine = styled(CustomFont)`
 	text-decoration: underline;
@@ -26,6 +26,7 @@ interface DefaultLoginProps {
 
 export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLoginProps) {
 	const router = useRouter();
+	const setLogin = useLoginStore(state => state.setLogin); //zustand
 
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
@@ -51,10 +52,14 @@ export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLog
 		try {
 			const response = await postLogin(userData);
 			console.log('로그인 성공:', response);
+
+			// Zustand store 업데이트
+			setLogin(response.userId, response.accessToken);
+
 			router.push('/'); // 홈 페이지로 이동
 		} catch (error: any) {
 			console.error('에러: ', error.response);
-			setErrormessage('아이디 또는 비밀번호가 일치하지 않습니다.');
+			setErrormessage('이메일 또는 비밀번호가 일치하지 않습니다.');
 			alert('로그인에 실패했습니다.');
 		}
 		
@@ -145,7 +150,7 @@ export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLog
 						}}
 					>
 						<CustomFontWithLine $color="#999999" $font="0.8rem">
-							아이디 찾기
+							이메일 찾기
 						</CustomFontWithLine>
 					</CustomButton>
 					<CustomButton
