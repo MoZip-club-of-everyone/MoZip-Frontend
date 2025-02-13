@@ -13,6 +13,7 @@ import CustomFont from "@/components/CustomFont";
 interface Question {
 	type: "SHORT_ANSWER" | "LONG_ANSWER" | "ONE_CHOICE" | "MULTIPLE_CHOICE";
 	question: string;
+	question_id: string;
 	details: string;
 	isRequired: boolean;
 }
@@ -22,9 +23,14 @@ interface AllQuestionsProps {
 }
 
 export default function AllQuestions({ mozipId }: AllQuestionsProps) {
-	const [questions, setQuestions] = useState<Question[]>([]);
+	const [questions, setQuestions] = useState<Question[]>([]); // 모든 질문들 관리 
 	const [error, setError] = useState<string | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
+	// const applicantId = "01JKZGM6T42SH2SJVPFT6DSZPK"; // 하드코딩된 applicant id 임 !
+	const applicantId = localStorage.getItem('applicantId'); // applicant id 꺼내오기 
+
+	// 1. 모든 질문 받아오는 API 
 	useEffect(() => {
 		if (!mozipId) {
 			setError("Mozip ID가 제공되지 않았습니다.");
@@ -62,6 +68,91 @@ export default function AllQuestions({ mozipId }: AllQuestionsProps) {
 		fetchQuestions();
 	}, [mozipId]);
 
+
+	// 2. 답변 자동 저장 API 
+	const handleSaveAnswer = async (questionId: string, answer: string | string[]) => {
+
+		const token = localStorage.getItem("accessToken");
+		if (!token) {
+			setError("Authorization token is missing.");
+			return;
+		}
+
+		try {
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_SERVER_URL}/api/papers/answers`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `${token}`,
+					},
+					body: JSON.stringify({
+						applicantId,
+						questionId,
+						answer,
+					}),
+				}
+			);
+
+			if (response.ok) {
+				console.log(`'${questionId}' 질문의 답변 자동저장 성공!`);
+				console.log('applicantId는', applicantId);
+				console.log('questionId는', questionId);
+				console.log('answer는', answer);
+			} else {
+				console.error("답변 저장 실패");
+				// console.log('applicantId는', applicantId);
+				// console.log('questionId는', questionId);
+				// console.log('answer는', answer);
+				// console.log('token은', token);
+				console.log("request 형태:", JSON.stringify({
+					applicantId,
+					questionId,
+					answer,
+				}));
+
+			}
+		} catch (error) {
+			console.error("오류 발생: ", error);
+		}
+	};
+
+	// 3. 모든 답변 자동저장 후 최종 저장(?) API
+	const handleSubmit = async () => {
+		if (isSubmitting) return; // 중복 요청 방지
+		setIsSubmitting(true);
+		const token = localStorage.getItem("accessToken");
+		if (!token) {
+			setError("Authorization token is missing.");
+			return;
+		}
+
+		try {
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_SERVER_URL}/papers/answers/register/applicants/${applicantId}`,
+				{
+					method: "POST",
+					headers: {
+						Authorization: `${token}`,
+						"Content-Type": "application/json",
+					}
+				}
+			);
+
+			if (!response.ok) {
+				throw new Error("제출에 실패했습니다.");
+			}
+
+			// console.log("제출 성공!");
+			alert("지원서가 성공적으로 제출되었습니다.");
+		} catch (error) {
+			console.error("제출 오류:", error);
+		} finally {
+			setIsSubmitting(false);
+		}
+	};
+
 	if (error) {
 		return <div>Error: {error}</div>;
 	}
@@ -69,43 +160,17 @@ export default function AllQuestions({ mozipId }: AllQuestionsProps) {
 	return (
 		<>
 			{questions.map((question, index) => {
+				const onSave = (answer: string | string[]) => handleSaveAnswer(question.question_id, answer);
+
 				switch (question.type) {
 					case "SHORT_ANSWER":
-						return (
-							<ShortAnswer
-								key={index}
-								question={question.question}
-								details={question.details}
-								isRequired={question.isRequired}
-							/>
-						);
+						return <ShortAnswer key={index} question={question.question} details={question.details} isRequired={question.isRequired} onSave={onSave} />;
 					case "LONG_ANSWER":
-						return (
-							<LongAnswer
-								key={index}
-								question={question.question}
-								details={question.details}
-								isRequired={question.isRequired}
-							/>
-						);
+						return <LongAnswer key={index} question={question.question} details={question.details} isRequired={question.isRequired} onSave={onSave} />;
 					case "ONE_CHOICE":
-						return (
-							<OneChoice
-								key={index}
-								question={question.question}
-								details={question.details}
-								isRequired={question.isRequired}
-							/>
-						);
+						return <OneChoice key={index} question={question.question} details={question.details} isRequired={question.isRequired} onSave={onSave} />;
 					case "MULTIPLE_CHOICE":
-						return (
-							<MultipleChoice
-								key={index}
-								question={question.question}
-								details={question.details}
-								isRequired={question.isRequired}
-							/>
-						);
+						return <MultipleChoice key={index} question={question.question} details={question.details} isRequired={question.isRequired} onSave={onSave} />;
 					default:
 						return <div key={index}>질문의 종류를 알 수 없습니다.</div>;
 				}
@@ -113,7 +178,7 @@ export default function AllQuestions({ mozipId }: AllQuestionsProps) {
 
 			<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D9D9D9" />
 			<CustomRow $width="100%" $alignitems="center" $justifycontent="flex-end">
-				<CustomButton $width="auto" $height="auto" $padding="1rem" $backgroundColor="#5296FF">
+				<CustomButton $width="auto" $height="auto" $padding="1rem" $backgroundColor="#5296FF" onClick={handleSubmit}>
 					<CustomFont $color="white" $font="1rem">제출</CustomFont>
 				</CustomButton>
 			</CustomRow>

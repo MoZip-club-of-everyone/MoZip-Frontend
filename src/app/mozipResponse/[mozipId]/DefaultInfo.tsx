@@ -41,6 +41,7 @@ export default function DefaultInfo({ mozipId, setSubmissionStatus }: DefaultInf
 		}
 	};
 
+	// 지원자 생성 API 요청 보내기 (나중에 비회원의 경우 이 요청은 pass, 회읜의 경우 요청 보내도록 수정 필요)
 	const handleSubmit = async () => {
 		const token = localStorage.getItem("accessToken");
 		if (!token) {
@@ -70,6 +71,8 @@ export default function DefaultInfo({ mozipId, setSubmissionStatus }: DefaultInf
 			if (response.status === 200) {
 				const data = await response.json();
 				console.log("응답 데이터:", data);
+				console.log("생성된 지원자의 applicantId는:", data.applicant_id);
+				localStorage.setItem('applicantId', data.applicant_id); // applicantId를 저장하고, page에서 AllQuestion에게로 넘겨주어야 함
 				setSubmissionStatus("success");
 			} else {
 				setSubmissionStatus("error");

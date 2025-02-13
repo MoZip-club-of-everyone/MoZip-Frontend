@@ -11,6 +11,8 @@
 import axios, { AxiosRequestConfig, AxiosError } from "axios";
 import { useRouter } from "next/router";
 
+export const isTest = true
+
 // 토큰 관련 함수
 const getAccessToken = (): string | null => localStorage.getItem("accessToken");
 const getRefreshToken = (): string | null =>
