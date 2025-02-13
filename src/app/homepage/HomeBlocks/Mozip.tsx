@@ -7,6 +7,8 @@ import MozipProgressButton from "../components/MozipProgressButton";
 import MozipDivider from "../components/MozipDivider";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
+import CustomFont from "@/components/CustomFont";
 
 interface MozipItem {
 	id: string;
@@ -32,6 +34,7 @@ export default function Mozip() {
 	const [mozipData, setMozipData] = useState<MozipItem[]>([]);
 	const [loading, setLoading] = useState(true); // 로딩 상태 관리
 	const token = localStorage.getItem("accessToken");
+	const router = useRouter();
 
 	useEffect(() => {
 		const clubId = localStorage.getItem("selectedClubId");
@@ -71,6 +74,15 @@ export default function Mozip() {
 		).padStart(2, "0")}일`;
 	};
 
+	const handleButtonClick = (mozipId: string) => {
+		console.log("클릭한 mozipId는:", mozipId); // 디버깅용
+		if (!mozipId) {
+			console.error("mozipId가 없습니다!");
+			return;
+		}
+		router.push(`/mozipResponse/${mozipId}`);
+	};
+
 	const renderProgressButtons = (
 		data: MozipItem[],
 		filterCondition: (item: MozipItem) => boolean
@@ -83,7 +95,7 @@ export default function Mozip() {
 					title={item.title}
 					startDate={formatDate(item.startDate)}
 					endDate={formatDate(item.endDate)}
-				// 클릭 시 배포된 모집 링크가 보이게 나중에 추가하기 !!
+					onClick={() => handleButtonClick(item.id)} // 정확히 전달
 				/>
 			));
 
@@ -92,7 +104,12 @@ export default function Mozip() {
 	}
 
 	if (!mozipData.length) {
-		return <div>아직 생성한 모집이 없어요 !</div>;
+		return (
+			<CustomColumnMargin $width="80%" $alignitems="center" $justifycontent="flex-start">
+				<AddNewMozip />
+				<CustomFont $color="#666666" $font="1rem">아직 생성된 모집이 없네요.</CustomFont>
+			</CustomColumnMargin>
+		);
 	}
 
 	return (

@@ -43,7 +43,7 @@ export default function MozipQuestions({ onNext, onPrev }: MozipQuestionProps) {
 				return "SHORT_ANSWER";
 			case "장문형":
 				return "LONG_ANSWER";
-			case "객관식":
+			case "객관식 질문":
 				return "ONE_CHOICE";
 			case "체크박스":
 				return "MULTIPLE_CHOICE";

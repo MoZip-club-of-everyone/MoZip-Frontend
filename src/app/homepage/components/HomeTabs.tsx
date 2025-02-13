@@ -11,6 +11,11 @@ import StyledImg from "@/components/StyledImg";
 import { IoIosArrowForward } from "react-icons/io";
 import CustomColumn from "@/components/CustomColumn";
 import CustomDivider from "@/components/CustomDivider";
+import { IoSettingsOutline } from "react-icons/io5";
+import { HiOutlineUserPlus } from "react-icons/hi2";
+import { useState } from "react";
+import ExecutiveManagementModal from "./modal/ExecutiveManagementModal";
+import ClubEditModal from "./modal/ClubEditModal";
 
 const CustomTabs = styled(CustomRow)`
   padding-top: 3rem;
@@ -18,31 +23,107 @@ const CustomTabs = styled(CustomRow)`
 
 // activeTab의 타입을 string으로, setActiveTab의 타입을 React.Dispatch로 지정
 interface MozipTabsProps {
-	activeTab: string;
-	setActiveTab: React.Dispatch<React.SetStateAction<string>>;
+  activeTab: string;
+  setActiveTab: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function HomeTabs({ activeTab, setActiveTab }: MozipTabsProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isClubModalOpen, setIsClubModalOpen] = useState(false);
 
-	return (
-		<CustomColumn $width='80%' $gap='1rem' $alignitems="center" $justifycontent="center">
-			<CustomTabs $width="100%" $alignitems="center" $justifycontent="flex-start" $gap="1rem">
+  return (
+    <CustomColumn
+      $width="80%"
+      $gap="1rem"
+      $alignitems="center"
+      $justifycontent="center"
+    >
+      <CustomTabs
+        $width="100%"
+        $alignitems="center"
+        $justifycontent="space-between"
+        $gap="1rem"
+      >
+        <BtnsLeft>
+          <CustomRow
+            $width="auto"
+            $alignitems="center"
+            $justifycontent="center"
+            $gap="0.5rem"
+          >
+            <CustomFont $color="black" $font="1.2rem" $fontweight="bold">
+              동아리
+            </CustomFont>
+            {activeTab === "동아리" && (
+              <StyledImg
+                src={"/icon_TabStar.png"}
+                $width="1rem"
+                $height="1rem"
+              />
+            )}
+          </CustomRow>
+          <IoIosArrowForward />
+          <CustomRow
+            $width="auto"
+            $alignitems="center"
+            $justifycontent="center"
+            $gap="0.5rem"
+          >
+            <CustomFont $color="black" $font="1.2rem" $fontweight="bold">
+              모집
+            </CustomFont>
+            {activeTab === "모집" && (
+              <StyledImg
+                src={"/icon_TabStar.png"}
+                $width="1rem"
+                $height="1rem"
+              />
+            )}
+          </CustomRow>
+        </BtnsLeft>
+        <BtnsRight>
+          <CheckButton onClick={() => setIsClubModalOpen(true)}>
+            <IoSettingsOutline />
+            동아리 관리
+          </CheckButton>
+          <CheckButton onClick={() => setIsModalOpen(true)}>
+            <HiOutlineUserPlus />
+            운영진 관리
+          </CheckButton>
+        </BtnsRight>
+      </CustomTabs>
 
-				<CustomRow $width="auto" $alignitems="center" $justifycontent="center" $gap="0.5rem">
-					<CustomFont $color='black' $font="1.2rem" $fontweight="bold">동아리</CustomFont>
-					{activeTab === "동아리" && <StyledImg src={'/icon_TabStar.png'} $width='1rem' $height="1rem" />}
-				</CustomRow>
-
-				<IoIosArrowForward />
-
-				<CustomRow $width="auto" $alignitems="center" $justifycontent="center" $gap="0.5rem">
-					<CustomFont $color='black' $font="1.2rem" $fontweight="bold">모집</CustomFont>
-					{activeTab === "모집" && <StyledImg src={'/icon_TabStar.png'} $width='1rem' $height="1rem" />}
-				</CustomRow>
-
-			</CustomTabs>
-
-			<CustomDivider $width='100%' $height='1px' $backgroundcolor="#D8D8D8" />
-		</CustomColumn>
-	);
+      <CustomDivider $width="100%" $height="1px" $backgroundcolor="#D8D8D8" />
+      {isModalOpen && (
+        <ExecutiveManagementModal onClose={() => setIsModalOpen(false)} />
+      )}
+      {isClubModalOpen && (
+        <ClubEditModal onClose={() => setIsClubModalOpen(false)} />
+      )}
+    </CustomColumn>
+  );
 }
+const CheckButton = styled.div`
+  display: flex;
+  border: 1px solid #464646;
+  padding: 3px 5px;
+  border-radius: 4px;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 12px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const BtnsLeft = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const BtnsRight = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+`;

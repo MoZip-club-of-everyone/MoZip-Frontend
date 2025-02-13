@@ -23,6 +23,7 @@ interface CustomBoxProps {
   $overflowy?: string;
   $overflowx?: string;
   $zindex?: string;
+  $boxshadow?: string;
 }
 
 const CustomBox = styled.div<CustomBoxProps>`
@@ -43,6 +44,7 @@ const CustomBox = styled.div<CustomBoxProps>`
   overflow-x: ${(props) => props.$overflowx || "auto"};
   overflow-y: ${(props) => props.$overflowy || "auto"};
   z-index: ${(props) => props.$zindex || '3'};
+  box-shadow: ${(props) => props.$boxshadow || "none"};
 
 
   /* 스크롤바 스타일 */

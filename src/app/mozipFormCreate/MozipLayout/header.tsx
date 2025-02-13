@@ -6,7 +6,9 @@ import CustomDivider from "@/components/CustomDivider";
 import CustomRow from "@/components/CustomRow";
 import CustomColumn from "@/components/CustomColumn";
 import CustomButton from "@/components/CustomButton";
+import { useRouter } from "next/navigation";
 
+import Image from 'next/image';
 import headerLogo from '@/assets/logo/headerLogo.svg';
 import StyledImg from "@/components/StyledImg";
 
@@ -18,16 +20,18 @@ const CustomHeader = styled(CustomColumn)`
 `;
 
 export default function Header() {
+	const router = useRouter();
+
+	const GoMain = () => {
+		router.push("/homepage");
+	}
 
 	return (
 		<CustomHeader $width="100%" $gap="0" $alignitems="flex-end">
-			<CustomRow $width="90%" $padding="0.5rem" $justifycontent="space-between" $alignitems="center">
-				<CustomButton $width='auto' $backgroundColor="transparent" $padding="1rem">
-					<StyledImg src={headerLogo} width='4rem' />
-				</CustomButton>
-
-				<CustomButton $width='auto' $backgroundColor="transparent">
-					<CustomFont $color="black" $font="0.8rem">로그인</CustomFont>
+			<CustomRow $width="90%" $padding="0.5rem" $justifycontent="flex-start" $alignitems="center">
+				<CustomButton $width='auto' $backgroundColor="transparent" $padding="1rem" onClick={GoMain}>
+					{/* <StyledImg src={headerLogo} width='4rem' /> */}
+					<Image src={headerLogo} alt='logo' />
 				</CustomButton>
 			</CustomRow>
 			<CustomDivider $width="100%" $height="1px" $backgroundcolor="#D8D8D8" />

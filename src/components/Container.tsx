@@ -19,5 +19,7 @@ export default function Container({
 }: {
   children: React.ReactNode;
 }) {
-  return <StyledContainer>{children}</StyledContainer>;
+  return (
+    <StyledContainer>{children}</StyledContainer>
+  );
 }

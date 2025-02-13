@@ -8,25 +8,36 @@ import CustomBox from "@/components/CustomBox";
 import CustomColumn from "@/components/CustomColumn";
 import { BsDot } from "react-icons/bs";
 
-// Props 타입 정의
 interface MozipProgressButtonProps {
 	title: string;
 	startDate: string;
 	endDate: string;
+	onClick?: () => void;
 }
 
 const CustomBoxWithShadow = styled(CustomBox)`
-	width: 20rem;
-	height: 10rem;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
-	border-radius: 1rem;
-	padding: 1rem;
-	background-color: white;
+  width: 20rem;
+  height: 10rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 1rem;
+  padding: 1rem;
+  background-color: white;
 `;
 
-export default function MozipProgressButton({ title, startDate, endDate }: MozipProgressButtonProps) {
+export default function MozipProgressButton({
+	title,
+	startDate,
+	endDate,
+	onClick,
+}: MozipProgressButtonProps) {
 	return (
-		<CustomButton $width="auto" $height="auto" $padding="0" $backgroundColor="transparent">
+		<CustomButton
+			$width="auto"
+			$height="auto"
+			$padding="0"
+			$backgroundColor="transparent"
+			onClick={onClick}
+		>
 			<CustomBoxWithShadow>
 				<CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center">
 					<CustomFont $color="#5B5B5B" $font="1rem" $fontweight="bold">
