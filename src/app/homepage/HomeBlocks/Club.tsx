@@ -135,9 +135,14 @@ export default function Club({ setActiveTab }: ClubProps) {
   //   fetchClubs(); // 동아리 데이터 가져오기
   // }, [setIsLoggedIn]); // setIsLoggedIn 변경 시 useEffect 다시 실행
 
-  const handleClubClick = (clubId: string) => {
+  const handleClubClick = (clubId: string, clubName: string) => {
     localStorage.setItem("selectedClubId", clubId); // club_id 저장
-    setActiveTab("모집"); // 탭 변경
+    localStorage.setItem("selectedClubName", clubName); // 동아리명 저장
+    // setActiveTab("모집"); // 탭 변경
+    // 약간의 지연 후 탭 변경 (이렇게 해야 클릭한 동아리명에 맞게 홈 탭 변경됨)
+    setTimeout(() => {
+      setActiveTab("모집");
+    }, 100);
   };
 
   if (!isLoggedIn) {
@@ -163,7 +168,7 @@ export default function Club({ setActiveTab }: ClubProps) {
             }
             clubName={club.name}
             clubDetails={[`관리자: ${club.master_name}`, `${club.mozip_count}개의 모집폼`]}
-            onClick={() => handleClubClick(club.club_id)}
+            onClick={() => handleClubClick(club.club_id, club.name)}
           />
         ))}
         <AddContainer>
