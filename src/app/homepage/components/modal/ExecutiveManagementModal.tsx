@@ -1,8 +1,13 @@
+//운영진 역할 변경, 삭제 api 연동 성공 시 주석처리된 부분 지울것 
 import styled from "styled-components";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoLinkOutline } from "react-icons/io5";
 import { IoClose } from "react-icons/io5";
 import CustomRow from "@/components/CustomRow";
+import postMemberInvite from "@/api/post/postMemberInvite";
+import getManageList from "@/api/get/getManageList";
+import putUserPosition from "@/api/put/putUserPosition";
+import deleteUser from "@/api/delete/deleteUser";
 
 interface ExecutiveManagementModalProps {
   onClose: () => void;
@@ -13,25 +18,123 @@ const roles = ["관리", "평가", "조회", "운영진 삭제"];
 export default function ExecutiveManagementModal({
   onClose,
 }: ExecutiveManagementModalProps) {
-  const [userRoles, setUserRoles] = useState<Record<string, string>>({
-    김강민: "마스터",
-    이나영: "관리",
-    김현아: "평가",
-    이예림: "조회",
-    임승민: "평가",
-    이수혁: "조회",
-    정재웅: "평가",
-  });
+  // const [manageList, setManageList] = useState<Array<{realname: string; position_name: string}>>([]);
+  const [manageList, setManageList] = useState<Array<{
+    realname: string; 
+    position_name: string;
+    user_id: string;
+  }>>([]);
 
-  const handleRoleChange = (name: string, newRole: string) => {
+  // 운영진 목록 조회
+  useEffect(() => {
+    const fetchManageList = async () => {
+      const clubId = localStorage.getItem("selectedClubId");
+      if (!clubId) {
+        alert('동아리가 존재하지 않습니다.');
+        return;
+      }
+
+      try {
+        const response = await getManageList(clubId);
+        setManageList(response);
+        console.log("운영진 목록: ", response);
+      } catch (error) {
+        console.error("운영진 목록 가져오기 실패:", error);
+        alert('운영진 목록을 불러오는데 실패했습니다.');
+      }
+    };
+
+    fetchManageList();
+  }, []); // 모달이 처음 렌더링될 때 한 번만 실행
+
+  // 운영진 역할 변경, 삭제
+  const handleRoleChange = async (realname: string, newRole: string ) => {
+    const clubId = localStorage.getItem("selectedClubId");
+    if (!clubId) {
+      alert('동아리가 존재하지 않습니다.');
+      return;
+    }
+
     if (newRole === "운영진 삭제") {
-      const updatedRoles = { ...userRoles };
-      delete updatedRoles[name];
-      setUserRoles({ ...updatedRoles });
+      try {
+        const data = {
+          name: realname
+        };
+        
+        await deleteUser(clubId, data);
+        
+        // API 호출이 성공하면 상태 업데이트
+        setManageList(prev => prev.filter(member => member.realname !== realname));
+        console.log('운영진 삭제 성공');
+      } catch (error) {
+        alert('운영진 삭제에 실패했습니다.');
+        console.error("운영진 삭제 실패:", error);
+      }
+      //setManageList(prev => prev.filter(member => member.realname !== realname));
+      
+      // const updatedRoles = { ...userRoles };
+      // delete updatedRoles[name];
+      // setUserRoles({ ...updatedRoles });
     } else {
-      setUserRoles({ ...userRoles, [name]: newRole });
+      // setManageList(prev => 
+      //   prev.map(member => 
+      //     member.realname === realname 
+      //       ? { ...member, position_name: newRole }
+      //       : member
+      //   )
+      // );
+
+      // 운영진 역할 변경
+      try {
+        const data = {
+          name: realname, //확인해야할 부분
+          positionName: newRole
+        };
+        
+        await putUserPosition(clubId, data);
+        
+        // API 호출이 성공하면 상태 업데이트
+        setManageList(prev => 
+          prev.map(member => 
+            member.realname === realname 
+              ? { ...member, position_name: newRole }
+              : member
+          )
+        );
+      } catch (error) {
+        alert('역할 변경에 실패했습니다.');
+        console.error("역할 변경 실패:", error);
+      }
     }
   };
+
+  const [email, setEmail] = useState('');
+  const clubId = localStorage.getItem("selectedClubId");
+
+  // 이메일 입력 핸들러
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  // 운영진 초대 api연동
+  const handleInvite = async () => {
+    if (!clubId) {
+      alert('동아리가 존재하지 않습니다.'); //clubId가 존재하지 않을 때
+      return;
+    }
+
+    const inviteData = {
+      email: email,
+    };
+    console.log('운영진 초대 성공: ', inviteData); // 리퀘스트 데이터
+    try {
+      const response = await postMemberInvite(clubId, inviteData);
+      console.log('초대 성공')
+      alert('초대에 성공하였습니다.')
+    } catch (error: any) {
+      alert('초대에 실패했습니다.')
+    }
+  }
 
   return (
     <ModalOverlay onClick={onClose}>
@@ -54,34 +157,39 @@ export default function ExecutiveManagementModal({
         <hr />
         <ModalContent>
           <InputWrapper>
-            <CreateClubInput type="email" placeholder="이메일 입력" />
-            <InviteButton>초대</InviteButton>
+            <CreateClubInput 
+              type="email" 
+              placeholder="이메일 입력" 
+              value={email}
+              onChange={handleEmailChange}
+            />
+            <InviteButton onClick={handleInvite}>초대</InviteButton>
           </InputWrapper>
         </ModalContent>
         <MemberList>
-          <Content>
-            운영진 권한 관리 ({Object.keys(userRoles).length}명)
-          </Content>
-          <ul>
-            {Object.entries(userRoles).map(([name, role]) => (
-              <ListItem key={name}>
-                <span>{name}</span>
-                {role === "마스터" ? (
-                  <RoleText>마스터</RoleText>
-                ) : (
-                  <Dropdown
-                    value={role}
-                    onChange={(e) => handleRoleChange(name, e.target.value)}
-                  >
-                    {roles.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </Dropdown>
-                )}
-              </ListItem>
-            ))}
+        <Content>
+          운영진 권한 관리 ({manageList.length}명)
+        </Content>
+        <ul>
+          {manageList.map(({ realname, position_name, user_id }) => (
+            <ListItem key={realname}>
+              <span>{realname}</span>
+              {position_name === "마스터" ? (
+                <RoleText>마스터</RoleText>
+              ) : (
+                <Dropdown
+                  value={position_name}
+                  onChange={(e) => handleRoleChange(realname, e.target.value)}
+                >
+                  {roles.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Dropdown>
+              )}
+            </ListItem>
+          ))}
           </ul>
         </MemberList>
       </ModalContainer>
@@ -142,12 +250,13 @@ const ModalContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1vh;
-  margin: 20px 0;
+  margin: 1rem 0;
 `;
 
 const Content = styled.div`
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
+  margin-bottom: 1rem;
 `;
 
 const InputWrapper = styled.div`
@@ -193,7 +302,11 @@ const ListItem = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
+  padding: 6px 0;
+
+  span {
+    font-size: 14px;
+  }
 `;
 
 const RoleText = styled.span`
