@@ -58,7 +58,7 @@ export default function ExecutiveManagementModal({
     if (newRole === "운영진 삭제") {
       try {
         const data = {
-          name: realname
+          realname: realname
         };
         
         await deleteUser(clubId, data);
@@ -87,7 +87,7 @@ export default function ExecutiveManagementModal({
       // 운영진 역할 변경
       try {
         const data = {
-          name: realname, //확인해야할 부분
+          realname: realname, //확인해야할 부분
           positionName: newRole
         };
         

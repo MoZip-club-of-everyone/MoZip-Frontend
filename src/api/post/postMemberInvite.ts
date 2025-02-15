@@ -6,7 +6,7 @@ interface Request {
 
 export default async function postMemberInvite(club_id: string, data: Request) {
     try{
-      const response = await axiosInstance.post(`api/clubs/${club_id}/invite`, data)
+      const response = await axiosInstance.post(`api/clubs/${club_id}/position`, data)
       return response.data;
     } catch (error) {
         console.error("운영진 초대 실패: ", error);
