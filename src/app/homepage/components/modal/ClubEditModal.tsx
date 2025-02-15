@@ -7,6 +7,8 @@ interface ClubEditModalProps {
 }
 
 export default function ClubEditModal({ onClose }: ClubEditModalProps) {
+  const clubName = localStorage.getItem("selectedClubName");
+  const [clubNameValue, setClubNameValue] = useState(clubName || '');
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
 
@@ -30,7 +32,10 @@ export default function ClubEditModal({ onClose }: ClubEditModalProps) {
 
         <ClubNameLayout>
           <Content>동아리명</Content>
-          <CreateClubInput defaultValue="멋쟁이사자처럼" />
+          <CreateClubInput 
+            value={clubNameValue}
+            onChange={(e) => setClubNameValue(e.target.value)}
+          />
         </ClubNameLayout>
 
         <Content>동아리 사진 첨부</Content>

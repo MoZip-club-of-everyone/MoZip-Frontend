@@ -56,51 +56,6 @@ export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLog
 	const [loginError, setLoginError] = useState('');
 	const [showPassword, setShowPassword] = useState(false); // 비밀번호 표시 상태
 
-	// const validateFields = () => {
-	// 	let isValid = true;
-	// 	setEmailError('');
-	// 	setPasswordError('');
-	// 	setLoginError('');
-	
-	// 	if (!email) {
-	// 	  setEmailError('이메일을 입력해주세요.');
-	// 	  isValid = false;
-	// 	}
-	
-	// 	if (!password) {
-	// 	  setPasswordError('비밀번호를 입력해주세요.');
-	// 	  isValid = false;
-	// 	}
-	
-	// 	return isValid;
-	// };
-
-	// const handleEmailBlur = () => {
-	// 	if (!email) {
-	// 		setEmailError('이메일을 입력해주세요.');
-	// 	} else {
-	// 		setEmailError('');
-	// 	}
-	// };
-
-	// const handlePasswordBlur = () => {
-	// 	if (!password) {
-	// 		setPasswordError('비밀번호를 입력해주세요.');
-	// 	} else {
-	// 		setPasswordError('');
-	// 	}
-	// };
-
-	// const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-	// 	setEmail(e.target.value);
-	// 	setEmailError('');
-	// };
-
-	// const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-	// 	setPassword(e.target.value);
-	// 	setPasswordError('');
-	// };
-
 	// 이메일 유효성 검사 함수
 	const validateEmail = (value: string) => {
 		if (!value) {

@@ -13,7 +13,7 @@ import CustomColumn from "@/components/CustomColumn";
 import CustomDivider from "@/components/CustomDivider";
 import { IoSettingsOutline } from "react-icons/io5";
 import { HiOutlineUserPlus } from "react-icons/hi2";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ExecutiveManagementModal from "./modal/ExecutiveManagementModal";
 import ClubEditModal from "./modal/ClubEditModal";
 
@@ -30,6 +30,15 @@ interface MozipTabsProps {
 export default function HomeTabs({ activeTab, setActiveTab }: MozipTabsProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isClubModalOpen, setIsClubModalOpen] = useState(false);
+  const [selectedClubName, setSelectedClubName] = useState<string>("");
+
+  useEffect(() => {
+    const clubName = localStorage.getItem("selectedClubName");
+    console.log("localStorage에서 가져온 clubName:", clubName);
+    if (clubName) {
+      setSelectedClubName(clubName);
+    }
+  }, [activeTab]); 
 
   return (
     <CustomColumn
@@ -53,6 +62,11 @@ export default function HomeTabs({ activeTab, setActiveTab }: MozipTabsProps) {
           >
             <CustomFont $color="black" $font="1.2rem" $fontweight="bold">
               동아리
+              {activeTab === "모집" && selectedClubName && (
+                <CustomFont  $color="black" $font="1rem" $fontweight="bold">
+                  {` [${selectedClubName}]`}
+                </CustomFont>
+              )}
             </CustomFont>
             {activeTab === "동아리" && (
               <StyledImg
@@ -81,16 +95,18 @@ export default function HomeTabs({ activeTab, setActiveTab }: MozipTabsProps) {
             )}
           </CustomRow>
         </BtnsLeft>
-        <BtnsRight>
-          <CheckButton onClick={() => setIsClubModalOpen(true)}>
-            <IoSettingsOutline />
-            동아리 관리
-          </CheckButton>
-          <CheckButton onClick={() => setIsModalOpen(true)}>
-            <HiOutlineUserPlus />
-            운영진 관리
-          </CheckButton>
-        </BtnsRight>
+        {activeTab === "모집" && (
+          <BtnsRight>
+            <CheckButton onClick={() => setIsClubModalOpen(true)}>
+              <IoSettingsOutline />
+              동아리 관리
+            </CheckButton>
+            <CheckButton onClick={() => setIsModalOpen(true)}>
+              <HiOutlineUserPlus />
+              운영진 관리
+            </CheckButton>
+          </BtnsRight>
+        )}
       </CustomTabs>
 
       <CustomDivider $width="100%" $height="1px" $backgroundcolor="#D8D8D8" />
