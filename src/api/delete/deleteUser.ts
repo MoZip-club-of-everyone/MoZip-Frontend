@@ -9,10 +9,10 @@ export default async function deleteUser(club_id: string, data: Request) {
         const response = await axiosInstance.delete(`api/clubs/${club_id}/position`, {
             data: data 
         });
-        console.log("삭제한 운영진: ", response)
+        console.log("특정 동아리의 사용자 추방: ", response)
         return response.data;
     } catch (error) {
-        console.error("특정 동아리의 사용자 추방: ", error);
+        console.error("특정 동아리의 사용자 추방 실패: ", error);
         throw error;
     }
 }  

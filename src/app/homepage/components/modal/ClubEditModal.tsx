@@ -1,16 +1,51 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { IoClose } from "react-icons/io5";
+import putClubInformation from "@/api/put/putClubInformation";
 
 interface ClubEditModalProps {
   onClose: () => void;
 }
 
+const ErrorMessage = styled.div`
+  font-size: 13px;
+  color: #E84B4B;
+  margin-top: 4px;
+`;
+const FileInfo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+`;
+const FileName = styled.span`
+  font-size: 13px;
+  &:hover{
+    text-decoration: underline;
+    text-underline-position:under;
+  }
+`;
+const RemoveFileButton = styled.button`
+  background: none;
+  border: none;
+  color: #000;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    font-weight: bold;
+  }
+`;
+
+
 export default function ClubEditModal({ onClose }: ClubEditModalProps) {
   const clubName = localStorage.getItem("selectedClubName");
+  const clubImage = localStorage.getItem("selectedClubImage")
   const [clubNameValue, setClubNameValue] = useState(clubName || '');
   const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(clubImage);
+
+  const [fileError, setFileError] = useState(''); // 에러 메시지 관리
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
@@ -24,6 +59,53 @@ export default function ClubEditModal({ onClose }: ClubEditModalProps) {
     setFile(null);
     setPreview(null);
   };
+
+  const handleClubEdit = async () => {
+    const clubId = localStorage.getItem("selectedClubId");
+      if (!clubId) {
+        alert('동아리가 존재하지 않습니다.');
+        return;
+      }
+    
+    // 이미지 처리 로직
+    let imageToSend: File | string;
+    if (file) {
+      imageToSend = file;  // 새로 선택된 파일이 있는 경우
+    } else if (preview) {
+      imageToSend = preview;  // 기존 이미지 URL이 있는 경우
+    } else {
+      alert('이미지를 선택해주세요.');
+      return;
+    }
+
+    const Request = {
+      name: clubNameValue,
+      image: imageToSend,
+    }
+    console.log("동아리 정보 수정 내용: ", Request) 
+
+      try {
+        const response = await putClubInformation(clubId, Request);
+        console.log("동아리 정보 수정 성공: ", response);
+         // 서버 응답의 이미지 URL을 로컬 스토리지에 저장(홈페이지 나가기 전에 모달 다시 여는 경우에 수정한 정보를 띄우기 위해)
+        if (response.image) {
+          localStorage.setItem("selectedClubImage", response.image);
+        }
+        
+        // 동아리 이름도 업데이트
+        localStorage.setItem("selectedClubName", response.name);
+        
+        alert("동아리가 성공적으로 수정되었습니다!");
+
+        setTimeout(() => {
+          onClose();
+        }, 100);
+        
+      } catch (error: any) {
+          console.error("동아리 정보 수정 실패: ", error);
+          alert('동아리 정보 수정에 실패했습니다.');
+      }
+  }
 
   return (
     <ModalOverlay onClick={onClose}>
@@ -46,15 +128,31 @@ export default function ClubEditModal({ onClose }: ClubEditModalProps) {
           accept="image/*"
           onChange={handleFileChange}
         />
-
+        {fileError && <ErrorMessage>{fileError}</ErrorMessage>}
         {file && (
+          <FileInfo>
+            <FileName>{file.name}</FileName>
+            <RemoveFileButton onClick={removeFile}>x</RemoveFileButton>
+          </FileInfo>
+        )}
+        
+        {(file || preview) && (
+          <FilePreview>
+            <img src={preview || URL.createObjectURL(file!)} alt="동아리 사진 미리보기" />
+            <CloseButton onClick={removeFile}>
+              <IoClose />
+            </CloseButton>
+          </FilePreview>
+        )}  
+        
+        {/* {file && (
           <FilePreview>
             <img src={preview!} alt="동아리 사진 미리보기" />
             <CloseButton onClick={removeFile}>
               <IoClose />
             </CloseButton>
           </FilePreview>
-        )}
+        )} */}
 
         <ModalButton
           $width="100%"
@@ -63,6 +161,7 @@ export default function ClubEditModal({ onClose }: ClubEditModalProps) {
           $color="#fff"
           $borderRadius="12px"
           $border="none"
+          onClick={handleClubEdit}
         >
           완료
         </ModalButton>
@@ -166,8 +265,9 @@ const FilePreview = styled.div`
   align-items: center;
 
   img {
-    width: 100%;
-    max-height: 200px;
+    width: 60%;
+    aspect-ratio: 1/1;  // 1:1 비율
+    /* max-height: 200px; */
     object-fit: cover;
     border-radius: 8px;
     border: 1px solid #ddd;
@@ -176,8 +276,8 @@ const FilePreview = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 5px;
-  right: 5px;
+  top: 10px;
+  right: 80px;
   background: rgba(0, 0, 0, 0.6);
   color: white;
   border: none;
