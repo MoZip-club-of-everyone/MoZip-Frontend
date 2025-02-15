@@ -24,13 +24,14 @@ export default function LogIn() {
 		switch (currentView) {
 			case "certificate":
 				return (
-					<Certificate
-						onComplete={() => {
-							if (nextView) {
-								setCurrentView(nextView); // 다음 화면으로 전환
-								setNextView(null); // nextView 초기화
-							}
-						}}
+					<Certificate 
+						setCurrentView={setCurrentView}
+						// onComplete={() => {
+						// 	if (nextView) {
+						// 		setCurrentView(nextView); // 다음 화면으로 전환
+						// 		setNextView(null); // nextView 초기화
+						// 	}
+						// }}
 					/>
 				);
 			case "findID":

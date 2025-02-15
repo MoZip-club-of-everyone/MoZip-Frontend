@@ -18,7 +18,6 @@ const roles = ["관리", "평가", "조회", "운영진 삭제"];
 export default function ExecutiveManagementModal({
   onClose,
 }: ExecutiveManagementModalProps) {
-  // const [manageList, setManageList] = useState<Array<{realname: string; position_name: string}>>([]);
   const [manageList, setManageList] = useState<Array<{
     realname: string; 
     position_name: string;
@@ -70,20 +69,7 @@ export default function ExecutiveManagementModal({
         alert('운영진 삭제에 실패했습니다.');
         console.error("운영진 삭제 실패:", error);
       }
-      //setManageList(prev => prev.filter(member => member.realname !== realname));
-      
-      // const updatedRoles = { ...userRoles };
-      // delete updatedRoles[name];
-      // setUserRoles({ ...updatedRoles });
     } else {
-      // setManageList(prev => 
-      //   prev.map(member => 
-      //     member.realname === realname 
-      //       ? { ...member, position_name: newRole }
-      //       : member
-      //   )
-      // );
-
       // 운영진 역할 변경
       try {
         const data = {
