@@ -5,13 +5,13 @@ interface Request {
     password: string;
 }
 
-export default async function putUserPosition(data: Request) {
+export default async function putPwChange(data: Request) {
     try{
         const response = await axiosInstance.put(`api/users/password`, data)
-        console.log("역할 변경한 운영진: ", response)
+        console.log("비밀번호 변경 완료: ", response)
         return response.data;
     } catch (error) {
-        console.error("특정 동아리의 사용자 역할 부여 실패: ", error);
+        console.error("비밀번호 변경 실패: ", error);
         throw error;
     }
 }

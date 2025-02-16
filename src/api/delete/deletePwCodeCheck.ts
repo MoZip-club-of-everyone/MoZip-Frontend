@@ -12,7 +12,7 @@ interface Response {
 
 export default async function deletePwCodeCheck(data: Request): Promise<Response> {
     try{
-        const response = await axiosInstance.delete(`api/users/certfication-number/password`, {
+        const response = await axiosInstance.delete(`api/users/certification-number/password`, {
             data: data 
         });
         console.log("비밀번호 인증번호 확인 완료:", response)
