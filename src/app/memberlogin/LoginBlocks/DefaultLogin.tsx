@@ -90,26 +90,6 @@ export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLog
 	};
 
 	const handleLogin = async () => {
-		// if (email === '') {
-        //     alert('아이디를 입력하세요.');
-        //     return;
-        // }
-
-        // if (password === '') {
-        //     alert('비밀번호를 입력하세요.');
-        //     return;
-        // }
-
-		// if (!validateFields()) {
-		// 	return;
-		// }
-
-		// if (!email || !password) {
-		// 	if (!email) setEmailError('이메일을 입력해주세요.');
-		// 	if (!password) setPasswordError('비밀번호를 입력해주세요.');
-		// 	return;
-		// }
-
 		// 최종 유효성 검사
 		const emailValidation = validateEmail(email);
 		const passwordValidation = validatePassword(password);
@@ -155,11 +135,6 @@ export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLog
 	
 	return (
 		<>
-			{/* <CustomButton $width="auto" $backgroundColor="white" $border="1px solid black">
-				<CustomFont $color="black" $font="1rem">
-					LOGO
-				</CustomFont>
-			</CustomButton> */}
 			<Image src={mainLogo} alt="Logo" width={72} height={72} />
 
 			<CustomColumn $width="80%" $alignitems="center" $justifycontent="center">
@@ -170,18 +145,6 @@ export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLog
 				</CustomRow>
 
 				<CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="1rem">
-					{/* <CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
-						<CustomFont $color="#363636" $font="1rem">
-							이메일
-						</CustomFont>
-						<MozipBlockInput
-							$placeholder="이메일"
-							$highlightcolor="#8BB9FF"
-							$width="100%"
-							$height="3rem"
-						/>
-					</CustomColumn> */}
-
 					<CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
 						<CustomFont $color="#363636" $font="1rem">
 							이메일
@@ -192,14 +155,7 @@ export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLog
 							$width="100%"
 							$height="3rem"
 							value={email}
-							// onChange={(e) => setEmail(e.target.value)}
-							// onChange={(e) => {
-							// 	setEmail(e.target.value);
-							// 	setEmailError('');
-							// 	setLoginError('');
-							// }}
 							onChange={handleEmailChange}
-							// onBlur={handleEmailBlur}
 						/>
 						{emailError && (
 							<CustomFont $color="#FF4949" $font="0.8rem">
@@ -220,21 +176,14 @@ export default function DefaultLogin({ setCurrentView, setNextView }: DefaultLog
 								$width="100%"
 								$height="3rem"
 								value={password}
-								// onChange={(e) => setPassword(e.target.value)}
-								// onChange={(e) => {
-								// 	setPassword(e.target.value);
-								// 	setPasswordError('');
-								// 	setLoginError('');
-								// }}
 								onChange={handlePasswordChange}
-								// onBlur={handlePasswordBlur}
 							/>
 							<PasswordToggleButton 
 								type="button"
 								onClick={() => setShowPassword(!showPassword)}
 								aria-label={showPassword ? "비밀번호 숨기기" : "비밀번호 표시"}
 							>
-								{showPassword ? <EyeOff size={20} color="#999999" /> : <Eye size={20} color="#999999" />}
+								{showPassword ? <Eye size={20} color="#999999" /> : <EyeOff size={20} color="#999999" />}
 							</PasswordToggleButton>
 						</PasswordInputContainer>
 						{passwordError && (

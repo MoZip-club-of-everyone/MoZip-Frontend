@@ -26,6 +26,7 @@ export default function LogIn() {
 				return (
 					<Certificate 
 						setCurrentView={setCurrentView}
+						currentView={nextView as "findID" | "findPW"}  // nextView를 전달
 						// onComplete={() => {
 						// 	if (nextView) {
 						// 		setCurrentView(nextView); // 다음 화면으로 전환

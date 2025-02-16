@@ -15,6 +15,9 @@ interface FindIDProps {
 }
 
 export default function FindID({ setCurrentView }: FindIDProps) {
+	const userName = localStorage.getItem("userName")
+	const findId = localStorage.getItem("findId")
+
 	return (
 		<>
 			{/* <CustomButton $width="auto" $backgroundColor="white" $border="1px solid black">
@@ -29,12 +32,12 @@ export default function FindID({ setCurrentView }: FindIDProps) {
 
 				<CustomColumn $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="1rem">
 					<CustomRow $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
-						<CustomFont $color="black" $font="1rem">이나영</CustomFont>
+						<CustomFont $color="black" $font="1rem">{userName}</CustomFont>
 						<CustomFont $color="black" $font="1rem">님의 아이디는</CustomFont>
 					</CustomRow>
 
 					<CustomRow $width="100%" $alignitems="flex-start" $justifycontent="center" $gap="0.5rem">
-						<CustomFont $color="black" $font="1rem">123@hufs.ac.kr</CustomFont>
+						<CustomFont $color="black" $font="1rem">{findId}</CustomFont>
 						<CustomFont $color="black" $font="1rem">입니다.</CustomFont>
 					</CustomRow>
 				</CustomColumn>
