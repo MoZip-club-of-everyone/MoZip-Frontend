@@ -5,11 +5,9 @@ import styled from "styled-components";
 import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
-import {
-  ReadPaperApplicant,
-  ReadPaperApplicantsForMozipData,
-} from "@/api/applicants.type";
+import { ReadPaperApplicantsForMozipData } from "@/api/applicants.type";
 import { getReadPaperApplicationsForMozip } from "@/api/applicants";
+import { updatePaperStatus } from "@/api/evaluation";
 
 const Applicant = styled.p<{ blue?: boolean }>`
   font-size: 16px;
@@ -80,6 +78,7 @@ export default function List() {
     useState<ReadPaperApplicantsForMozipData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedApplicants, setSelectedApplicants] = useState<string[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -96,6 +95,72 @@ export default function List() {
       console.error("서류 지원자 목록 데이터 가져오기 실패:", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+  const filteredApplicants = applicantsData
+    ? selectedFilter
+      ? applicantsData.applicants.filter(
+          (a) => a.paper_status === selectedFilter
+        )
+      : applicantsData.applicants
+    : [];
+
+  const handleStatusUpdate = async (
+    status: "합격" | "불합격" | "보류" | "예비"
+  ) => {
+    if (selectedApplicants.length === 0) {
+      alert("선택된 지원자가 없습니다.");
+      return;
+    }
+
+    try {
+      const updateData = {
+        applicants: selectedApplicants.map((id) => ({
+          applicant_id: id,
+          status: status,
+        })),
+      };
+
+      await updatePaperStatus(updateData);
+
+      // 로컬 상태 업데이트
+      if (applicantsData) {
+        const updatedApplicants = applicantsData.applicants.map((applicant) => {
+          if (selectedApplicants.includes(applicant.applicant_id)) {
+            return {
+              ...applicant,
+              paper_status: status,
+            };
+          }
+          return applicant;
+        });
+
+        const newPassedCount = updatedApplicants.filter(
+          (a) => a.paper_status === "합격"
+        ).length;
+        const newFailedCount = updatedApplicants.filter(
+          (a) => a.paper_status === "불합격"
+        ).length;
+        const newPPendingCount = updatedApplicants.filter(
+          (a) => a.paper_status === "보류"
+        ).length;
+        const newReserveCount = updatedApplicants.filter(
+          (a) => a.paper_status === "예비"
+        ).length;
+
+        setApplicantsData({
+          ...applicantsData,
+          applicants: updatedApplicants,
+          passed_cnt: newPassedCount,
+          failed_cnt: newFailedCount,
+        });
+
+        setSelectedApplicants([]);
+        alert(`선택된 지원자들의 상태가 ${status}으로 변경되었습니다.`);
+      }
+    } catch (error) {
+      console.error(`서류 ${status} 처리 실패:`, error);
+      alert(`상태 변경 중 오류가 발생했습니다.`);
     }
   };
 
@@ -156,18 +221,43 @@ export default function List() {
         <CustomFont $font="24px" $color="#363636" $fontweight="bold">
           서류 지원자 목록
         </CustomFont>
-        <Applicant blue>전체 {applicantsData.total_cnt}명</Applicant> |{" "}
-        <Applicant>합격자 {applicantsData.passed_cnt}명</Applicant> |{" "}
-        <Applicant>불합격자 {applicantsData.failed_cnt}명</Applicant>
+        <Applicant
+          blue={selectedFilter === null}
+          onClick={() => setSelectedFilter(null)}
+        >
+          전체 {applicantsData.total_cnt}명
+        </Applicant>{" "}
+        |
+        <Applicant
+          blue={selectedFilter === "합격"}
+          onClick={() => setSelectedFilter("합격")}
+        >
+          합격자 {applicantsData.passed_cnt}명
+        </Applicant>{" "}
+        |{" "}
+        <Applicant
+          blue={selectedFilter === "불합격"}
+          onClick={() => setSelectedFilter("불합격")}
+        >
+          불합격자 {applicantsData.failed_cnt}명
+        </Applicant>
       </CustomRow>
 
       {/* Buttons Section */}
       <CustomRow $width="100%" $justifycontent="space-between" $margin="0.5rem">
         <BtnsLeft>
-          <CheckButton>서류합격</CheckButton>
-          <CheckButton>서류불합격</CheckButton>
-          <CheckButton>보류</CheckButton>
-          <CheckButton>예비</CheckButton>
+          <CheckButton onClick={() => handleStatusUpdate("합격")}>
+            서류합격
+          </CheckButton>
+          <CheckButton onClick={() => handleStatusUpdate("불합격")}>
+            서류불합격
+          </CheckButton>
+          <CheckButton onClick={() => handleStatusUpdate("보류")}>
+            보류
+          </CheckButton>
+          <CheckButton onClick={() => handleStatusUpdate("예비")}>
+            예비
+          </CheckButton>
         </BtnsLeft>
         <BtnsRight>
           <CheckButton onClick={copyEmails}>
@@ -207,7 +297,8 @@ export default function List() {
             </tr>
           </thead>
           <tbody>
-            {applicantsData.applicants.map((applicant) => (
+            {/* {applicantsData.applicants.map((applicant) => ( */}
+            {filteredApplicants.map((applicant) => (
               <tr key={applicant.applicant_id}>
                 <td>
                   <input

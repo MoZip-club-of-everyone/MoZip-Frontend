@@ -1,14 +1,39 @@
-import { isTest } from "./axiosInstance";
+import axiosInstance, { isTest } from "./axiosInstance";
+import { updatePaperStatusType } from "./evaluation.type";
 
 /**
  * 서류 합불 상태 수정
  */
-export async function updatePaperStatus() {
+export const updatePaperStatus = async (
+  data: updatePaperStatusType
+): Promise<updatePaperStatusType> => {
   if (isTest) {
-    return {};
+    return {
+      applicants: [
+        {
+          applicant_id: "01F8Z8D8F8G8H8J8K8L8M8N8O8",
+          status: "합격", // PASSED
+        },
+        {
+          applicant_id: "01F8Z8D8F8G8H8J8K8L8M8N8O9",
+          status: "불합격", // FAILED
+        },
+      ],
+    };
+  } else {
+    console.log("서류 지원서 상태 업데이트 함수 실행됨");
+    try {
+      const response = await axiosInstance.put<updatePaperStatusType>(
+        `/applicants/papers/status`,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.error("서류 지원서 상태 업데이트 API 요청 실패:", error);
+      throw error;
+    }
   }
-  return {};
-}
+};
 
 /**
  * 면접 합불 상태 수정
