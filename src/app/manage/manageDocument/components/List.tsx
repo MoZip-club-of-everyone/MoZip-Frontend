@@ -6,7 +6,7 @@ import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
 import CustomRow from "@/components/CustomRow";
 import { ReadPaperApplicantsForMozipData } from "@/api/applicants.type";
-import { getReadPaperApplicationsForMozip } from "@/api/applicants";
+import { getReadPaperApplicantsForMozip } from "@/api/applicants";
 import { updatePaperStatus } from "@/api/evaluation";
 
 const Applicant = styled.p<{ blue?: boolean }>`
@@ -87,7 +87,7 @@ export default function List() {
   const fetchData = async () => {
     try {
       setIsLoading(true);
-      const response = await getReadPaperApplicationsForMozip();
+      const response = await getReadPaperApplicantsForMozip();
       if (response && response.length > 0) {
         setApplicantsData(response[0]);
       }
