@@ -2,7 +2,8 @@ import { create } from 'zustand';
 
 // 포지션 타입 정의
 // Position 타입을 export 합니다
-export type Position = 'MASTER' | 'MANAGER' | 'EVALUATE' | 'READ' | null;
+// export type Position = 'MASTER' | 'MANAGER' | 'EVALUATE' | 'READ' | null;
+export type Position = '마스터' | '관리' | '평가' | '조회' | null;
 
 interface PositionState {
   position: Position;
@@ -12,12 +13,18 @@ interface PositionState {
 }
 
 // 권한 레벨 정의 (높은 숫자가 더 높은 권한)
+// const POSITION_LEVELS = {
+//   'MASTER': 4,
+//   'MANAGER': 3,
+//   'EVALUATE': 2,
+//   'READ': 1,
+// } as const;
 const POSITION_LEVELS = {
-  'MASTER': 4,
-  'MANAGER': 3,
-  'EVALUATE': 2,
-  'READ': 1,
-} as const;
+    '마스터': 4,
+    '관리': 3,
+    '평가': 2,
+    '조회': 1,
+  } as const;
 
 export const usePositionStore = create<PositionState>((set, get) => ({
   position: null,
