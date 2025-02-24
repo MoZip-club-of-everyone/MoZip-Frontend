@@ -30,6 +30,7 @@ export default function MultipleChoice({ question, details, isRequired, onSave }
 		setSelectedOptions(updatedOptions);
 		// onSave(updatedOptions);
 		onSave(updatedOptions.length === 1 ? updatedOptions[0] : updatedOptions.join(', '));
+		// response 받을 떄 "1, 2, 3" 으로 오면, ,로 split해서 내가 가공해서 써야함 
 	};
 
 

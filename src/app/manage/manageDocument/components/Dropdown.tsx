@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 interface Option {
@@ -11,6 +11,8 @@ interface DropdownProps {
   title: string;
   options: Option[];
   searchable?: boolean;
+  onOpen?: () => void;
+  onSelect?: (id: string) => void
 }
 
 const DropdownContainer = styled.div`
@@ -64,14 +66,24 @@ const Label = styled.label`
   font-size: 14px;
 `;
 
-const Dropdown: React.FC<DropdownProps> = ({ title, options, searchable }) => {
+const Dropdown: React.FC<DropdownProps> = ({ title, options, searchable, onOpen, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [selected, setSelected] = useState<string[]>(
     options.filter((opt) => opt.checked).map((opt) => opt.label)
   );
+  // options가 변경될 때 selected 초기화
+  useEffect(() => {
+    setSelected(options.filter((opt) => opt.checked).map((opt) => opt.label));
+  }, [options]);
 
-  const toggleDropdown = () => setIsOpen((prev) => !prev);
+  // const toggleDropdown = () => setIsOpen((prev) => !prev);
+  const toggleDropdown = () => {
+    if (!isOpen && onOpen) {
+      onOpen();
+    }
+    setIsOpen((prev) => !prev);
+  };
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) =>
     setSearchTerm(e.target.value);
 

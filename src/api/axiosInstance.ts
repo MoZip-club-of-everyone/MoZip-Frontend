@@ -33,6 +33,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = getAccessToken();
+    console.log('토큰:', accessToken);
     console.log("Access Token:", accessToken); // 토큰 값 확인(변수명accessToken을 저장 시(postLogin.ts참고)의 변수명과 동일하게 맞춰야함.)
 
     //회원가입 요청은 accessToken을 추가하지 않음

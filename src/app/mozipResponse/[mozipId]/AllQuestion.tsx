@@ -130,7 +130,7 @@ export default function AllQuestions({ mozipId }: AllQuestionsProps) {
 
 		try {
 			const response = await fetch(
-				`${process.env.NEXT_PUBLIC_SERVER_URL}/papers/answers/register/applicants/${applicantId}`,
+				`${process.env.NEXT_PUBLIC_SERVER_URL}/api/papers/answers/register/applicants/${applicantId}`,
 				{
 					method: "POST",
 					headers: {

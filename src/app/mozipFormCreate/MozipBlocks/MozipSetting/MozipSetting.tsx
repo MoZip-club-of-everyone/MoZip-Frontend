@@ -42,7 +42,8 @@ export default function MozipSetting({ onPublish, onPrev }: MozipSettingProps) {
 			startDate,
 			endDate,
 			isLoginRequired: detailSettings.isLoginRequired || false,
-			isEditAllowed: detailSettings.isEditAllowed || false,
+			// isEditAllowed: detailSettings.isEditAllowed || false,
+			isEditAvailable: detailSettings.isEditAllowed || false,
 			descriptionBeforeMozip: messageSettings.preRecruitText || "",
 			descriptionAfterMozip: messageSettings.postRecruitText || "",
 			paperQuestions: paperQuestions.map((question: any) => ({

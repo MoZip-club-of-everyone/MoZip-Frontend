@@ -74,9 +74,10 @@ export default function Mozip() {
 				if (response.data.position) {
 					setPosition(response.data.position as Position);
 					console.log("저장된 position:", response.data.position); // API로 받은 position
-        			console.log("zustand store의 position:", position); // store에 저장된 position
+					console.log("zustand store의 position:", position); // store에 저장된 position
+					console.log("token", token);
 				}
-				  
+
 				setMozipData(response.data.mozips);
 				console.log(response.data);
 			} catch (error) {

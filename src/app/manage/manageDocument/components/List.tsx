@@ -8,77 +8,17 @@ import CustomRow from "@/components/CustomRow";
 import { ReadPaperApplicantsForMozipData } from "@/api/applicants.type";
 import { getReadPaperApplicantsForMozip } from "@/api/applicants";
 import { updatePaperStatus } from "@/api/evaluation";
-
-const Applicant = styled.p<{ blue?: boolean }>`
-  font-size: 16px;
-  color: ${({ blue }) => (blue ? "#5296FF" : "inherit")};
-`;
-
-const TableWrapper = styled.div`
-  width: 100%;
-  overflow-x: auto;
-`;
-
-const StyledTable = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1rem;
-
-  thead th {
-    border-top: 2px solid #ddd;
-    border-bottom: 2px solid #ddd;
-    background-color: white;
-    font-weight: bold;
-    padding: 8px;
-    text-align: center;
-  }
-
-  tbody td {
-    padding: 8px;
-    text-align: center;
-    background-color: white;
-  }
-
-  tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-
-  tbody tr:hover {
-    background-color: #f1f1f1;
-  }
-`;
-
-const BtnsLeft = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-
-const BtnsRight = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-
-const CheckButton = styled.div`
-  display: flex;
-  border: 1px solid #464646;
-  padding: 3px 5px;
-  border-radius: 4px;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 12px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #f1f1f1;
-  }
-`;
+import { ApplicantsResponse } from "@/api/applicants.type";
+import axiosInstance from "@/api/axiosInstance";
 
 export default function List() {
-  const [applicantsData, setApplicantsData] =
-    useState<ReadPaperApplicantsForMozipData | null>(null);
+  // const [applicantsData, setApplicantsData] = useState<ReadPaperApplicantsForMozipData | null>(null);
+  const [applicantsData, setApplicantsData] = useState<ApplicantsResponse | null>(null);
+
   const [isLoading, setIsLoading] = useState(true);
   const [selectedApplicants, setSelectedApplicants] = useState<string[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+  const mozipId = localStorage.getItem("mozipId");
 
   useEffect(() => {
     fetchData();
@@ -86,10 +26,24 @@ export default function List() {
 
   const fetchData = async () => {
     try {
+      if (!mozipId) {
+        return;
+      }
       setIsLoading(true);
-      const response = await getReadPaperApplicantsForMozip();
-      if (response && response.length > 0) {
-        setApplicantsData(response[0]);
+      const response = await axiosInstance.get<ApplicantsResponse>(
+        `/api/mozip/${mozipId}/applicants/papers`
+      );
+
+      console.log("API 응답 데이터:", response);
+      console.log("API 응답:", response.data.applicants);
+
+      if (response.data && response.data.applicants.length > 0) {
+        console.log("첫 번째 지원자의 이름:", response.data.applicants[0].realname);
+
+        setApplicantsData(response.data);
+      } else {
+        console.log("null임 !!!");
+        setApplicantsData(null);
       }
     } catch (error) {
       console.error("서류 지원자 목록 데이터 가져오기 실패:", error);
@@ -97,13 +51,15 @@ export default function List() {
       setIsLoading(false);
     }
   };
+
+
+
   const filteredApplicants = applicantsData
     ? selectedFilter
-      ? applicantsData.applicants.filter(
-          (a) => a.paper_status === selectedFilter
-        )
+      ? applicantsData.applicants.filter((a) => a.paper_status === selectedFilter)
       : applicantsData.applicants
     : [];
+
 
   const handleStatusUpdate = async (
     status: "합격" | "불합격" | "보류" | "예비"
@@ -322,7 +278,8 @@ export default function List() {
                     지원서
                   </a>
                 </td>
-                <td>{applicant.paper_score_average.toFixed(2)}</td>
+                <td>{applicant.paper_score_average !== null ? applicant.paper_score_average.toFixed(2) : "점수없음"}</td>
+
                 <td>{applicant.email}</td>
                 <td>{applicant.phone}</td>
                 <td>{applicant.paper_status}</td>
@@ -334,3 +291,67 @@ export default function List() {
     </CustomColumn>
   );
 }
+
+const Applicant = styled.p<{ blue?: boolean }>`
+  font-size: 16px;
+  color: ${({ blue }) => (blue ? "#5296FF" : "inherit")};
+`;
+
+const TableWrapper = styled.div`
+  width: 100%;
+  overflow-x: auto;
+`;
+
+const StyledTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+
+  thead th {
+    border-top: 2px solid #ddd;
+    border-bottom: 2px solid #ddd;
+    background-color: white;
+    font-weight: bold;
+    padding: 8px;
+    text-align: center;
+  }
+
+  tbody td {
+    padding: 8px;
+    text-align: center;
+    background-color: white;
+  }
+
+  tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+`;
+
+const BtnsLeft = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const BtnsRight = styled.div`
+  display: flex;
+  gap: 1rem;
+`;
+
+const CheckButton = styled.div`
+  display: flex;
+  border: 1px solid #464646;
+  padding: 3px 5px;
+  border-radius: 4px;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 12px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #f1f1f1;
+  }
+`;
