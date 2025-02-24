@@ -1,7 +1,7 @@
 import axiosInstance from "../axiosInstance";
 
 interface Response {
-    realname: string;
+    realname_and_phone: string;
     position_name: string;
     user_id: string;
 }

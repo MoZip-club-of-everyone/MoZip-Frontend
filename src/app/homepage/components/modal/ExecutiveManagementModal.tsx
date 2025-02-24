@@ -19,7 +19,7 @@ export default function ExecutiveManagementModal({
   onClose,
 }: ExecutiveManagementModalProps) {
   const [manageList, setManageList] = useState<Array<{
-    realname: string; 
+    realname_and_phone: string; 
     position_name: string;
     user_id: string;
   }>>([]);
@@ -46,8 +46,8 @@ export default function ExecutiveManagementModal({
     fetchManageList();
   }, []); // 모달이 처음 렌더링될 때 한 번만 실행
 
-  // 운영진 역할 변경, 삭제
-  const handleRoleChange = async (realname: string, newRole: string ) => {
+  // 운영진 역할 변경, 삭제(49~96줄)
+  const handleRoleChange = async (userId: string, newRole: string ) => {
     const clubId = localStorage.getItem("selectedClubId");
     if (!clubId) {
       alert('동아리가 존재하지 않습니다.');
@@ -57,23 +57,24 @@ export default function ExecutiveManagementModal({
     if (newRole === "운영진 삭제") {
       try {
         const data = {
-          realname: realname
+          userId: userId
         };
         
         await deleteUser(clubId, data);
         
-        // API 호출이 성공하면 상태 업데이트
-        setManageList(prev => prev.filter(member => member.realname !== realname));
+        // API 호출이 성공하면 상태 업데이트 (member.user_id는 getManageList에서 넘겨주는 리스폰스값의 변수명!! 즉, 백이 넘겨주는 값)
+        setManageList(prev => prev.filter(member => member.user_id !== userId));
         console.log('운영진 삭제 성공');
       } catch (error) {
         alert('운영진 삭제에 실패했습니다.');
         console.error("운영진 삭제 실패:", error);
       }
     } else {
+
       // 운영진 역할 변경
       try {
         const data = {
-          realname: realname, //확인해야할 부분
+          userId: userId, //확인해야할 부분
           positionName: newRole
         };
         
@@ -82,7 +83,7 @@ export default function ExecutiveManagementModal({
         // API 호출이 성공하면 상태 업데이트
         setManageList(prev => 
           prev.map(member => 
-            member.realname === realname 
+            member.user_id === userId 
               ? { ...member, position_name: newRole }
               : member
           )
@@ -157,15 +158,15 @@ export default function ExecutiveManagementModal({
           운영진 권한 관리 ({manageList.length}명)
         </Content>
         <ul>
-          {manageList.map(({ realname, position_name, user_id }) => (
-            <ListItem key={realname}>
-              <span>{realname}</span>
+          {manageList.map(({ realname_and_phone, position_name, user_id }) => (
+            <ListItem key={realname_and_phone}>
+              <span>{realname_and_phone}</span>
               {position_name === "마스터" ? (
                 <RoleText>마스터</RoleText>
               ) : (
                 <Dropdown
                   value={position_name}
-                  onChange={(e) => handleRoleChange(realname, e.target.value)}
+                  onChange={(e) => handleRoleChange(user_id, e.target.value)}
                 >
                   {roles.map((option) => (
                     <option key={option} value={option}>

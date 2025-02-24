@@ -9,12 +9,23 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import CustomFont from "@/components/CustomFont";
+import { usePositionStore, Position } from "@/stores/usePositionStore";
 
 interface MozipItem {
 	id: string;
 	title: string;
+	description: string;
 	startDate: string;
 	endDate: string;
+	isLoginRequired: boolean;
+	isEditAvailable: boolean;
+	descriptionBeforeMozip: string;
+	descriptionAfterMozip: string;
+}
+
+interface MozipResponse {
+	position: string;
+	mozips: MozipItem[];
 }
 
 const ButtonWrapper = styled.div`
@@ -35,6 +46,8 @@ export default function Mozip() {
 	const [loading, setLoading] = useState(true); // 로딩 상태 관리
 	const token = localStorage.getItem("accessToken");
 	const router = useRouter();
+	const setPosition = usePositionStore(state => state.setPosition); // 유저 포지션 관리 zustand store 정의
+	const position = usePositionStore(state => state.position); // zustand store에 잘 저장됐는지 확인하기 위한 변수
 
 	useEffect(() => {
 		const clubId = localStorage.getItem("selectedClubId");
@@ -48,7 +61,7 @@ export default function Mozip() {
 		const fetchMozipData = async () => {
 			try {
 				console.log("localStorage에서 가져온 club_id:", clubId);
-				const response = await axios.get<MozipItem[]>(
+				const response = await axios.get<MozipResponse>(
 					`${process.env.NEXT_PUBLIC_SERVER_URL}/api/mozip?club_id=${clubId}`,
 					{
 						headers: {
@@ -56,7 +69,16 @@ export default function Mozip() {
 						},
 					}
 				);
-				setMozipData(response.data);
+
+				// position 정보를 store에 저장
+				if (response.data.position) {
+					setPosition(response.data.position as Position);
+					console.log("저장된 position:", response.data.position); // API로 받은 position
+        			console.log("zustand store의 position:", position); // store에 저장된 position
+				}
+				  
+				setMozipData(response.data.mozips);
+				console.log(response.data);
 			} catch (error) {
 				console.error("모집 데이터를 가져오는 중 오류 발생:", error);
 			} finally {

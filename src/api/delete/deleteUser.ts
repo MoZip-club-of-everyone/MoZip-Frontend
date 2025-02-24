@@ -1,7 +1,8 @@
 import axiosInstance from "../axiosInstance";
 
 interface Request {
-    realname: string;
+    // realname: string;
+    userId: string;
 }
 
 export default async function deleteUser(club_id: string, data: Request) {

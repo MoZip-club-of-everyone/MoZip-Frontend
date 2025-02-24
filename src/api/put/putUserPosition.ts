@@ -1,7 +1,7 @@
 import axiosInstance from "../axiosInstance";
 
 interface Request {
-    realname: string;
+    userId: string;
     positionName: string;
 }
 
