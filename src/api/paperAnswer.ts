@@ -5,7 +5,20 @@ import { isTest } from "./axiosInstance";
  */
 export async function readPaperAnswersForApplicant() {
   if (isTest) {
-    return {};
+    return {
+      list: [
+        {
+          applicantId: "123",
+          questionId: "101",
+          answer: "열심히 하고 싶습니다!",
+        },
+        {
+          applicantId: "123",
+          questionId: "102",
+          answer: "백엔드 개발",
+        },
+      ],
+    };
   }
   return {};
 }
@@ -15,7 +28,20 @@ export async function readPaperAnswersForApplicant() {
  */
 export async function readPaperAnswersForQuestion() {
   if (isTest) {
-    return {};
+    return {
+      list: [
+        {
+          applicantId: "123",
+          questionId: "101",
+          answer: "열심히 하고 싶습니다!",
+        },
+        {
+          applicantId: "456",
+          questionId: "101",
+          answer: "배우고 싶어서 지원했습니다.",
+        },
+      ],
+    };
   }
   return {};
 }
@@ -25,7 +51,11 @@ export async function readPaperAnswersForQuestion() {
  */
 export async function readPaperAnswerForApplicantAndQuestion() {
   if (isTest) {
-    return {};
+    return {
+      applicantId: "123",
+      questionId: "101",
+      answer: "열심히 하고 싶습니다!",
+    };
   }
   return {};
 }
@@ -35,7 +65,11 @@ export async function readPaperAnswerForApplicantAndQuestion() {
  */
 export async function readPaperAnswer() {
   if (isTest) {
-    return {};
+    return {
+      applicantId: "123",
+      questionId: "101",
+      answer: "열심히 하고 싶습니다!",
+    };
   }
   return {};
 }
@@ -45,7 +79,11 @@ export async function readPaperAnswer() {
  */
 export async function createPaperAnswer() {
   if (isTest) {
-    return {};
+    return {
+      applicantId: "123",
+      questionId: "101",
+      answer: "열심히 하고 싶습니다!",
+    };
   }
   return {};
 }
@@ -55,7 +93,11 @@ export async function createPaperAnswer() {
  */
 export async function updatePaperAnswer() {
   if (isTest) {
-    return {};
+    return {
+      applicantId: "123",
+      questionId: "101",
+      answer: "더욱 성실하게 참여하고 싶습니다!",
+    };
   }
   return {};
 }

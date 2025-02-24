@@ -1,13 +1,12 @@
-import { useEffect } from "react";
-import { fetchQuestions } from "@/api/post/fetchQuestionGET";
-
 import CustomColumn from "@/components/CustomColumn";
 import CustomFont from "@/components/CustomFont";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CommentModal from "../CommentModal";
 import CustomRow from "@/components/CustomRow";
 import Dropdown from "./Dropdown";
+import { ReadPaperApplicationsForMozipData } from "@/api/applicants.type";
+import { getReadPaperApplicationsForMozip } from "@/api/applicants";
 
 const QuestionWrapper = styled.div`
   width: 100%;
@@ -79,8 +78,48 @@ const CommentButton = styled.button`
 `;
 
 export default function View(): JSX.Element {
-  const [score, setScore] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [score, setScore] = useState<string>("");
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [paperData, setPaperData] = useState<
+    ReadPaperApplicationsForMozipData[]
+  >([]);
+  const [selectedApplicant, setSelectedApplicant] = useState<string>("");
+  const [selectedQuestion, setSelectedQuestion] = useState<string>("");
+
+  // API 데이터 가져오기
+  useEffect(() => {
+    const fetchPaperData = async () => {
+      try {
+        const data = await getReadPaperApplicationsForMozip(
+          "your-mozip-id",
+          selectedApplicant || undefined,
+          selectedQuestion || undefined
+        );
+        // 여기 에러나........
+        // setPaperData(data);
+      } catch (error) {
+        console.error("Failed to fetch paper data:", error);
+      }
+    };
+
+    fetchPaperData();
+  }, [selectedApplicant, selectedQuestion]);
+
+  // 지원자 목록 생성
+  const applicants =
+    paperData[0]?.answers.map((answer) => ({
+      id: answer.applicant_id,
+      label: answer.realname,
+      checked: answer.applicant_id === selectedApplicant,
+    })) || [];
+
+  // 문항 목록 생성
+  const questions =
+    paperData.map((question) => ({
+      id: question.question_id,
+      label: question.question,
+      checked: question.question_id === selectedQuestion,
+    })) || [];
 
   const handleScoreChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setScore(e.target.value);
@@ -93,19 +132,21 @@ export default function View(): JSX.Element {
   const handleCommentClick = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const applicants = [
-    { id: "김강민", label: "김강민", checked: true },
-    { id: "임승민", label: "임승민", checked: true },
-    { id: "이나영", label: "이나영", checked: false },
-    { id: "이예림", label: "이예림", checked: true },
-  ];
+  const handleApplicantSelect = (applicantId: string) => {
+    setSelectedApplicant(applicantId);
+  };
 
-  const questions = [
-    { id: "전체", label: "전체", checked: true },
-    { id: "1번 문항", label: "1번 문항", checked: true },
-    { id: "2번 문항", label: "2번 문항", checked: true },
-    { id: "3번 문항", label: "3번 문항", checked: false },
-  ];
+  const handleQuestionSelect = (questionId: string) => {
+    setSelectedQuestion(questionId);
+  };
+
+  // 현재 선택된 질문과 답변 찾기
+  const currentQuestion = paperData.find(
+    (q) => q.question_id === selectedQuestion || !selectedQuestion
+  );
+  const currentAnswer = currentQuestion?.answers.find(
+    (a) => a.applicant_id === selectedApplicant
+  );
 
   return (
     <CustomColumn $width="100%" $alignitems="flex-start" $gap="16px">
@@ -113,28 +154,40 @@ export default function View(): JSX.Element {
         서류 지원서 보기
       </CustomFont>
       <CustomRow>
-        <Dropdown title="조회할 지원자" options={applicants} searchable />
+        <Dropdown
+          title="조회할 지원자"
+          options={applicants}
+          searchable
+          // onSelect={handleApplicantSelect}
+        />
         <Dropdown
           title="문항별 응답조회"
           options={questions}
           searchable={false}
+          // onSelect={handleQuestionSelect}
         />
       </CustomRow>
-      <QuestionWrapper>
-        <Question>IT동아리 지원 이유를 작성해주세요.</Question>
-      </QuestionWrapper>
-      <AnswerWapper>
-        <AnswerName>김강민</AnswerName>
-        <AnswerDiv>프로젝트 경험을 쌓고 싶습니다.</AnswerDiv>
-        <ScoreInput
-          type="text"
-          value={score}
-          onChange={handleScoreChange}
-          placeholder="100점"
-        />
-        <ScoreButton onClick={handleScoreSubmit}>점수 입력</ScoreButton>
-        <CommentButton onClick={handleCommentClick}>평가 코멘트</CommentButton>
-      </AnswerWapper>
+      {currentQuestion && currentAnswer && (
+        <>
+          <QuestionWrapper>
+            <Question>{currentQuestion.question}</Question>
+          </QuestionWrapper>
+          <AnswerWapper>
+            <AnswerName>{currentAnswer.realname}</AnswerName>
+            <AnswerDiv>{currentAnswer.answer}</AnswerDiv>
+            <ScoreInput
+              type="text"
+              value={score}
+              onChange={handleScoreChange}
+              placeholder="100점"
+            />
+            <ScoreButton onClick={handleScoreSubmit}>점수 입력</ScoreButton>
+            <CommentButton onClick={handleCommentClick}>
+              평가 코멘트
+            </CommentButton>
+          </AnswerWapper>
+        </>
+      )}
       {isModalOpen && (
         <CommentModal isOpen={isModalOpen} onClose={closeModal} />
       )}
