@@ -141,11 +141,13 @@ export default function AllQuestions({ mozipId }: AllQuestionsProps) {
 			);
 
 			if (!response.ok) {
-				throw new Error("제출에 실패했습니다.");
+				// throw new Error("제출에 실패했습니다.");
+				alert("지원서 제출 실패 ㅠㅠ");
+				console.log("오류:", response);
 			}
-
-			// console.log("제출 성공!");
-			alert("지원서가 성공적으로 제출되었습니다.");
+			else {
+				alert("지원서가 성공적으로 제출되었습니다.");
+			}
 		} catch (error) {
 			console.error("제출 오류:", error);
 		} finally {

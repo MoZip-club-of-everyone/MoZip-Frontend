@@ -18,7 +18,7 @@ const Option = styled.div`
   margin-bottom: 0.5rem;
 `;
 
-export default function MultipleChoice({ question, details, isRequired, onSave }: { question: string; details: string; isRequired: boolean, onSave: (answer: string[]) => void; }) {
+export default function MultipleChoice({ question, details, isRequired, onSave }: { question: string; details: string; isRequired: boolean, onSave: (answer: string) => void; }) {
 	const options = ["Option 1", "Option 2", "Option 3", "Option 4"];
 	const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
@@ -28,7 +28,8 @@ export default function MultipleChoice({ question, details, isRequired, onSave }
 			? selectedOptions.filter((option) => option !== value)
 			: [...selectedOptions, value];
 		setSelectedOptions(updatedOptions);
-		onSave(updatedOptions);
+		// onSave(updatedOptions);
+		onSave(updatedOptions.length === 1 ? updatedOptions[0] : updatedOptions.join(', '));
 	};
 
 
