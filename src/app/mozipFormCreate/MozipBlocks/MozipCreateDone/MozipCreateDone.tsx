@@ -16,6 +16,7 @@ interface MozipCreateDoneProps {
 }
 
 export default function MozipCreateDone({ onManage }: MozipCreateDoneProps) {
+	const mozipId = localStorage.getItem("mozipId");
 
 	return (
 		<CustomColumn $width="90%" $alignitems="center" $justifycontent="center" $gap='2rem'>
@@ -25,7 +26,7 @@ export default function MozipCreateDone({ onManage }: MozipCreateDoneProps) {
 			<CustomBox $width='100%' $height="auto" $border="1px solid #D8D8D8" $backgroundcolor="white"
 				$padding='0.5rem' $alignitems="center" $justifycontent="center">
 				<CustomRow $width="95%" $height="auto" $alignitems="center" $justifycontent="space-between">
-					<CustomFont $color='black' $font='1rem'>www.mozip.com</CustomFont>
+					<CustomFont $color='black' $font='1rem'>http://localhost:3000/{mozipId}</CustomFont>
 
 					<CustomRow $width='auto' $height="auto" $gap='1rem' $alignitems="center" $justifycontent="center">
 						<CustomButton $width='auto' $height="auto" $flexDirection="row" $backgroundColor="#5296FF" $gap="0.5rem" $padding="0.5rem 1rem"
