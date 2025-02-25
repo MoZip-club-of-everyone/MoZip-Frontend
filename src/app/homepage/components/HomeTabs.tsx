@@ -16,6 +16,7 @@ import { HiOutlineUserPlus } from "react-icons/hi2";
 import { useState, useEffect } from "react";
 import ExecutiveManagementModal from "./modal/ExecutiveManagementModal";
 import ClubEditModal from "./modal/ClubEditModal";
+import { usePositionStore } from '@/stores/usePositionStore'; 
 
 const CustomTabs = styled(CustomRow)`
   padding-top: 3rem;
@@ -31,6 +32,7 @@ export default function HomeTabs({ activeTab, setActiveTab }: MozipTabsProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isClubModalOpen, setIsClubModalOpen] = useState(false);
   const [selectedClubName, setSelectedClubName] = useState<string>("");
+  const { position, hasPermission } = usePositionStore();
 
   useEffect(() => {
     const clubName = localStorage.getItem("selectedClubName");
@@ -39,6 +41,12 @@ export default function HomeTabs({ activeTab, setActiveTab }: MozipTabsProps) {
       setSelectedClubName(clubName);
     }
   }, [activeTab]); 
+  
+  // 관리 버튼을 표시할지 결정하는 함수
+  const shouldShowManagementButtons = () => {
+    if (!position) return false;
+    return hasPermission('관리'); // '관리' 권한(레벨 3) 이상만 버튼이 보이도록 설정
+  };
 
   return (
     <CustomColumn
@@ -97,10 +105,12 @@ export default function HomeTabs({ activeTab, setActiveTab }: MozipTabsProps) {
         </BtnsLeft>
         {activeTab === "모집" && (
           <BtnsRight>
-            <CheckButton onClick={() => setIsClubModalOpen(true)}>
-              <IoSettingsOutline />
-              동아리 관리
-            </CheckButton>
+            { shouldShowManagementButtons() && (
+              <CheckButton onClick={() => setIsClubModalOpen(true)}>
+                <IoSettingsOutline />
+                동아리 관리
+              </CheckButton>
+            )}
             <CheckButton onClick={() => setIsModalOpen(true)}>
               <HiOutlineUserPlus />
               운영진 관리
@@ -119,6 +129,7 @@ export default function HomeTabs({ activeTab, setActiveTab }: MozipTabsProps) {
     </CustomColumn>
   );
 }
+
 const CheckButton = styled.div`
   display: flex;
   border: 1px solid #464646;

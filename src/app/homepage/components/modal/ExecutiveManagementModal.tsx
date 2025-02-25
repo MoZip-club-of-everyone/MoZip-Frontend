@@ -8,12 +8,12 @@ import postMemberInvite from "@/api/post/postMemberInvite";
 import getManageList from "@/api/get/getManageList";
 import putUserPosition from "@/api/put/putUserPosition";
 import deleteUser from "@/api/delete/deleteUser";
+import { usePositionStore } from "@/stores/usePositionStore";
+import putMasterDelegation from "@/api/put/putMasterDelegation";
 
 interface ExecutiveManagementModalProps {
   onClose: () => void;
 }
-
-const roles = ["관리", "평가", "조회", "운영진 삭제"];
 
 export default function ExecutiveManagementModal({
   onClose,
@@ -23,28 +23,56 @@ export default function ExecutiveManagementModal({
     position_name: string;
     user_id: string;
   }>>([]);
+  const { position, hasPermission } = usePositionStore();
+  const isMaster = position === '마스터';
+
+  const canEditRoles = position === '마스터' || position === '관리';
+  // const roles = ["마스터 권한 위임", "관리", "평가", "조회", "운영진 삭제"];
+  const normalRoles = ["관리", "평가", "조회"];
+  const dangerRoles = ["운영진 삭제"];
 
   // 운영진 목록 조회
+  // useEffect(() => {
+  //   const fetchManageList = async () => {
+  //     const clubId = localStorage.getItem("selectedClubId");
+  //     if (!clubId) {
+  //       alert('동아리가 존재하지 않습니다.');
+  //       return;
+  //     }
+
+  //     try {
+  //       const response = await getManageList(clubId);
+  //       setManageList(response);
+  //       console.log("운영진 목록: ", response);
+  //     } catch (error) {
+  //       console.error("운영진 목록 가져오기 실패:", error);
+  //       alert('운영진 목록을 불러오는데 실패했습니다.');
+  //     }
+  //   };
+
+  //   fetchManageList();
+  // }, []); // 모달이 처음 렌더링될 때 한 번만 실행
+  const fetchManageList = async () => {
+    const clubId = localStorage.getItem("selectedClubId");
+    if (!clubId) {
+      alert('동아리가 존재하지 않습니다.');
+      return;
+    }
+
+    try {
+      const response = await getManageList(clubId);
+      setManageList(response);
+      console.log("운영진 목록: ", response);
+    } catch (error) {
+      console.error("운영진 목록 가져오기 실패:", error);
+      alert('운영진 목록을 불러오는데 실패했습니다.');
+    }
+  };
+
+  // 초기 데이터 로드
   useEffect(() => {
-    const fetchManageList = async () => {
-      const clubId = localStorage.getItem("selectedClubId");
-      if (!clubId) {
-        alert('동아리가 존재하지 않습니다.');
-        return;
-      }
-
-      try {
-        const response = await getManageList(clubId);
-        setManageList(response);
-        console.log("운영진 목록: ", response);
-      } catch (error) {
-        console.error("운영진 목록 가져오기 실패:", error);
-        alert('운영진 목록을 불러오는데 실패했습니다.');
-      }
-    };
-
     fetchManageList();
-  }, []); // 모달이 처음 렌더링될 때 한 번만 실행
+  }, []);
 
   // 운영진 역할 변경, 삭제(49~96줄)
   const handleRoleChange = async (userId: string, newRole: string ) => {
@@ -68,6 +96,31 @@ export default function ExecutiveManagementModal({
       } catch (error) {
         alert('운영진 삭제에 실패했습니다.');
         console.error("운영진 삭제 실패:", error);
+      }
+    } else if (newRole === "마스터 권한 위임") {
+      try{
+        const data = {
+          userId: userId,
+          positionName: "마스터"
+        };
+        
+        await putMasterDelegation(clubId, data);
+        alert('마스터 권한 위임에 성공했습니다.');
+        
+        // 마스터 권한 위임 성공 후 목록 새로고침
+        await fetchManageList();
+
+        setManageList(prev => 
+          prev.map(member => 
+            member.user_id === userId 
+              ? { ...member, position_name: "마스터" } // "마스터"로 변경
+              : member
+          )
+        );
+
+      } catch (error) {
+        alert('마스터 권한 위임에 실패했습니다.');
+        console.error("마스터 권한 위임 실패:", error);
       }
     } else {
 
@@ -157,13 +210,13 @@ export default function ExecutiveManagementModal({
         <Content>
           운영진 권한 관리 ({manageList.length}명)
         </Content>
-        <ul>
+        {/* <ul>
           {manageList.map(({ realname_and_phone, position_name, user_id }) => (
             <ListItem key={realname_and_phone}>
               <span>{realname_and_phone}</span>
               {position_name === "마스터" ? (
-                <RoleText>마스터</RoleText>
-              ) : (
+                <MasterRole>마스터</MasterRole>
+              ) : canEditRoles ? (
                 <Dropdown
                   value={position_name}
                   onChange={(e) => handleRoleChange(user_id, e.target.value)}
@@ -174,10 +227,45 @@ export default function ExecutiveManagementModal({
                     </option>
                   ))}
                 </Dropdown>
+              ) : (
+                <RoleText>{position_name}</RoleText>
+              )}
+            </ListItem>
+          ))}
+          </ul> */}
+          <ul>
+          {manageList.map(({ realname_and_phone, position_name, user_id }) => (
+            <ListItem key={realname_and_phone}>
+              <span>{realname_and_phone}</span>
+              {position_name === "마스터" ? (
+                <MasterRole>마스터</MasterRole>
+              ) : canEditRoles ? (
+                <Dropdown
+                  value={position_name}
+                  onChange={(e) => handleRoleChange(user_id, e.target.value)}
+                >
+                  {isMaster && (
+                    <option value="마스터 권한 위임">마스터 권한 위임</option>
+                  )}
+                  {normalRoles.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                  <option disabled style={{ borderTop: "1px solid #ccc" }}>──────────</option>
+                  {dangerRoles.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Dropdown>
+              ) : (
+                <RoleText>{position_name}</RoleText>
               )}
             </ListItem>
           ))}
           </ul>
+          
         </MemberList>
       </ModalContainer>
     </ModalOverlay>
@@ -296,11 +384,17 @@ const ListItem = styled.li`
   }
 `;
 
-const RoleText = styled.span`
+const MasterRole = styled.span`
   font-size: 14px;
   font-weight: bold;
   color: #333;
 `;
+const RoleText = styled.span`
+  font-size: 14px;
+  /* font-weight: bold; */
+  color: #333;
+`;
+
 
 const Dropdown = styled.select`
   padding: 6px;
